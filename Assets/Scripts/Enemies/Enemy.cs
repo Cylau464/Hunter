@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] int _maxHealth = 5;
     int _health;
     [SerializeField] float _viewDistance = 10f;
+    public DragType dragType = DragType.Draggable;
 
     [Header("Attack properties")]
     [SerializeField] int _damage = 1;
@@ -52,7 +53,6 @@ public class Enemy : MonoBehaviour
     SpriteRenderer _sprite;
     Vector2 _startPos;
     Collider2D _target;
-    DragType dragType = DragType.Draggable;
 
     int direction = 1;
 
@@ -211,7 +211,8 @@ public class Enemy : MonoBehaviour
 
     void Hurt()
     {
-        _transform.position = _hook ?? _hook.transform.position;
+        if(_hook != null)
+            _transform.position = _hook.transform.position;
 
         if(_dazedTime <= Time.time)
             SwitchState(State.Chase);

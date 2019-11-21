@@ -57,6 +57,7 @@ public class PlayerMovement : MonoBehaviour
     PlayerAttack attack;
     Transform playerTransform;
     WeaponAtributes weapon;
+    Hook hook;
 
     WeaponType _weaponType;
 
@@ -85,6 +86,7 @@ public class PlayerMovement : MonoBehaviour
         attack = GetComponent<PlayerAttack>();
         playerTransform = GetComponent<Transform>();
         weapon = GetComponentInChildren<WeaponAtributes>();
+        hook = GetComponentInChildren<Hook>();
 
         _playerHeight = bodyCollider.size.y;
 
@@ -112,6 +114,9 @@ public class PlayerMovement : MonoBehaviour
             Time.timeScale = 1f;
         if (Input.GetKeyDown(KeyCode.T))
             Time.timeScale = 0.01f;
+
+        if (input.hook && hook.throwCoroutine == null)
+            hook.throwCoroutine = hook.StartCoroutine(hook.Throw(new Vector2(3, 3)));
 
         if (isOnGround)
         {

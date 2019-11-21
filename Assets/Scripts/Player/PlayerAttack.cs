@@ -370,7 +370,7 @@ public class PlayerAttack : MonoBehaviour
         if(_weapon != null)
             Gizmos.DrawWireCube(_weapon.position, new Vector3(_attackRangeX, _attackRangeY, 0f));
         Vector3 ray = Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position);
-        Gizmos.DrawLine(transform.position, ray);
+        //Gizmos.DrawLine(transform.position, ray);
     }
 
     void ResetCombo()

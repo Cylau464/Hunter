@@ -16,6 +16,7 @@ public class PlayerInput : MonoBehaviour
     [HideInInspector] public bool lightAttack;
     [HideInInspector] public bool strongAttack;
     [HideInInspector] public bool evade;
+    [HideInInspector] public bool hook;
     [HideInInspector] public bool horizontalAccess = true;
     [HideInInspector] public static bool restart;
     public List<InputsEnums> lastInputs = new List<InputsEnums>(2);
@@ -58,6 +59,7 @@ public class PlayerInput : MonoBehaviour
         crouchPressed = false;
         evade = false;
         restart = false;
+        hook = false;
 
         _readyToClear = false;
 
@@ -74,6 +76,8 @@ public class PlayerInput : MonoBehaviour
 
         crouchPressed = crouchPressed || Input.GetButtonDown("Crouch");
         crouchHeld = crouchHeld || Input.GetButton("Crouch");
+
+        hook = hook || Input.GetButton("Hook");
 
         //evade = evade || Input.GetButtonDown("Evade");
         if(Input.GetButtonDown("Evade"))
