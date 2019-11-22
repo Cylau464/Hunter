@@ -77,7 +77,7 @@ public class PlayerInput : MonoBehaviour
         crouchPressed = crouchPressed || Input.GetButtonDown("Crouch");
         crouchHeld = crouchHeld || Input.GetButton("Crouch");
 
-        hook = hook || Input.GetButton("Hook");
+        hook = hook || Input.GetButtonDown("Hook");
 
         //evade = evade || Input.GetButtonDown("Evade");
         if(Input.GetButtonDown("Evade"))

@@ -75,6 +75,9 @@ public class PlayerMovement : MonoBehaviour
     Vector2 _colliderCrouchOffset;
     Vector2 _aimDirection;
 
+    bool _hooked;
+    Transform _hook;
+
     const float smallAmount = .05f;         //A small amount used for hanging position
 
     void Start()
@@ -132,9 +135,14 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        PhysicsCheck();
-        GroundMovement();
-        AirMovement();
+        if(_hooked)
+            Hooked();
+        else
+        {
+            PhysicsCheck();
+            GroundMovement();
+            AirMovement();
+        }
 
         if (isAttacking && !isOnGround && attack.attackState != AttackState.End)
         {
@@ -419,6 +427,23 @@ public class PlayerMovement : MonoBehaviour
     void HorizontalAcces()
     {
         input.horizontalAccess = true;
+    }
+
+    public void HookOn(Transform hook)
+    {
+        _hooked = true;
+        _hook = hook;
+    }
+
+    void Hooked()
+    {
+        transform.position = Vector2.MoveTowards(transform.position, _hook.position, 5f * Time.deltaTime);
+    }
+
+    public void HookOff()
+    {
+        _hooked = false;
+        _hook = null;
     }
 
     RaycastHit2D Raycast(Vector2 offset, Vector2 rayDirection, float length)
