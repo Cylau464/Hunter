@@ -49,6 +49,7 @@ public class Enemy : MonoBehaviour
     State _currentState;
     Transform _transform;
     Transform _hook;
+    Transform _myHookTarget;
     Rigidbody2D _rigidBody;
     SpriteRenderer _sprite;
     Vector2 _startPos;
@@ -69,6 +70,12 @@ public class Enemy : MonoBehaviour
         _rigidBody      = GetComponent<Rigidbody2D>();
         _sprite         = GetComponent<SpriteRenderer>();
         _startPos       = transform.position;
+
+        foreach(Transform t in _transform)
+        {
+            if(t.tag == "Hook Target")
+                _myHookTarget = t;
+        }
     }
 
     void Update()
@@ -211,10 +218,9 @@ public class Enemy : MonoBehaviour
 
     void Hurt()
     {
-        if(_hook != null)
-            _transform.position = _hook.transform.position;
-
-        if(_dazedTime <= Time.time)
+        if (_hook != null)
+            _transform.position = _hook.transform.position - _myHookTarget.localPosition;
+        else if (_dazedTime <= Time.time)
             SwitchState(State.Chase);
     }
 

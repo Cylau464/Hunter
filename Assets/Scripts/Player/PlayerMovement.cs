@@ -119,7 +119,10 @@ public class PlayerMovement : MonoBehaviour
             Time.timeScale = 0.01f;
 
         if (input.hook && hook.throwCoroutine == null)
-            hook.throwCoroutine = hook.StartCoroutine(hook.Throw(new Vector2(3, 3)));
+        {
+            Debug.Log("CAM" +  Camera.main.ScreenToWorldPoint(Input.mousePosition) + "mp " + Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10f)));
+            hook.throwCoroutine = hook.StartCoroutine(hook.Throw(Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10f))));
+        }
 
         if (isOnGround)
         {
@@ -433,17 +436,21 @@ public class PlayerMovement : MonoBehaviour
     {
         _hooked = true;
         _hook = hook;
+        rigidBody.bodyType = RigidbodyType2D.Static;
     }
 
     void Hooked()
     {
-        transform.position = Vector2.MoveTowards(transform.position, _hook.position, 5f * Time.deltaTime);
+        Vector2 temp = hook.transform.position;
+        transform.position = Vector2.MoveTowards(transform.position, _hook.position, 20f * Time.deltaTime);
+        hook.transform.position = temp;
     }
 
     public void HookOff()
     {
         _hooked = false;
         _hook = null;
+        rigidBody.bodyType = RigidbodyType2D.Dynamic;
     }
 
     RaycastHit2D Raycast(Vector2 offset, Vector2 rayDirection, float length)
