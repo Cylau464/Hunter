@@ -45,14 +45,16 @@ public class Hook : MonoBehaviour
         Collider2D[] dragTargets = Physics2D.OverlapCircleAll(_tipTransform.position, dragRadius, _layers);
         _startPos = _tailTransform.position;
 
+        //While tip of hook didn't reach target position
         while(Vector2.MoveTowards(_tipTransform.position, target, throwSpeed * Time.deltaTime) != (Vector2) _tipTransform.position)//while (Mathf.Abs(target.x - _transform.position.x) > 0 || Mathf.Abs(target.y - _transform.position.y) > 0 && dragTargets.Length == 0)
         {
             yield return new WaitForEndOfFrame();
-
-            RaycastHit2D hit = Physics2D.Linecast(_startPos, target, _layers);
-
+            //Draw a line from tip pos to target pos to check for objects on the way
+            RaycastHit2D hit = Physics2D.Linecast(_tipTransform.position, target, _layers);
+            //If have the object
             if (hit.transform)
             {
+                //Looking for child object Hook Target
                 foreach (Transform curTarget in hit.transform)
                 {
                     if (curTarget.tag == "Hook Target")
@@ -61,6 +63,7 @@ public class Hook : MonoBehaviour
             }
             else
             {
+                //Get cathets 
                 float kat1 = Mathf.Abs(target.x - _startPos.x);
                 float kat2 = Mathf.Abs(target.y - _startPos.y);
 
@@ -68,9 +71,9 @@ public class Hook : MonoBehaviour
                 if (Mathf.Sqrt(Mathf.Pow(kat1, 2) + Mathf.Pow(kat2, 2)) > maxLength)
                 {
                     //...find a new coordinates for throw, equals to the max length
-                    float angle = Vector2.Angle(_transform.position, target);             //Get alpha angle
+                    float angle = Vector2.Angle(_startPos, target);                       //Get alpha angle
                     kat1 = maxLength * Mathf.Cos(angle);                                  //Get first cathet (x)
-                    kat2 = Mathf.Sqrt(Mathf.Pow(maxLength, 2) - Mathf.Pow(kat1, 2));      //Get second cathet (y)
+                    kat2 = maxLength * Mathf.Sin(angle);//Mathf.Sqrt(Mathf.Pow(maxLength, 2) - Mathf.Pow(kat1, 2));      //Get second cathet (y)
                     target = new Vector2(_startPos.x + kat1, _startPos.y + kat2);
                 }
             }
@@ -80,52 +83,56 @@ public class Hook : MonoBehaviour
             //Looking for the closest target to grab it
             dragTargets = Physics2D.OverlapCircleAll(_tipTransform.position, dragRadius, _layers);
         }
-
+        //If have a target into radius...
         if(dragTargets != null && dragTargets.Length != 0)
         {
+            //...Check his layer name
             if(dragTargets[0].gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
-                _tipTransform.position = target;
-                _hookedEnemy = dragTargets[0].GetComponent<Enemy>();
-                _hookedEnemy.HookOn(_tipTransform);
-                pullCoroutine = StartCoroutine(Pull(_hookedEnemy.dragType));
+                _tipTransform.position = target;                                //Move tip of hook to target
+                _hookedEnemy = dragTargets[0].GetComponent<Enemy>();            //Cache component
+                _hookedEnemy.HookOn(_tipTransform);                             //Set target state to HookOn
+                pullCoroutine = StartCoroutine(Pull(_hookedEnemy.dragType));    //Pull up tip of hook
             }
             else
             {
-                _hookedTarget = dragTargets[0].transform;
-                Debug.Log(_hookedTarget + "ht");
-                pullCoroutine = StartCoroutine(Pull(DragType.NotDraggable));
+                _hookedTarget = dragTargets[0].transform;                       //Cache target transform component A NAHUYA?
+                pullCoroutine = StartCoroutine(Pull(DragType.NotDraggable));    //Pull up tail of hook to tip
             }
         }
+        //Havent a target
+        else
+        {
+            //Just pull up tip of hook back
+            pullCoroutine = StartCoroutine(Pull(DragType.None));
+        }
 
-        throwCoroutine = null;
+        throwCoroutine = null;                                                  //Unset coroutine var 
         yield return null;
     }
 
-    IEnumerator Pull(DragType type)//void Pull(DragType type)
+    IEnumerator Pull(DragType type)
     {
+        //Vector2.zero used because child objects Tip and Tail ever must be in zero local coordinates parent object Hook
         Debug.Log("PULL");
-        if(type == DragType.NotDraggable)
+        //If target object is not draggable - pull up character
+        if (type == DragType.NotDraggable)
         {
+            //Player follow for tail of hook
             _playerMovement.HookOn(_tailTransform);
-            /*while (Mathf.Abs(_tipTransform.position.x - _tailTransform.position.x) > 0 
-                || Mathf.Abs(_tipTransform.position.y - _tailTransform.position.y) > 0)
-            {
-                yield return new WaitForEndOfFrame();
-
-            }*/
-            while (Vector2.MoveTowards(_tailTransform.localPosition, _tipTransform.localPosition, pullSpeed * Time.deltaTime) != (Vector2) _tailTransform.localPosition)//while (Mathf.Abs(_transform.position.x - _transform.TransformPoint(_localStartPos).x) > 0 || Mathf.Abs(_transform.position.y - _transform.TransformPoint(_localStartPos).y) > 0)
+            //While tail of hook didn't reach tip position
+            while (Vector2.MoveTowards(_tailTransform.localPosition, _tipTransform.localPosition, pullSpeed * Time.deltaTime) != (Vector2) _tailTransform.localPosition)
             {
                 yield return new WaitForEndOfFrame();
 
                 _tailTransform.localPosition = Vector2.MoveTowards(_tailTransform.localPosition, _tipTransform.localPosition, pullSpeed * Time.deltaTime);
-                //_transform.position = Vector2.MoveTowards(_tailTransform.localPosition, _tipTransform.localPosition, pullSpeed * Time.deltaTime);
             }
         }
+        //If target object draggable or if haven't a target 
         else
         {
-            Debug.Log(_transform.position + "nfds " + _parent.InverseTransformPoint(_transform.position) + "sdf " + _transform.localPosition.x);
-            while (Vector2.MoveTowards(_parent.InverseTransformPoint(_tipTransform.position), Vector2.zero, pullSpeed * Time.deltaTime) != (Vector2) _tipTransform.localPosition)//while (Mathf.Abs(_transform.TransformPoint(_localStartPos).x - _transform.localPosition.x) > 0 || Mathf.Abs(_transform.TransformPoint(_localStartPos).y - _transform.localPosition.y) > 0)
+            //While target didn't reach tail of hook position
+            while (Vector2.MoveTowards(_parent.InverseTransformPoint(_tipTransform.position), Vector2.zero, pullSpeed * Time.deltaTime) != (Vector2) _tipTransform.localPosition)
             {
                 yield return new WaitForEndOfFrame();
                 
@@ -145,9 +152,11 @@ public class Hook : MonoBehaviour
         else
             _playerMovement.HookOff();
 
+        //Return all objects to they start positions
         _transform.localPosition = _localStartPos;
         _tailTransform.localPosition = Vector2.zero;
         _tipTransform.localPosition = Vector2.zero;
+        //Unset targets
         _hookedEnemy = null;
         _hookedTarget = null;
     }
