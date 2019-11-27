@@ -6,39 +6,39 @@ public class WeaponAnimation : MonoBehaviour
 {
     public Quaternion defaultRot;
 
-    bool _flipCond;
+    bool flipCond;
 
     int direction;
 
-    PlayerMovement _cMovement;
-    Transform _character;
-    SpriteRenderer _sprite;
+    PlayerMovement cMovement;
+    Transform character;
+    SpriteRenderer sprite;
 
     void Start()
     {
-        _character  = transform.parent;
-        _cMovement  = _character.GetComponent<PlayerMovement>();
-        _sprite     = GetComponent<SpriteRenderer>();
-        direction   = _cMovement.direction;
-        _flipCond   = _sprite.flipX;
+        character  = transform.parent;
+        cMovement  = character.GetComponent<PlayerMovement>();
+        sprite     = GetComponent<SpriteRenderer>();
+        direction   = cMovement.direction;
+        flipCond   = sprite.flipX;
         defaultRot  = transform.rotation;
     }
 
     void Update()
     {
         //Flip weapon following the character
-        if (!_cMovement.isAttacking && _cMovement.sprite.flipX != _sprite.flipX)
+        if (!cMovement.isAttacking && cMovement.sprite.flipX != sprite.flipX)
             FlipWeapon();
 
-        if (_cMovement.isAttacking)
-            _sprite.flipX = false;
+        if (cMovement.isAttacking)
+            sprite.flipX = false;
     }
 
     void FlipWeapon()
     {
         transform.localPosition = new Vector2(-transform.localPosition.x, transform.localPosition.y);
         transform.localRotation = Quaternion.Euler(transform.localRotation.eulerAngles.x, transform.localRotation.eulerAngles.y, -transform.localRotation.eulerAngles.z);
-        direction = _cMovement.direction;
-        _sprite.flipX = !_sprite.flipX;
+        direction = cMovement.direction;
+        sprite.flipX = !sprite.flipX;
     }
 }

@@ -5,14 +5,14 @@ using UnityEngine;
 public class PlayerAtributes : MonoBehaviour 
 {
     [SerializeField] int maxHealth = 10;
-    int _health;
+    int health;
 
-    PlayerMovement _movement;
+    PlayerMovement movement;
 
     void Start()
     {
-        _health = maxHealth;
-        _movement = GetComponent<PlayerMovement>();
+        health = maxHealth;
+        movement = GetComponent<PlayerMovement>();
     }
     void Update()
     {
@@ -21,9 +21,9 @@ public class PlayerAtributes : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        _health -= damage;
+        health -= damage;
         
-        if(_health <= 0)
-            _movement.isDead = true;
+        if(health <= 0)
+            movement.isDead = true;
     }
 }

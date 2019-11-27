@@ -4,37 +4,51 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public bool drawDebugRaycast = true;
+    [SerializeField] bool drawDebugRaycast = true;
 
     [Header("Movement Properties")]
-    public float speed = 8f;
-    public float crouchSpeedDivisor = 3f;
-    public float coyoteDuration = .05f;
-    public float climbingSpeed = 70f;        //70 = 20 because 50 it's gravity force
+    [SerializeField] float speed                    = 8f;           //Horizontal speed
+    [SerializeField] float crouchSpeedDivisor       = 3f;           //Speed divisor for crouching (Not used now)
+    [SerializeField] float coyoteDuration           = .05f;         //Little delay for jump after character start falling down
+    [SerializeField] float climbingSpeed            = 70f;          //70 = 20 because 50 it's gravity force
 
     [Header("Jump Properties")]
-    public float jumpForce = 6.3f;
-    public float jumpHoldForce = 2.2f;
-    public float jumpHoldDuration = .1f;
-    public float hangingJumpForce = 15f;	//Force of wall hanging jump
-    public float maxFallSpeed = -25f;
-    public int extraJumps = 1;
+    [SerializeField] float jumpForce                = 6.3f;         //Used once after pressing
+    [SerializeField] float jumpHoldForce            = 2.2f;         //Used all time if key hold
+    [SerializeField] float jumpHoldDuration         = .1f;          //Max duration of holding jump
+    //public float hangingJumpForce                 = 15f;	        //Force of wall hanging jump
+    [SerializeField] float maxFallSpeed             = -25f;         //Max falling speed 
+    [SerializeField] int extraJumps                 = 1;            //Count of extra jumps
 
     [Header("Enviropment Check Properties")]
-    public float footOffset = .3f;
-    public float headClearence = .7f;
-    public float eyeHeight = .2f;			//Height of wall checks
-    public float reachOffset = .7f;         //X offset for wall grabbing
-    public float grabDistance = .4f;        //The reach distance for wall grabs
-    public float groundDistance = .2f;
-    public float evadingDuration = .35f;
-    public float evadingDistance = 8f;
-    public float evadingCooldown = 1f;
-    public int direction { get; private set; } = 1;
-    public LayerMask groundLayer = 1 << 9;  //9 - Platforms layer
+    [SerializeField] float footOffset               = .3f;          //Offset between foots
+    [SerializeField] float headClearence            = .7f;          //Necessary free space above head for stand up or/and jump
+    [SerializeField] float eyeHeight                = .2f;			//Height of eye for wall checks
+    [SerializeField] float reachOffset              = .7f;          //X offset for wall grabbing
+    [SerializeField] float grabDistance             = .4f;          //The reach distance for wall grabs
+    [SerializeField] float groundDistance           = .2f;          //Distance to check on ground character or not
+    [SerializeField] float evadingDuration          = .35f;         //Duration of evade state and animation
+    [SerializeField] float evadingDistance          = 8f;           //Distance of evade
+    [SerializeField] float evadingCooldown          = 1f;           //Evade cooldown in sec
+    public int direction { get; private set; }      = 1;            //Character direction
+    [SerializeField] LayerMask groundLayer          = 1 << 9;       //9 - Platforms layer
 
     [Header("Status Flags")]
-    public bool isOnGround;
+    [SerializeField]
+    bool isOnGround,
+    isJumping,
+    isDoubleJump,
+    isHeadBlocked,
+    isCrouching,
+    isAttacking,
+    isEvading,
+    isHanging,
+    isClimbing,
+    isHooked,
+    isHurt,
+    isDead,
+    canFlip;
+    /*public bool isOnGround;
     public bool isJumping;
     public bool isDoubleJump;
     public bool isHeadBlocked;
@@ -43,70 +57,70 @@ public class PlayerMovement : MonoBehaviour
     public bool isEvading;
     public bool isHanging;
     public bool isClimbing;
+    bool isHooked;
     public bool isHurt;
     public bool isDead;
     public bool canFlip = true;
-    public bool moveInputPriority = true;
-
-    [HideInInspector] public float speedDivisor = 1f;
+    public bool moveInputPriority = true;      //What the hell is this?
+*/
+    [HideInInspector] 
+    public float speedDivisor = 1f;                //Used to decrease horizontal speed
 
     PlayerInput input;
     Rigidbody2D rigidBody;
     BoxCollider2D bodyCollider;
-    public SpriteRenderer sprite;
+    public SpriteRenderer sprite;                  //Maybe create property for public get?
     PlayerAttack attack;
     Transform playerTransform;
     WeaponAtributes weapon;
     Hook hook;
+    Transform hookTransform;
 
-    WeaponType _weaponType;
+    WeaponType weaponType;
 
-    int _extraJumpsCount;
+    int extraJumpsCount;                          //Current count extra jumps
 
-    float _coyoteTime;
-    float _playerHeight;
-    float _jumpTime;
-    float _evadingCooldown;
-    float _evadingDuration;
+    float curCoyoteTime;                          //Current coyote time
+    float playerHeight;                           //Based on vertical collider size
+    float curJumpTime;                            //Current time in jump (Cant be higher max jumpHoldDuration)
+    float curEvadingCooldown;                     //Current evade cooldown time
+    float curEvadingDuration;                     //Current evade duration time
 
-    Vector2 _colliderStandSize;
-    Vector2 _colliderStandOffset;
-    Vector2 _colliderCrouchSize;
-    Vector2 _colliderCrouchOffset;
-    Vector2 _aimDirection;
-
-    bool _hooked;
-    Transform _hook;
+    Vector2 colliderStandSize;                    //Collider size for standing position
+    Vector2 colliderStandOffset;                  //Collider offset for standing position
+    Vector2 colliderCrouchSize;                   //Collider size for crouching position
+    Vector2 colliderCrouchOffset;                 //Collider offset for crouching position
+    Vector2 aimDirection;
 
     const float smallAmount = .05f;         //A small amount used for hanging position
 
     void Start()
     {
-        input = GetComponent<PlayerInput>();
-        rigidBody = GetComponent<Rigidbody2D>();
-        bodyCollider = GetComponent<BoxCollider2D>();
-        sprite = GetComponent<SpriteRenderer>();
-        attack = GetComponent<PlayerAttack>();
-        playerTransform = GetComponent<Transform>();
-        weapon = GetComponentInChildren<WeaponAtributes>();
-        hook = GetComponentInChildren<Hook>();
+        input                   = GetComponent<PlayerInput>();
+        rigidBody               = GetComponent<Rigidbody2D>();
+        bodyCollider            = GetComponent<BoxCollider2D>();
+        sprite                  = GetComponent<SpriteRenderer>();
+        attack                  = GetComponent<PlayerAttack>();
+        playerTransform         = GetComponent<Transform>();
+        weapon                  = GetComponentInChildren<WeaponAtributes>();
+        hook                    = GetComponentInChildren<Hook>();
 
-        _playerHeight = bodyCollider.size.y;
+        playerHeight            = bodyCollider.size.y;
 
-        _colliderStandSize = bodyCollider.size;
-        _colliderStandOffset = bodyCollider.offset;
-
-        _colliderCrouchSize = new Vector2(bodyCollider.size.x, .85f);
-        _colliderCrouchOffset = new Vector2(bodyCollider.offset.x, -.17f);
+        colliderStandSize       = bodyCollider.size;
+        colliderStandOffset     = bodyCollider.offset;
+        //Decrease collider size and offset for this strange values. Need to change they on variables with percent not numbers
+        colliderCrouchSize      = new Vector2(bodyCollider.size.x, .85f);
+        colliderCrouchOffset    = new Vector2(bodyCollider.offset.x, -.17f);
         //Dividing jump height by weapon mass
         //jumpForce /= weapon.weaponMass;
         //jumpHoldForce /= weapon.weaponMass;
-        _weaponType = weapon.weaponType;
+        weaponType              = weapon.weaponType;
     }
 
     private void OnGUI()
     {
-        GUI.TextField(new Rect(10, 10, 100, 200), rigidBody.velocity.ToString() + "\n" + playerTransform.position + "\nAim" + _aimDirection + "\nAngle " + (Vector2.Angle(transform.right, Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position)) * Mathf.Sign(Vector3.Dot(transform.forward, Vector3.Cross(transform.right, Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position))))));
+        GUI.TextField(new Rect(10, 10, 100, 200), rigidBody.velocity.ToString() + "\n" + playerTransform.position + "\nAim" + aimDirection + "\nAngle " + (Vector2.Angle(transform.right, Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position)) * Mathf.Sign(Vector3.Dot(transform.forward, Vector3.Cross(transform.right, Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position))))));
     }
 
     void Update()
@@ -118,28 +132,29 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.T))
             Time.timeScale = 0.01f;
 
+        //If hook is not throwing or pulling
         if (input.hook && hook.throwCoroutine == null)
         {
-            Debug.Log("CAM" +  Camera.main.ScreenToWorldPoint(Input.mousePosition) + "mp " + Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10f)));
+            //Value 10f in vector3 compensates for the Z position of the camera. Need to get this value from the camera (-Input.mousePosition.z)
             hook.throwCoroutine = hook.StartCoroutine(hook.Throw(Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10f))));
         }
-
+        //Reset variables when character landed
         if (isOnGround)
         {
-            _coyoteTime = Time.time + coyoteDuration;
-            _extraJumpsCount = extraJumps;
+            curCoyoteTime = Time.time + coyoteDuration;
+            extraJumpsCount = extraJumps;
         }
 
-        //_aimDirection = Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position);
+        //aimDirection = Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position);
 
-        //if (Mathf.Sign(_aimDirection.x) != direction)
+        //if (Mathf.Sign(aimDirection.x) != direction)
         //    FlipCharacterDirection();
     }
 
     void FixedUpdate()
     {
-        if(_hooked)
-            Hooked();
+        if(isHooked)
+            isHooked();
         else
         {
             PhysicsCheck();
@@ -164,8 +179,8 @@ public class PlayerMovement : MonoBehaviour
         isHeadBlocked = false;
 
         //Cast rays for the left and right foot
-        RaycastHit2D leftCheck = Raycast(new Vector2(-footOffset, -_playerHeight / 2f), Vector2.down, groundDistance);
-        RaycastHit2D rightCheck = Raycast(new Vector2(footOffset, -_playerHeight / 2f), Vector2.down, groundDistance);
+        RaycastHit2D leftCheck = Raycast(new Vector2(-footOffset, -playerHeight / 2f), Vector2.down, groundDistance);
+        RaycastHit2D rightCheck = Raycast(new Vector2(footOffset, -playerHeight / 2f), Vector2.down, groundDistance);
 
         if ((leftCheck || rightCheck) && !isJumping)
             isOnGround = true;
@@ -180,10 +195,10 @@ public class PlayerMovement : MonoBehaviour
         Vector2 grabDir = new Vector2(direction, 0f);
 
         //Cast three rays to look for a wall grab
-        RaycastHit2D blockedCheck = Raycast(new Vector2(footOffset * direction, _playerHeight / 2), grabDir, grabDistance);
-        RaycastHit2D ledgeCheck = Raycast(new Vector2(reachOffset * direction, _playerHeight / 2), Vector2.down, grabDistance);
+        RaycastHit2D blockedCheck = Raycast(new Vector2(footOffset * direction, playerHeight / 2), grabDir, grabDistance);
+        RaycastHit2D ledgeCheck = Raycast(new Vector2(reachOffset * direction, playerHeight / 2), Vector2.down, grabDistance);
         RaycastHit2D wallCheck = Raycast(new Vector2(footOffset * direction, eyeHeight), grabDir, grabDistance);
-        RaycastHit2D climbCheck = Raycast(new Vector2(footOffset * direction, -_playerHeight / 2), grabDir, grabDistance);
+        RaycastHit2D climbCheck = Raycast(new Vector2(footOffset * direction, -playerHeight / 2), grabDir, grabDistance);
 
         //If the player is off the ground AND is not hanging AND is falling AND
         //found a ledge AND found a wall AND the grab is NOT blocked...
@@ -205,7 +220,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //Evading
-        if (/*input.evade*/input.lastInputs.Contains(InputsEnums.Evade) && attack.attackState != AttackState.Damage && !isEvading && _evadingCooldown <= Time.time)
+        if (/*input.evade*/input.lastInputs.Contains(InputsEnums.Evade) && attack.attackState != AttackState.Damage && !isEvading && curEvadingCooldown <= Time.time)
         {
             //If use evade in hanging state
             if (rigidBody.bodyType == RigidbodyType2D.Static)
@@ -221,7 +236,7 @@ public class PlayerMovement : MonoBehaviour
             isHanging = false;
             input.horizontalAccess = false;
             canFlip = false;
-            _evadingDuration = Time.time + evadingDuration;
+            curEvadingDuration = Time.time + evadingDuration;
             Crouch();
             rigidBody.velocity = Vector2.zero;
 
@@ -231,19 +246,19 @@ public class PlayerMovement : MonoBehaviour
                 rigidBody.AddForce(new Vector2(evadingDistance * direction, 0f), ForceMode2D.Impulse);
 
         }
-        else if (isEvading && (_evadingDuration <= Time.time || (input.jumpPressed && _extraJumpsCount > 0)))
+        else if (isEvading && (curEvadingDuration <= Time.time || (input.jumpPressed && extraJumpsCount > 0)))
         {
             isEvading = false;
             input.horizontalAccess = true;
             canFlip = true;
-            _evadingCooldown = Time.time + evadingCooldown;
+            curEvadingCooldown = Time.time + evadingCooldown;
 
             //Skip stand up animation
             if (input.crouchHeld && isOnGround)
                 Crouch();
         }
         //Clear up all evade inputs from the inputs list if CD has not yet passed
-        if (_evadingCooldown > Time.time)
+        if (curEvadingCooldown > Time.time)
             input.lastInputs.RemoveAll(x => x == InputsEnums.Evade);
 
         //Climbing
@@ -334,7 +349,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //Jump
-        if (input.jumpPressed && attack.attackState != AttackState.Damage && (isOnGround || _coyoteTime > Time.time))
+        if (input.jumpPressed && attack.attackState != AttackState.Damage && (isOnGround || curCoyoteTime > Time.time))
         {
             if (isCrouching && !isHeadBlocked)
                 StandUp();
@@ -342,7 +357,7 @@ public class PlayerMovement : MonoBehaviour
             isAttacking = false;
             isOnGround = false;
             isJumping = true;
-            _jumpTime = Time.time + jumpHoldDuration;
+            curJumpTime = Time.time + jumpHoldDuration;
 
             rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0f);
             rigidBody.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
@@ -353,24 +368,24 @@ public class PlayerMovement : MonoBehaviour
             if (input.jumpHeld)
                 rigidBody.AddForce(new Vector2(0f, jumpHoldForce), ForceMode2D.Impulse);
 
-            if (_jumpTime <= Time.time)
+            if (curJumpTime <= Time.time)
             {
                 isJumping = false;
                 isDoubleJump = false;
             }
         }
         //Double jumps
-        else if (!isOnGround && attack.attackState != AttackState.Damage && input.jumpPressed && _extraJumpsCount > 0 && !isHanging && !isClimbing /*&& !input.crouchHeld*/)
+        else if (!isOnGround && attack.attackState != AttackState.Damage && input.jumpPressed && extraJumpsCount > 0 && !isHanging && !isClimbing /*&& !input.crouchHeld*/)
         {
             isAttacking = false;
             isJumping = true;
             isDoubleJump = true;
-            _jumpTime = Time.time + jumpHoldDuration;
+            curJumpTime = Time.time + jumpHoldDuration;
 
             rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0f);
             rigidBody.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
 
-            _extraJumpsCount--;
+            extraJumpsCount--;
         }
 
         //Фиксирование максимальной скорости падения
@@ -394,8 +409,8 @@ public class PlayerMovement : MonoBehaviour
 
         isCrouching = false;
         input.horizontalAccess = true;
-        bodyCollider.size = _colliderStandSize;
-        bodyCollider.offset = _colliderStandOffset;
+        bodyCollider.size = colliderStandSize;
+        bodyCollider.offset = colliderStandOffset;
     }
 
     public void Crouch()
@@ -404,8 +419,8 @@ public class PlayerMovement : MonoBehaviour
         isAttacking = false;
         input.horizontalAccess = false;
 
-        bodyCollider.size = _colliderCrouchSize;
-        bodyCollider.offset = _colliderCrouchOffset;
+        bodyCollider.size = colliderCrouchSize;
+        bodyCollider.offset = colliderCrouchOffset;
         rigidBody.velocity = Vector2.zero;
     }
 
@@ -434,46 +449,45 @@ public class PlayerMovement : MonoBehaviour
 
     public void HookOn(Transform hook)
     {
-        _hooked = true;
-        _hook = hook;
+        isHooked = true;
+        hookTransform = hook;
         rigidBody.bodyType = RigidbodyType2D.Static;
     }
 
-    void Hooked()
+    void isHooked()
     {
-        Vector2 temp = hook.transform.position;
-        transform.position = Vector2.MoveTowards(transform.position, _hook.position, 20f * Time.deltaTime);
-        hook.transform.position = temp;
+        Vector2 temp = hookTransform.position;//hook.transform.position;
+        transform.position = Vector2.MoveTowards(transform.position, /*hook.*/hookTransform.position, 20f * Time.deltaTime);
+        hookTransform.position = temp;//hook.transform.position = temp;
     }
 
     public void HookOff()
     {
-        _hooked = false;
-        _hook = null;
+        isHooked = false;
+        hookTransform = null;
         rigidBody.bodyType = RigidbodyType2D.Dynamic;
     }
 
     RaycastHit2D Raycast(Vector2 offset, Vector2 rayDirection, float length)
     {
-        //Если луч без указания слоя
+        //If ray used without layer
         return Raycast(offset, rayDirection, length, groundLayer);
     }
 
     RaycastHit2D Raycast(Vector2 offset, Vector2 rayDirection, float length, LayerMask mask)
     {
         Vector2 pos = playerTransform.position;
-
-        //Рассчёт луча от чара + отступ до ближайшего объекта на указанном слое (если не указан см. выше)
+        //Cast ray from char+offset to direction on set length
         RaycastHit2D hit = Physics2D.Raycast(pos + offset, rayDirection, length, mask);
 
         if (drawDebugRaycast)
         {
+            //If ray takes hit from object on setted layer color be a red, if not - cyan
             Color color = hit ? Color.red : Color.cyan;
 
             Debug.DrawRay(pos + offset, rayDirection * length, color);
         }
 
-        //Вернуть луч
         return hit;
     }
 }

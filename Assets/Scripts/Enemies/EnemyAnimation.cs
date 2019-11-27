@@ -4,38 +4,38 @@ using UnityEngine;
 
 public class EnemyAnimation : MonoBehaviour
 {
-    Enemy _enemy;
-    Rigidbody2D _rigidBody;      //Reference to the Rigidbody2D component
-    Animator _anim;              //Reference to the Animator component
+    Enemy enemy;
+    Rigidbody2D rigidBody;      //Reference to the Rigidbody2D component
+    Animator anim;              //Reference to the Animator component
 
-    int _patrolParamID;
-    int _chaseParamID;
-    int _attackingParamID;
-    int _hurtParamID;
-    int _deadParamID;
-    int _speedParamID;
-    int _fallParamID;
+    int patrolParamID;
+    int chaseParamID;
+    int attackingParamID;
+    int hurtParamID;
+    int deadParamID;
+    int speedParamID;
+    int fallParamID;
 
     // Start is called before the first frame update
     void Start()
     {
         //Get the integer hashes of the parameters. This is much more efficient
         //than passing strings into the animator
-        //_patrolParamID          = Animator.StringToHash("isPatroling");
-        //_chaseParamID           = Animator.StringToHash("isChasing");
-        _attackingParamID       = Animator.StringToHash("isAttacking");
-        _hurtParamID            = Animator.StringToHash("isHurt");
-        _deadParamID            = Animator.StringToHash("isDead");
-        _speedParamID           = Animator.StringToHash("speed");
-        _fallParamID            = Animator.StringToHash("verticalVelocity");
+        //patrolParamID          = Animator.StringToHash("isPatroling");
+        //chaseParamID           = Animator.StringToHash("isChasing");
+        attackingParamID       = Animator.StringToHash("isAttacking");
+        hurtParamID            = Animator.StringToHash("isHurt");
+        deadParamID            = Animator.StringToHash("isDead");
+        speedParamID           = Animator.StringToHash("speed");
+        fallParamID            = Animator.StringToHash("verticalVelocity");
 
         //Get references to the needed components
-        _enemy                  = GetComponent<Enemy>();
-        _rigidBody              = GetComponent<Rigidbody2D>();
-        _anim                   = GetComponent<Animator>();
+        enemy                  = GetComponent<Enemy>();
+        rigidBody              = GetComponent<Rigidbody2D>();
+        anim                   = GetComponent<Animator>();
 
         //If any of the needed components don't exist...
-        if (_enemy == null || _rigidBody == null || _anim == null)
+        if (enemy == null || rigidBody == null || anim == null)
         {
             //...log an error and then remove this component
             Debug.LogError("A needed component is missing from the enemy: " + gameObject.GetInstanceID());
@@ -47,15 +47,15 @@ public class EnemyAnimation : MonoBehaviour
     void Update()
     {
         //Update the Animator with the appropriate values
-        //_anim.SetBool(_patrolParamID, _enemy.isPatrol);
-        //_anim.SetBool(_chaseParamID, _enemy.isChase);
-        _anim.SetBool(_hurtParamID, _enemy.isHurt);
-        _anim.SetBool(_attackingParamID, _enemy.isAttack);
-        _anim.SetBool(_deadParamID, _enemy.isDead);
+        //anim.SetBool(patrolParamID, enemy.isPatrol);
+        //anim.SetBool(chaseParamID, enemy.isChase);
+        anim.SetBool(hurtParamID, enemy.isHurt);
+        anim.SetBool(attackingParamID, enemy.isAttack);
+        anim.SetBool(deadParamID, enemy.isDead);
 
-        _anim.SetFloat(_fallParamID, _rigidBody.velocity.y);
+        anim.SetFloat(fallParamID, rigidBody.velocity.y);
 
         //Use the absolute value of speed so that we only pass in positive numbers
-        _anim.SetFloat(_speedParamID, _rigidBody.velocity.x);
+        anim.SetFloat(speedParamID, rigidBody.velocity.x);
     }
 }

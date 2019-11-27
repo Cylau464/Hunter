@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum InputsEnums { Evade, StrongAttack, LightAttack }
+public enum InputsEnum { Evade, StrongAttack, LightAttack }
 
 [DefaultExecutionOrder(-100)]
 
@@ -19,9 +19,9 @@ public class PlayerInput : MonoBehaviour
     [HideInInspector] public bool hook;
     [HideInInspector] public bool horizontalAccess = true;
     [HideInInspector] public static bool restart;
-    public List<InputsEnums> lastInputs = new List<InputsEnums>(2);
+    public List<InputsEnum> lastInputs = new List<InputsEnum>(2);           //Create new list for 2 elements for writting 2 last inputs
 
-    bool _readyToClear;
+    bool readyToClear;
 
     PlayerAttack attack;
 
@@ -44,12 +44,12 @@ public class PlayerInput : MonoBehaviour
         else
             horizontal = Mathf.Clamp(horizontal, -1f, 1f);
 
-        _readyToClear = true;
+        readyToClear = true;
     }
 
     void ClearInput()
     {
-        if (!_readyToClear)
+        if (!readyToClear)
             return;
 
         horizontal = 0f;
@@ -61,7 +61,7 @@ public class PlayerInput : MonoBehaviour
         restart = false;
         hook = false;
 
-        _readyToClear = false;
+        readyToClear = false;
 
         if (!attack.canAttack)
             lastInputs.Clear();
@@ -82,12 +82,14 @@ public class PlayerInput : MonoBehaviour
         //evade = evade || Input.GetButtonDown("Evade");
         if(Input.GetButtonDown("Evade"))
         {
+            //If list have a free slot for new input
             if (lastInputs.Count < lastInputs.Capacity)
-                lastInputs.Add(InputsEnums.Evade);
+                lastInputs.Add(InputsEnum.Evade);
+            //If haven't - remove the first element and add a new input at the end
             else
             {
                 lastInputs.RemoveAt(0);
-                lastInputs.Add(InputsEnums.Evade);
+                lastInputs.Add(InputsEnum.Evade);
             }
         }
 
@@ -95,22 +97,22 @@ public class PlayerInput : MonoBehaviour
         {
             lightAttack = true;
             if(lastInputs.Count < lastInputs.Capacity)
-                lastInputs.Add(InputsEnums.LightAttack);
+                lastInputs.Add(InputsEnum.LightAttack);
             else
             {
                 lastInputs.RemoveAt(0);
-                lastInputs.Add(InputsEnums.LightAttack);
+                lastInputs.Add(InputsEnum.LightAttack);
             }
         }
         if (Input.GetButtonDown("StrongAttack"))
         {
             strongAttack = true;
             if (lastInputs.Count < lastInputs.Capacity)
-                lastInputs.Add(InputsEnums.StrongAttack);
+                lastInputs.Add(InputsEnum.StrongAttack);
             else
             {
                 lastInputs.RemoveAt(0);
-                lastInputs.Add(InputsEnums.StrongAttack);
+                lastInputs.Add(InputsEnum.StrongAttack);
             }
         }
 

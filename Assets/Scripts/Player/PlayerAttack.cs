@@ -30,27 +30,27 @@ public class PlayerAttack : MonoBehaviour
 
     public LayerMask[] whatIsEnemies;
 
-    SpriteRenderer _sprite;
-    SpriteRenderer _weaponSprite;
-    PlayerMovement _movement;
-    PlayerInput _input;
-    Transform _weapon;
-    Rigidbody2D _rigidBody;
-    WeaponAtributes _weaponAtributes;
-    WeaponAnimation _weaponAnimation;
+    SpriteRenderer sprite;
+    SpriteRenderer weaponSprite;
+    PlayerMovement movement;
+    PlayerInput input;
+    Transform weapon;
+    Rigidbody2D rigidBody;
+    WeaponAtributes weaponAtributes;
+    WeaponAnimation weaponAnimation;
     GameObject shellPrefab;
-    GameObject _shellObj;
-    Shell _shell;
+    GameObject shellObj;
+    Shell shell;
 
-    float _attackRangeX;
-    float _attackRangeY;
-    float _attackDuration;
-    float _attackForceDistance;
-    float _shellSpeed;
-    float _timeBtwAttacks;
-    float _delayResetCombo;
-    float _posX;
-    float _rotZ;
+    float attackRangeX;
+    float attackRangeY;
+    float attackDuration;
+    float attackForceDistance;
+    float shellSpeed;
+    float timeBtwAttacks;
+    float curDelayResetCombo;
+    float posX;
+    float rotZ;
 
     int damage;
 
@@ -58,50 +58,48 @@ public class PlayerAttack : MonoBehaviour
 
     private void OnGUI()
     {
-        //GUI.TextField(new Rect(10, 10, 120, 200), "vel" + _rigidBody.velocity + "damage: " + damage + "\nattack speed: " + _timeBtwAttacks + "\nattack dur: " + _attackDuration + "\nLA" + _input.lightAttack + "\nSA" + _input.strongAttack + "\nLIST: " + string.Join("\n", _input.lastInputs.ConvertAll(i => i.ToString()).ToArray()) + "\n\n\n\n\n" + (_input.lastInputs.Count == 0));
+        //GUI.TextField(new Rect(10, 10, 120, 200), "vel" + rigidBody.velocity + "damage: " + damage + "\nattack speed: " + timeBtwAttacks + "\nattack dur: " + attackDuration + "\nLA" + input.lightAttack + "\nSA" + input.strongAttack + "\nLIST: " + string.Join("\n", input.lastInputs.ConvertAll(i => i.ToString()).ToArray()) + "\n\n\n\n\n" + (input.lastInputs.Count == 0));
     }
 
     void Start()
     {
-        _weapon = GameObject.FindWithTag("Main Weapon").transform;
-        _posX = _weapon.localPosition.x;
-        _weaponSprite = _weapon.GetComponent<SpriteRenderer>();
-        _weaponAtributes = _weapon.GetComponent<WeaponAtributes>();
-        _weaponAnimation = _weapon.GetComponent<WeaponAnimation>();
-        //_anim = _parent.GetComponent<Animator>();
-        _movement = GetComponent<PlayerMovement>();
-        _rigidBody = GetComponent<Rigidbody2D>();
-        _sprite = GetComponent<SpriteRenderer>();
-        _input = GetComponent<PlayerInput>();
-
-        _attackRangeX = _weaponAtributes.attackRangeX;
-        _attackRangeY = _weaponAtributes.attackRangeY;
-
-        weaponType = _weaponAtributes.weaponType;
+        weapon              = GameObject.FindWithTag("Main Weapon").transform;
+        posX                = weapon.localPosition.x;
+        weaponSprite        = weapon.GetComponent<SpriteRenderer>();
+        weaponAtributes     = weapon.GetComponent<WeaponAtributes>();
+        weaponAnimation     = weapon.GetComponent<WeaponAnimation>();
+        attackRangeX        = weaponAtributes.attackRangeX;
+        attackRangeY        = weaponAtributes.attackRangeY;
+        weaponType          = weaponAtributes.weaponType;
+        //anim = parent.GetComponent<Animator>();
+        movement            = GetComponent<PlayerMovement>();
+        rigidBody           = GetComponent<Rigidbody2D>();
+        sprite              = GetComponent<SpriteRenderer>();
+        input               = GetComponent<PlayerInput>();
     }
     
     void Update()
     {
-        if (!_movement.isDead)
+        if (!movement.isDead)
         {
-            if (!_movement.isEvading && !_movement.isClimbing && !_movement.isHanging && canAttack &&
-                _input.lastInputs.Count != 0 && (_input.lastInputs[0] == InputsEnums.StrongAttack || _input.lastInputs[0] == InputsEnums.LightAttack)/*_input.lastInputs.Exists(x => x == InputsEnums.StrongAttack || x == InputsEnums.LightAttack)*/ && _timeBtwAttacks + Time.deltaTime <= Time.time)
+            if (!movement.isEvading && !movement.isClimbing && !movement.isHanging && canAttack &&
+                input.lastInputs.Count != 0 && (input.lastInputs[0] == InputsEnums.StrongAttack || input.lastInputs[0] == InputsEnums.LightAttack)/*input.lastInputs.Exists(x => x == InputsEnums.StrongAttack || x == InputsEnums.LightAttack)*/ && timeBtwAttacks + Time.deltaTime <= Time.time)
             {
-                if (!_movement.isOnGround && lightCombo + strongCombo + jointCombo > 0)
+                if (!movement.isOnGround && lightCombo + strongCombo + jointCombo > 0)
                     switchAttack = true;
                 
                 attackState = AttackState.Start;
                 //if list have both attack input...
-                if (_input.lastInputs.Contains(InputsEnums.LightAttack) && _input.lastInputs.Contains(InputsEnums.StrongAttack))
+                if (input.lastInputs.Contains(InputsEnums.LightAttack) && input.lastInputs.Contains(InputsEnums.StrongAttack))
                 {
                     attackType = AttackTypes.Joint;
-                    _input.lastInputs.Clear();          //...remove all list element
+                    input.lastInputs.Clear();          //...remove all list element
                 }
                 //if only one of they...
                 else
                 {
-                    attackType = _input.lastInputs[0] == InputsEnums.LightAttack ? AttackTypes.Light : AttackTypes.Strong;
-                    _input.lastInputs.RemoveAt(0);      //...remove first list element
+                    attackType = input.lastInputs[0] == InputsEnums.LightAttack ? AttackTypes.Light : AttackTypes.Strong;
+                    input.lastInputs.RemoveAt(0);      //...remove first list element
                 }
 
                 MeleeAttack(attackType);
@@ -111,9 +109,9 @@ public class PlayerAttack : MonoBehaviour
             EndOfAttack();
 
             //Flip character if shooting
-            Vector2 _aimDirection = Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position);
-            if (_movement.isAttacking && weaponType != WeaponType.Melee && Mathf.Sign(_aimDirection.x) != _movement.direction)
-                _movement.FlipCharacterDirection();
+            Vector2 aimDirection = Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position);
+            if (movement.isAttacking && weaponType != WeaponType.Melee && Mathf.Sign(aimDirection.x) != movement.direction)
+                movement.FlipCharacterDirection();
         }
 
         ResetCombo();
@@ -121,7 +119,7 @@ public class PlayerAttack : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!_movement.isDead)
+        if (!movement.isDead)
         {
             if(attackState == AttackState.Start)
                 RotateRangeWeapon();
@@ -131,21 +129,21 @@ public class PlayerAttack : MonoBehaviour
     void MeleeAttack(AttackTypes attackType)
     {
         //Only one air combo in a jump
-        if (!_movement.isOnGround && !canAttack)
+        if (!movement.isOnGround && !canAttack)
             return;
 
-        if (_movement.isCrouching)
-            _movement.StandUp();
+        if (movement.isCrouching)
+            movement.StandUp();
 
-        _movement.isAttacking = true;
-        _input.lightAttack = false;
-        _input.strongAttack = false;
+        movement.isAttacking = true;
+        input.lightAttack = false;
+        input.strongAttack = false;
 
         GetWeaponAtributes(attackType);
         SetCombo(attackType);
         //Stop character before attack
         if(weaponType != WeaponType.Range)
-            _rigidBody.velocity = Vector2.zero;
+            rigidBody.velocity = Vector2.zero;
     }
 
     void RangeAttack(AttackTypes attackType)
@@ -157,45 +155,45 @@ public class PlayerAttack : MonoBehaviour
     {
         if (weaponType != WeaponType.Melee)
         {
-            Vector2 _angle = Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position);
-            _rotZ = Mathf.Atan2(_angle.y, _angle.x) * Mathf.Rad2Deg;
+            Vector2 angle = Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position);
+            rotZ = Mathf.Atan2(angle.y, angle.x) * Mathf.Rad2Deg;
 
-            _weapon.transform.rotation = Quaternion.Euler(0f, 0f, _rotZ);
+            weapon.transform.rotation = Quaternion.Euler(0f, 0f, rotZ);
         }
     }
 
     void GiveDamage()
     {
-        if (!_movement.isAttacking)
+        if (!movement.isAttacking)
             return;
 
         attackState = AttackState.Damage;
-        _movement.canFlip = false;
-        _delayResetCombo = Time.time + delayResetCombo;
+        movement.canFlip = false;
+        curDelayResetCombo = Time.time + delayResetCombo;
 
         if (weaponType != WeaponType.Melee)
         {
-            _shellObj = Instantiate(shellPrefab, transform.position, Quaternion.Euler(0f, 0f, _rotZ));
-            _shell = _shellObj.GetComponent<Shell>();
-            _shell.damage = damage;
-            _shell.speed = _shellSpeed;
+            shellObj = Instantiate(shellPrefab, transform.position, Quaternion.Euler(0f, 0f, rotZ));
+            shell = shellObj.GetComponent<Shell>();
+            shell.damage = damage;
+            shell.speed = shellSpeed;
         }
         else
         {
-            _rigidBody.AddForce(Vector2.right * _movement.direction * _attackForceDistance, ForceMode2D.Impulse);
+            rigidBody.AddForce(Vector2.right * movement.direction * attackForceDistance, ForceMode2D.Impulse);
 
-            Collider2D[] enemiesToDamage = Physics2D.OverlapBoxAll(_weapon.position, new Vector2(_attackRangeX, _attackRangeY), 0, whatIsEnemies[0]);
+            Collider2D[] enemiesToDamage = Physics2D.OverlapBoxAll(weapon.position, new Vector2(attackRangeX, attackRangeY), 0, whatIsEnemies[0]);
             LayerMask mask = 1 << 9 | 1 << 12;      //9 - platforms, 12 - enemy
             RaycastHit2D hit;
 
             //Raycast to player from enemy
-            hit = Physics2D.Raycast(_movement.transform.position, Vector2.right * _movement.direction, 1.2f, mask);
+            hit = Physics2D.Raycast(movement.transform.position, Vector2.right * movement.direction, 1.2f, mask);
             Debug.Log(hit + "\n" + hit.transform);
-            Debug.DrawRay(_movement.transform.position, Vector2.right * _movement.direction * 1.2f, Color.cyan, 2f);
+            Debug.DrawRay(movement.transform.position, Vector2.right * movement.direction * 1.2f, Color.cyan, 2f);
 
             for (int i = 0; i < enemiesToDamage.Length; i++)
             {
-                //_camShake.Shake(.2f, 1f, 2f);
+                //camShake.Shake(.2f, 1f, 2f);
                 enemiesToDamage[i].GetComponent<Enemy>().TakeDamage(damage);
             }
         }
@@ -203,33 +201,33 @@ public class PlayerAttack : MonoBehaviour
 
     void EndOfAttack()
     {
-        if (!_movement.isAttacking)
+        if (!movement.isAttacking)
             return;
 
         //End of attack and pause anim
-        if (_timeBtwAttacks <= Time.time)
+        if (timeBtwAttacks <= Time.time)
         {
-            _movement.canFlip = true;
+            movement.canFlip = true;
             attackState = AttackState.End;
-            _rigidBody.velocity = Vector2.zero;
+            rigidBody.velocity = Vector2.zero;
 
             //Switch animation from air attack to grounded
-            if (airLightCombo + airStrongCombo + airJointCombo > 0 && _movement.isOnGround)
+            if (airLightCombo + airStrongCombo + airJointCombo > 0 && movement.isOnGround)
             {
-                _movement.isAttacking = false;
+                movement.isAttacking = false;
                 attackType = default;
             }
         }
 
         //Pause attack state for give little time for next attack
-        if (_attackDuration <= Time.time)
+        if (attackDuration <= Time.time)
         {
-            //_input.lightAttack = false;
-            //_input.strongAttack = false;
-            _movement.isAttacking = false;
+            //input.lightAttack = false;
+            //input.strongAttack = false;
+            movement.isAttacking = false;
             attackType = default;
-            _weapon.transform.rotation = _weaponAnimation.defaultRot;
-            _movement.speedDivisor = 1f;
+            weapon.transform.rotation = weaponAnimation.defaultRot;
+            movement.speedDivisor = 1f;
         }
     }
 
@@ -239,7 +237,7 @@ public class PlayerAttack : MonoBehaviour
         {
             case AttackTypes.Light:
             {
-                    if (_movement.isOnGround)
+                    if (movement.isOnGround)
                     {
                         airLightCombo = airStrongCombo = 0; //nullify air combo
 
@@ -281,7 +279,7 @@ public class PlayerAttack : MonoBehaviour
                 }
             case AttackTypes.Strong:
             {
-                if (_movement.isOnGround)
+                if (movement.isOnGround)
                 {
                     airLightCombo = airStrongCombo = 0;
 
@@ -306,7 +304,7 @@ public class PlayerAttack : MonoBehaviour
             {
                 lightCombo = strongCombo = airLightCombo = airStrongCombo = 0; //nullify all other combo
 
-                if (_movement.isOnGround)
+                if (movement.isOnGround)
                 {
                     airJointCombo = 0;
 
@@ -329,36 +327,36 @@ public class PlayerAttack : MonoBehaviour
 
     void GetWeaponAtributes(AttackTypes type)
     {
-        weaponType = _weaponAtributes.weaponType;
-        shellPrefab = _weaponAtributes.shellPrefab;
-        _shellSpeed = _weaponAtributes.shellSpeed;
-        _movement.speedDivisor = type == AttackTypes.Light ? _weaponAtributes.speedDivisorL : type == AttackTypes.Strong ? _weaponAtributes.speedDivisorS : _weaponAtributes.speedDivisorJ;
+        weaponType = weaponAtributes.weaponType;
+        shellPrefab = weaponAtributes.shellPrefab;
+        shellSpeed = weaponAtributes.shellSpeed;
+        movement.speedDivisor = type == AttackTypes.Light ? weaponAtributes.speedDivisorL : type == AttackTypes.Strong ? weaponAtributes.speedDivisorS : weaponAtributes.speedDivisorJ;
 
         switch (type)
         {
             case AttackTypes.Light:
             {
-                damage = _weaponAtributes.lightAttackDamage;
-                _attackForceDistance = _weaponAtributes.lightAttackForce;
-                _timeBtwAttacks = Time.time + _weaponAtributes.lightAttackSpeed;
-                _attackDuration = Time.time + _weaponAtributes.lightAttackSpeed * 1.5f;
+                damage = weaponAtributes.lightAttackDamage;
+                attackForceDistance = weaponAtributes.lightAttackForce;
+                timeBtwAttacks = Time.time + weaponAtributes.lightAttackSpeed;
+                attackDuration = Time.time + weaponAtributes.lightAttackSpeed * 1.5f;
                 break;
             }
             case AttackTypes.Strong:
             {
-                damage = _weaponAtributes.strongAttackDamage;
+                damage = weaponAtributes.strongAttackDamage;
 
-                _attackForceDistance = _weaponAtributes.strongAttackForce;
-                _timeBtwAttacks = Time.time + _weaponAtributes.strongAttackSpeed;
-                _attackDuration = Time.time + _weaponAtributes.strongAttackSpeed * 1.5f;
+                attackForceDistance = weaponAtributes.strongAttackForce;
+                timeBtwAttacks = Time.time + weaponAtributes.strongAttackSpeed;
+                attackDuration = Time.time + weaponAtributes.strongAttackSpeed * 1.5f;
                 break;
             }
             case AttackTypes.Joint:
             {
-                damage = _weaponAtributes.jointAttackDamage;
-                _attackForceDistance = _weaponAtributes.jointAttackForce;
-                _timeBtwAttacks = Time.time + _weaponAtributes.jointAttackSpeed;
-                _attackDuration = Time.time + _weaponAtributes.jointAttackSpeed * 1.5f;
+                damage = weaponAtributes.jointAttackDamage;
+                attackForceDistance = weaponAtributes.jointAttackForce;
+                timeBtwAttacks = Time.time + weaponAtributes.jointAttackSpeed;
+                attackDuration = Time.time + weaponAtributes.jointAttackSpeed * 1.5f;
                 break;
             }
         }
@@ -367,21 +365,21 @@ public class PlayerAttack : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        if(_weapon != null)
-            Gizmos.DrawWireCube(_weapon.position, new Vector3(_attackRangeX, _attackRangeY, 0f));
+        if(weapon != null)
+            Gizmos.DrawWireCube(weapon.position, new Vector3(attackRangeX, attackRangeY, 0f));
         Vector3 ray = Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position);
         //Gizmos.DrawLine(transform.position, ray);
     }
 
     void ResetCombo()
     {
-        if (_movement.isOnGround && !canAttack)
+        if (movement.isOnGround && !canAttack)
         {
             airLightCombo = airStrongCombo = airJointCombo = 0;
             canAttack = true;
         }
 
-        if (_timeBtwAttacks <= Time.time && _delayResetCombo <= Time.time)
+        if (timeBtwAttacks <= Time.time && curDelayResetCombo <= Time.time)
         {
             lightCombo = strongCombo = jointCombo = airLightCombo = airStrongCombo = airJointCombo = 0;
             attackState = default;

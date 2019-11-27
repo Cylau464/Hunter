@@ -176,6 +176,34 @@ public class Player : MonoBehaviour
         {
             case PlayerState.Idle:
             Idle();
+            break;
+            case PlayerState.Move:
+            Move();
+            break;
+            case PlayerState.Jump:
+            Jump();
+            break;
+            case PlayerState.Crouch:
+            Crouch();
+            break;
+            case PlayerState.Climb:
+            Climb();
+            break;
+            case PlayerState.Hang:
+            Hang();
+            break;
+            case PlayerState.Attack:
+            Attack();
+            break;
+            case PlayerState.Hooked:
+            Hooked();
+            break;
+            case PlayerState.Hurt:
+            Hurt();
+            break;
+            case PlayerState.Dead:
+            Dead();
+            break;
         }
     }
 
