@@ -179,8 +179,8 @@ public class PlayerMovement : MonoBehaviour
         isHeadBlocked = false;
 
         //Cast rays for the left and right foot
-        RaycastHit2D leftCheck = Raycast(new Vector2(-footOffset, -playerHeight / 2f), Vector2.down, groundDistance);
-        RaycastHit2D rightCheck = Raycast(new Vector2(footOffset, -playerHeight / 2f), Vector2.down, groundDistance);
+        RaycastHit2D leftCheck      = Raycast(new Vector2(-footOffset, -playerHeight / 2f), Vector2.down, groundDistance);
+        RaycastHit2D rightCheck     = Raycast(new Vector2(footOffset, -playerHeight / 2f), Vector2.down, groundDistance);
 
         if ((leftCheck || rightCheck) && !isJumping)
             isOnGround = true;
@@ -195,10 +195,10 @@ public class PlayerMovement : MonoBehaviour
         Vector2 grabDir = new Vector2(direction, 0f);
 
         //Cast three rays to look for a wall grab
-        RaycastHit2D blockedCheck = Raycast(new Vector2(footOffset * direction, playerHeight / 2), grabDir, grabDistance);
-        RaycastHit2D ledgeCheck = Raycast(new Vector2(reachOffset * direction, playerHeight / 2), Vector2.down, grabDistance);
-        RaycastHit2D wallCheck = Raycast(new Vector2(footOffset * direction, eyeHeight), grabDir, grabDistance);
-        RaycastHit2D climbCheck = Raycast(new Vector2(footOffset * direction, -playerHeight / 2), grabDir, grabDistance);
+        RaycastHit2D blockedCheck   = Raycast(new Vector2(footOffset * direction, playerHeight / 2), grabDir, grabDistance);
+        RaycastHit2D ledgeCheck     = Raycast(new Vector2(reachOffset * direction, playerHeight / 2), Vector2.down, grabDistance);
+        RaycastHit2D wallCheck      = Raycast(new Vector2(footOffset * direction, eyeHeight), grabDir, grabDistance);
+        RaycastHit2D climbCheck     = Raycast(new Vector2(footOffset * direction, -playerHeight / 2), grabDir, grabDistance);
 
         //If the player is off the ground AND is not hanging AND is falling AND
         //found a ledge AND found a wall AND the grab is NOT blocked...
@@ -302,7 +302,7 @@ public class PlayerMovement : MonoBehaviour
         {
             xVelocity = speed * speedDivisor/*/ weapon.weaponMass*/ * input.horizontal;
             rigidBody.velocity = new Vector2(xVelocity, rigidBody.velocity.y);
-            //Флипать чара, если он смотрит в протиповоложную от движения сторону
+            //Flip caharcter if his direction != input horizontal
             if (xVelocity * direction < 0f)
                 FlipCharacterDirection();
         }
