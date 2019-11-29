@@ -15,7 +15,7 @@ public class Hook : MonoBehaviour
     PlayerMovement playerMovement;
     Vector2 startPos;
     Vector2 localStartPos;
-    Transform transform;
+    Transform myTransform;
     Transform tipTransform;
     Transform tailTransform;
     Transform parent;
@@ -28,16 +28,16 @@ public class Hook : MonoBehaviour
 
     void Start()
     {
-        transform = transform;
-        parent = transform.parent;
-        playerMovement = transform.parent.GetComponent<PlayerMovement>();
+        myTransform = transform;
+        parent = myTransform.parent;
+        playerMovement = myTransform.parent.GetComponent<PlayerMovement>();
 
-        foreach(Transform child in transform)
+        foreach(Transform child in myTransform)
         {
             tipTransform = child.name == "Tip" ? child : tipTransform;
             tailTransform = child.name == "Tail" ? child : tailTransform;
         }
-        localStartPos = transform.localPosition;//tailTransform.localPosition;
+        localStartPos = myTransform.localPosition;//tailTransform.localPosition;
     }
 
     public IEnumerator Throw(Vector2 target)
@@ -153,7 +153,7 @@ public class Hook : MonoBehaviour
             playerMovement.HookOff();
 
         //Return all objects to they start positions
-        transform.localPosition = localStartPos;
+        myTransform.localPosition = localStartPos;
         tailTransform.localPosition = Vector2.zero;
         tipTransform.localPosition = Vector2.zero;
         //Unset targets
