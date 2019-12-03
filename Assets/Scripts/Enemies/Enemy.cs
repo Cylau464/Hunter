@@ -30,7 +30,8 @@ public class Enemy : MonoBehaviour
     bool pathPassed = true;
 
     [Header("Hurt Properties")]
-    float dazedTime = .5f;
+    [SerializeField] float dazedTime = .5f;
+    float curDazedTime;
 
     [Header("State Flags")]
     public bool isPatrol;
@@ -47,8 +48,8 @@ public class Enemy : MonoBehaviour
 
     enum State { Null, Patrol, Chase, Attack, Hurt, Dead };
     State currentState;
-    Transform transform;
-    Transform hook;
+    Transform myTransform;
+    Transform hookTransform;
     Transform myHookTarget;
     Rigidbody2D rigidBody;
     SpriteRenderer sprite;
@@ -66,10 +67,10 @@ public class Enemy : MonoBehaviour
     {
         health         = maxHealth;
         currentState   = State.Patrol;
-        transform      = GetComponent<Transform>();
+        myTransform    = GetComponent<Transform>();
         rigidBody      = GetComponent<Rigidbody2D>();
         sprite         = GetComponent<SpriteRenderer>();
-        startPos       = transform.position;
+        startPos       = myTransform.position;
 
         foreach(Transform t in transform)
         {
@@ -218,22 +219,22 @@ public class Enemy : MonoBehaviour
 
     void Hurt()
     {
-        if (hook != null)
-            transform.position = hook.transform.position - myHookTarget.localPosition;
-        else if (dazedTime <= Time.time)
+        if (hookTransform != null)
+            transform.position = hookTransform.position - myHookTarget.localPosition;
+        else if (curDazedTime <= Time.time)
             SwitchState(State.Chase);
     }
 
     public void HookOn(Transform hook)
     {
-        hook = hook;
+        hookTransform = hook;
         SwitchState(State.Hurt);
     }
 
     public void HookOff(float dazedTime)
     {
-        hook = null;
-        dazedTime = Time.time + dazedTime;
+        hookTransform = null;
+        curDazedTime = Time.time + dazedTime;
     }
 
     void Dead()
@@ -265,11 +266,12 @@ public class Enemy : MonoBehaviour
         blinkingPeriod += Time.deltaTime;
         if(blinkingPeriod >= spriteBlinkingPeriod)
         {
-            blinkingPeriod = 0f;
+            blinkingPeriod = 0f;/*
             if(sprite.color == Color.white)
                 sprite.color = Color.red;
             else
-                sprite.color = Color.white;
+                sprite.color = Color.white;*/
+            sprite.color = sprite.color == Color.white ? Color.red : Color.white;
         }
     }
 
