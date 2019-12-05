@@ -27,7 +27,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float reachOffset              = .7f;          //X offset for wall grabbing
     [SerializeField] float grabDistance             = .4f;          //The reach distance for wall grabs
     [SerializeField] float groundDistance           = .2f;          //Distance to check on ground character or not
-    [SerializeField] float evadingDuration          = .35f;         //Duration of evade state and animation
+    [SerializeField] float evadingDuration          = .35f;         //Duration of evade state
     [SerializeField] float evadingDistance          = 8f;           //Distance of evade
     [SerializeField] float evadingCooldown          = 1f;           //Evade cooldown in sec
     public int direction { get; private set; }      = 1;            //Character direction
@@ -83,7 +83,7 @@ public class PlayerMovement : MonoBehaviour
     float curCoyoteTime;                          //Current coyote time
     float playerHeight;                           //Based on vertical collider size
     float curJumpTime;                            //Current time in jump (Cant be higher max jumpHoldDuration)
-    float curEvadingCooldown;                     //Current evade cooldown time
+    float curEvadingCooldown;                     //Current evade cooldown time left
     float curEvadingDuration;                     //Current evade duration time
 
     Vector2 colliderStandSize;                    //Collider size for standing position
@@ -92,10 +92,11 @@ public class PlayerMovement : MonoBehaviour
     Vector2 colliderCrouchOffset;                 //Collider offset for crouching position
     Vector2 aimDirection;
 
-    const float smallAmount = .05f;         //A small amount used for hanging position
+    const float smallAmount = .05f;               //A small amount used for hanging position and something else
 
     void Start()
     {
+        //Get all references
         input                   = GetComponent<PlayerInput>();
         rigidBody               = GetComponent<Rigidbody2D>();
         bodyCollider            = GetComponent<BoxCollider2D>();
@@ -104,18 +105,18 @@ public class PlayerMovement : MonoBehaviour
         playerTransform         = GetComponent<Transform>();
         weapon                  = GetComponentInChildren<WeaponAtributes>();
         hook                    = GetComponentInChildren<Hook>();
+        weaponType              = weapon.weaponType;
 
         playerHeight            = bodyCollider.size.y;
 
         colliderStandSize       = bodyCollider.size;
         colliderStandOffset     = bodyCollider.offset;
-        //Decrease collider size and offset for this strange values. Need to change they on variables with percent not numbers
+        //Decrease collider size and offset for this strange values. Need to change they on variables with percent, not numbers
         colliderCrouchSize      = new Vector2(bodyCollider.size.x, .85f);
         colliderCrouchOffset    = new Vector2(bodyCollider.offset.x, -.17f);
         //Dividing jump height by weapon mass
         //jumpForce /= weapon.weaponMass;
         //jumpHoldForce /= weapon.weaponMass;
-        weaponType              = weapon.weaponType;
     }
 
     private void OnGUI()
@@ -154,7 +155,7 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         if(isHooked)
-            isHooked();
+            Hooked();
         else
         {
             PhysicsCheck();
@@ -454,7 +455,7 @@ public class PlayerMovement : MonoBehaviour
         rigidBody.bodyType = RigidbodyType2D.Static;
     }
 
-    void isHooked()
+    void Hooked()
     {
         Vector2 temp = hookTransform.position;//hook.transform.position;
         transform.position = Vector2.MoveTowards(transform.position, /*hook.*/hookTransform.position, 20f * Time.deltaTime);

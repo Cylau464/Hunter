@@ -45,43 +45,48 @@ public class Hook : MonoBehaviour
         Collider2D[] dragTargets = Physics2D.OverlapCircleAll(tipTransform.position, dragRadius, layers);
         startPos = tailTransform.position;
 
+        //Draw a line from tip pos to target pos to check for objects on the way
+        RaycastHit2D hit = Physics2D.Linecast(tipTransform.position, target, layers);
+        //If have the object
+        if (hit.transform)
+        {
+            //Looking for child object Hook Target
+            foreach (Transform curTarget in hit.transform)
+            {
+                if (curTarget.tag == "Hook Target")
+                    target = curTarget.position;
+            }
+        }
+        else
+        {
+            //Get cathets 
+            float kat1 = Mathf.Abs(target.x - startPos.x);
+            float kat2 = Mathf.Abs(target.y - startPos.y);
+
+            //Check throw length. If it longer than max length...
+            if (Mathf.Sqrt(Mathf.Pow(kat1, 2) + Mathf.Pow(kat2, 2)) > maxLength)
+            {
+                //...find a new coordinates for throw, equals to the max length
+                float angle = Vector2.Angle(startPos, target);                       //Get alpha angle
+                kat1 = maxLength * Mathf.Cos(angle);                                  //Get first cathet (x)
+                kat2 = maxLength * Mathf.Sin(angle);//Mathf.Sqrt(Mathf.Pow(maxLength, 2) - Mathf.Pow(kat1, 2));      //Get second cathet (y)
+                target = new Vector2(startPos.x + kat1, startPos.y + kat2);
+            }
+        }
+
         //While tip of hook didn't reach target position
         while(Vector2.MoveTowards(tipTransform.position, target, throwSpeed * Time.deltaTime) != (Vector2) tipTransform.position)//while (Mathf.Abs(target.x - transform.position.x) > 0 || Mathf.Abs(target.y - transform.position.y) > 0 && dragTargets.Length == 0)
         {
             yield return new WaitForEndOfFrame();
-            //Draw a line from tip pos to target pos to check for objects on the way
-            RaycastHit2D hit = Physics2D.Linecast(tipTransform.position, target, layers);
-            //If have the object
-            if (hit.transform)
-            {
-                //Looking for child object Hook Target
-                foreach (Transform curTarget in hit.transform)
-                {
-                    if (curTarget.tag == "Hook Target")
-                        target = curTarget.position;
-                }
-            }
-            else
-            {
-                //Get cathets 
-                float kat1 = Mathf.Abs(target.x - startPos.x);
-                float kat2 = Mathf.Abs(target.y - startPos.y);
 
-                //Check throw length. If it longer than max length...
-                if (Mathf.Sqrt(Mathf.Pow(kat1, 2) + Mathf.Pow(kat2, 2)) > maxLength)
-                {
-                    //...find a new coordinates for throw, equals to the max length
-                    float angle = Vector2.Angle(startPos, target);                       //Get alpha angle
-                    kat1 = maxLength * Mathf.Cos(angle);                                  //Get first cathet (x)
-                    kat2 = maxLength * Mathf.Sin(angle);//Mathf.Sqrt(Mathf.Pow(maxLength, 2) - Mathf.Pow(kat1, 2));      //Get second cathet (y)
-                    target = new Vector2(startPos.x + kat1, startPos.y + kat2);
-                }
-            }
             //Move tip of hook
             tipTransform.position = Vector2.MoveTowards(tipTransform.position, target, throwSpeed * Time.deltaTime);
 
             //Looking for the closest target to grab it
             dragTargets = Physics2D.OverlapCircleAll(tipTransform.position, dragRadius, layers);
+
+            if(dragTargets.Length != 0)
+                break;
         }
         //If have a target into radius...
         if(dragTargets != null && dragTargets.Length != 0)
@@ -89,7 +94,7 @@ public class Hook : MonoBehaviour
             //...Check his layer name
             if(dragTargets[0].gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
-                tipTransform.position = target;                                //Move tip of hook to target
+                tipTransform.position = /*target*/dragTargets[0].transform.position;                                //Move tip of hook to target
                 hookedEnemy = dragTargets[0].GetComponent<Enemy>();            //Cache component
                 hookedEnemy.HookOn(tipTransform);                             //Set target state to HookOn
                 pullCoroutine = StartCoroutine(Pull(hookedEnemy.dragType));    //Pull up tip of hook
