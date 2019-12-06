@@ -21,7 +21,7 @@ public class Hook : MonoBehaviour
     Transform parent;
     Enemy hookedEnemy;
     Transform hookedTarget;
-    [SerializeField] LayerMask layers = 1 << 9 | 1 << 12;
+    [SerializeField] LayerMask dragLayers = 1 << 9 | 1 << 12;
 
     public Coroutine throwCoroutine;
     public Coroutine pullCoroutine;
@@ -42,11 +42,12 @@ public class Hook : MonoBehaviour
 
     public IEnumerator Throw(Vector2 target)
     {
-        Collider2D[] dragTargets = Physics2D.OverlapCircleAll(tipTransform.position, dragRadius, layers);
+        Collider2D[] dragTargets;// = Physics2D.OverlapCircleAll(tipTransform.position, dragRadius, dragLayers);
         startPos = tailTransform.position;
 
         //Draw a line from tip pos to target pos to check for objects on the way
-        RaycastHit2D hit = Physics2D.Linecast(tipTransform.position, target, layers);
+        RaycastHit2D hit = Physics2D.Raycast(tipTransform.position, target, maxLength, dragLayers);
+        //RaycastHit2D hit = Physics2D.Linecast(tipTransform.position, target, dragLayers);
         //If have the object
         if (hit.transform)
         {
@@ -58,6 +59,11 @@ public class Hook : MonoBehaviour
             }
         }
         else
+        {
+            Debub.Log("hit result " + hit);
+            //target = hit.position;
+        }
+        /*else
         {
             //Get cathets 
             float kat1 = Mathf.Abs(target.x - startPos.x);
@@ -72,10 +78,10 @@ public class Hook : MonoBehaviour
                 kat2 = maxLength * Mathf.Sin(angle);//Mathf.Sqrt(Mathf.Pow(maxLength, 2) - Mathf.Pow(kat1, 2));      //Get second cathet (y)
                 target = new Vector2(startPos.x + kat1, startPos.y + kat2);
             }
-        }
+        }*/
 
         //While tip of hook didn't reach target position
-        while(Vector2.MoveTowards(tipTransform.position, target, throwSpeed * Time.deltaTime) != (Vector2) tipTransform.position)//while (Mathf.Abs(target.x - transform.position.x) > 0 || Mathf.Abs(target.y - transform.position.y) > 0 && dragTargets.Length == 0)
+        while(Vector2.MoveTowards(tipTransform.position, target, throwSpeed * Time.deltaTime) != (Vector2) tipTransform.position)
         {
             yield return new WaitForEndOfFrame();
 
@@ -83,7 +89,7 @@ public class Hook : MonoBehaviour
             tipTransform.position = Vector2.MoveTowards(tipTransform.position, target, throwSpeed * Time.deltaTime);
 
             //Looking for the closest target to grab it
-            dragTargets = Physics2D.OverlapCircleAll(tipTransform.position, dragRadius, layers);
+            dragTargets = Physics2D.OverlapCircleAll(tipTransform.position, dragRadius, dragLayers);
 
             if(dragTargets.Length != 0)
                 break;
@@ -96,7 +102,6 @@ public class Hook : MonoBehaviour
             {
                 tipTransform.position = /*target*/dragTargets[0].transform.position;                                //Move tip of hook to target
                 hookedEnemy = dragTargets[0].GetComponent<Enemy>();            //Cache component
-                hookedEnemy.HookOn(tipTransform);                             //Set target state to HookOn
                 pullCoroutine = StartCoroutine(Pull(hookedEnemy.dragType));    //Pull up tip of hook
             }
             else
@@ -133,9 +138,12 @@ public class Hook : MonoBehaviour
                 tailTransform.localPosition = Vector2.MoveTowards(tailTransform.localPosition, tipTransform.localPosition, pullSpeed * Time.deltaTime);
             }
         }
-        //If target object draggable or if haven't a target 
+        //If target object draggable or haven't a target 
         else
         {
+            if(hookedEnemy != null)
+                hookedEnemy.HookOn(tipTransform);                             //Set target state to HookOn
+
             //While target didn't reach tail of hook position
             while (Vector2.MoveTowards(parent.InverseTransformPoint(tipTransform.position), Vector2.zero, pullSpeed * Time.deltaTime) != (Vector2) tipTransform.localPosition)
             {
@@ -154,7 +162,7 @@ public class Hook : MonoBehaviour
     {
         if(hookedEnemy)
             hookedEnemy.HookOff(dazedTime);
-        else
+        else if(hookedTarget)
             playerMovement.HookOff();
 
         //Return all objects to they start positions
