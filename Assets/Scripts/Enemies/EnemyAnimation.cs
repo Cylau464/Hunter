@@ -15,6 +15,8 @@ public class EnemyAnimation : MonoBehaviour
     int deadParamID;
     int speedParamID;
     int fallParamID;
+    int castParamID;
+    int spellParamID;
 
     // Start is called before the first frame update
     void Start()
@@ -26,8 +28,10 @@ public class EnemyAnimation : MonoBehaviour
         attackingParamID       = Animator.StringToHash("isAttacking");
         hurtParamID            = Animator.StringToHash("isHurt");
         deadParamID            = Animator.StringToHash("isDead");
+        castParamID            = Animator.StringToHash("isCast");
         speedParamID           = Animator.StringToHash("speed");
         fallParamID            = Animator.StringToHash("verticalVelocity");
+        spellParamID           = Animator.StringToHash("spellNumber");
 
         //Get references to the needed components
         enemy                  = GetComponent<Enemy>();
@@ -52,6 +56,9 @@ public class EnemyAnimation : MonoBehaviour
         anim.SetBool(hurtParamID, enemy.isHurt);
         anim.SetBool(attackingParamID, enemy.isAttack);
         anim.SetBool(deadParamID, enemy.isDead);
+        anim.SetBool(castParamID, enemy.isCast);
+
+        anim.SetInt(spellParamID, enemy.spellNumber);
 
         anim.SetFloat(fallParamID, rigidBody.velocity.y);
 
