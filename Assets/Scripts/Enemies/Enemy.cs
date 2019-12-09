@@ -11,13 +11,13 @@ public class Enemy : MonoBehaviour
     public DragType dragType = DragType.Draggable;
 
     [Header("Attack properties")]
-    [SerializeField] int damage = 1;
+    [SerializeField] protected int damage = 1;
     [SerializeField] float attackDistance = 2f;
     //[SerializeField] float attackDuration = 1f;
     [SerializeField] float attackRangeX = 2f;
     [SerializeField] float attackRangeY = 1f;
     public float attackCD = 1.5f;
-    float attackCD = 0f;
+    float curAttackCD = 0f;
 
     [Header("Speed Properties")]
     [SerializeField] float patrolSpeed = 2f;
@@ -37,6 +37,7 @@ public class Enemy : MonoBehaviour
     public bool isPatrol;
     public bool isChase;
     public bool isAttack;
+    public bool isCast;
     public bool isHurt;
     public bool isDead;
 
@@ -44,24 +45,27 @@ public class Enemy : MonoBehaviour
     [SerializeField] float spriteBlinkingPeriod   = 0.1f;
     float blinkingTimer = 0f;
     float blinkingPeriod = 0f;
+
     bool spriteBlinkingEnabled;
 
-    enum State { Null, Patrol, Chase, Attack, Hurt, Dead };
-    State currentState;
+    protected enum State { Null, Patrol, Chase, Attack, CastSpell, Hurt, Dead };
+    protected State currentState;
     Transform myTransform;
     Transform hookTransform;
     Transform myHookTarget;
-    Rigidbody2D rigidBody;
+    protected Rigidbody2D rigidBody;
     SpriteRenderer sprite;
     Vector2 startPos;
     Collider2D target;
 
-    int direction = 1;
+    protected int direction = 1;
 
     //Patrol variables
     float pathDestination  = 0f;   //Point to move around start position
     float patrolDelay      = 0f;   //Delay before start next path
     int dir                = 0;    //Local var direction
+
+    public int spellNumber;
 
     void Start()
     {
@@ -107,6 +111,10 @@ public class Enemy : MonoBehaviour
                 //isAttack = true;
                 Attack();
                 break;
+            case State.CastSpell:
+                isCast = true;         
+                CastSpell();
+                break;
             case State.Hurt:
                 isHurt = true;
                 Hurt();
@@ -119,18 +127,20 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void SwitchState(State newState)
+    protected void SwitchState(State newState)
     {
         isPatrol    = false;
         isChase     = false;
         isAttack    = false;
+        isCast      = false;
         isHurt      = false;
         isDead      = false;
 
+        spellNumber = 0;
         currentState = newState;
     }
 
-    void Patrol()
+    protected void Patrol()
     {
         //If character reached destination...
         if (pathPassed)
@@ -172,7 +182,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void Chase()
+    protected void Chase()
     {
         //Flip enemy towards the player
         if(Mathf.Sign(target.transform.position.x - transform.position.x) != direction)
@@ -194,9 +204,9 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void Attack()
+    protected void Attack()
     {
-        if(attackCD <= Time.time && !isAttack)
+        if(curAttackCD <= Time.time && !isAttack)
         {
             //If player too far
             if (target != null)
@@ -217,7 +227,12 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void Hurt()
+    protected virtual void CastSpell()
+    {
+
+    }
+
+    protected void Hurt()
     {
         if (hookTransform != null)
             transform.position = hookTransform.position - myHookTarget.localPosition;
@@ -237,7 +252,7 @@ public class Enemy : MonoBehaviour
         curDazedTime = Time.time + dazedTime;
     }
 
-    void Dead()
+    protected void Dead()
     {
         Destroy(gameObject);
     }
@@ -277,7 +292,7 @@ public class Enemy : MonoBehaviour
 
     void GiveDamage()
     {
-        attackCD = Time.time + attackCD;       //Start cooldown of attack
+        curAttackCD = Time.time + attackCD;       //Start cooldown of attack
         LayerMask playerLayer = 1 << 10;       //10 - player layer
 
         Collider2D objectToDamage = Physics2D.OverlapBox(transform.position, new Vector2(attackRangeX, attackRangeY), 0, playerLayer);
@@ -312,5 +327,24 @@ public class Enemy : MonoBehaviour
 
         if(target && isPatrol)
             SwitchState(State.Chase);
+    }
+}
+
+[System.Serializable]
+public struct EnemySpell
+{
+    [SerializeField] float longJumpDistance = 10f;
+    [SerializeField] float longJumpHeight = 5f;
+    [SerializeField] float longJumpDelay = 1.5f;                      //Delay after jump
+    float curLongJumpDelay;
+    [SerializeField] float longJumpCD = 7f;
+    float curLongJumpCD;
+    [SerializeField] float longJumpRangeX = 5f;
+    [SerializeField] float longJumpRangeY = 2f;
+
+    public EnemySpell()
+    {
+        this.
+        this.
     }
 }

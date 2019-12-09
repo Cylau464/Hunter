@@ -42,7 +42,7 @@ public class Hook : MonoBehaviour
 
     public IEnumerator Throw(Vector2 target)
     {
-        Collider2D[] dragTargets;// = Physics2D.OverlapCircleAll(tipTransform.position, dragRadius, dragLayers);
+        Collider2D[] dragTargets = null;// = Physics2D.OverlapCircleAll(tipTransform.position, dragRadius, dragLayers);
         startPos = tailTransform.position;
 
         //Draw a line from tip pos to target pos to check for objects on the way
@@ -60,7 +60,7 @@ public class Hook : MonoBehaviour
         }
         else
         {
-            Debub.Log("hit result " + hit);
+            Debug.Log("hit result " + hit);
             //target = hit.position;
         }
         /*else
@@ -136,6 +136,7 @@ public class Hook : MonoBehaviour
                 yield return new WaitForEndOfFrame();
 
                 tailTransform.localPosition = Vector2.MoveTowards(tailTransform.localPosition, tipTransform.localPosition, pullSpeed * Time.deltaTime);
+                myTransform.localPosition = -Vector2.MoveTowards(tailTransform.localPosition, tipTransform.localPosition, pullSpeed * Time.deltaTime);
             }
         }
         //If target object draggable or haven't a target 

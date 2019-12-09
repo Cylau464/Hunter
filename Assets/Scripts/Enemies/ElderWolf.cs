@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class ElderWolf : Enemy
 {
-    public bool isCast;
-    public int spellNumber; //Unset this in SwitchState
     enum Spell { None, LongJump, BackJump, SwingTail, IceBreath };
     Spell spell = Spell.None;
+
+    object[] spells = {  };
 
     [SerializeField] float longJumpDistance = 10f;
     [SerializeField] float longJumpHeight = 5f;
@@ -15,48 +15,19 @@ public class ElderWolf : Enemy
     float curLongJumpDelay;
     [SerializeField] float longJumpCD = 7f;
     float curLongJumpCD;
+    [SerializeField] float longJumpRangeX = 5f;
+    [SerializeField] float longJumpRangeY = 2f;
+
     [SerializeField] float backJumpDistance = 6f;
     [SerializeField] float backJumpHeight = 4f;
     [SerializeField] float backJumpDelay = .5f;                      //Delay after jump
     float curBackJumpDelay;
     [SerializeField] float backJumpCD = 10f;
     float curBackJumpCD;
+    [SerializeField] float backJumpRangeX = 3f;
+    [SerializeField] float backJumpRangeY = 2f;
 
-    void FixedUpdate()
-    {
-        CheckPlayer();
-
-        switch (currentState)
-        {
-            case State.Patrol:
-                isPatrol = true;
-                Patrol();
-                break;
-            case State.Chase:
-                isChase = true;
-                Chase();
-                break;
-            case State.Attack:
-                //isAttack = true;
-                Attack();
-                break;
-            case State.CastSpell:
-                isCast = true;          //Need to set it false in SwitchState
-                CastSpell();
-                break;
-            case State.Hurt:
-                isHurt = true;
-                Hurt();
-                break;
-            case State.Dead:
-                isDead = true;
-                Invoke("Dead", 3f);
-                currentState = State.Null;
-                break;
-        }
-    }
-
-    void CastSpell()
+    override protected void CastSpell()
     {
         switch(spell)
         {
@@ -110,8 +81,9 @@ public class ElderWolf : Enemy
             rigidBody.AddForce(new Vector2(backJumpDistance * -direction, backJumpHeight), ForceMode2D.Impulse);
     }
 
-    void JumpDamage()
+    void JumpDamage(Spell usedSpell)
     {
+        foreach()
         if(spell == Spell.LongJump)
         {
             curLongJumpDelay = Time.time + longJumpDelay;
@@ -125,7 +97,7 @@ public class ElderWolf : Enemy
 
         LayerMask playerLayer = 1 << 10;       //10 - player layer
 
-        Collider2D objectToDamage = Physics2D.OverlapBox(transform.position, new Vector2(attackRangeX, attackRangeY), 0, playerLayer);
+        Collider2D objectToDamage = Physics2D.OverlapBox(transform.position, new Vector2(1, 1), 0, playerLayer);
 
         if (objectToDamage != null)
             objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(damage);

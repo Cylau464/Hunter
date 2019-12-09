@@ -34,21 +34,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] LayerMask groundLayer          = 1 << 9;       //9 - Platforms layer
 
     [Header("Status Flags")]
-    [SerializeField]
-    bool isOnGround,
-    isJumping,
-    isDoubleJump,
-    isHeadBlocked,
-    isCrouching,
-    isAttacking,
-    isEvading,
-    isHanging,
-    isClimbing,
-    isHooked,
-    isHurt,
-    isDead,
-    canFlip;
-    /*public bool isOnGround;
+    public bool isOnGround;
     public bool isJumping;
     public bool isDoubleJump;
     public bool isHeadBlocked;
@@ -62,7 +48,7 @@ public class PlayerMovement : MonoBehaviour
     public bool isDead;
     public bool canFlip = true;
     public bool moveInputPriority = true;      //What the hell is this?
-*/
+
     [HideInInspector] 
     public float speedDivisor = 1f;                //Used to decrease horizontal speed
 
@@ -221,7 +207,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //Evading
-        if (/*input.evade*/input.lastInputs.Contains(InputsEnums.Evade) && attack.attackState != AttackState.Damage && !isEvading && curEvadingCooldown <= Time.time)
+        if (/*input.evade*/input.lastInputs.Contains(InputsEnum.Evade) && attack.attackState != AttackState.Damage && !isEvading && curEvadingCooldown <= Time.time)
         {
             //If use evade in hanging state
             if (rigidBody.bodyType == RigidbodyType2D.Static)
@@ -260,7 +246,7 @@ public class PlayerMovement : MonoBehaviour
         }
         //Clear up all evade inputs from the inputs list if CD has not yet passed
         if (curEvadingCooldown > Time.time)
-            input.lastInputs.RemoveAll(x => x == InputsEnums.Evade);
+            input.lastInputs.RemoveAll(x => x == InputsEnum.Evade);
 
         //Climbing
         if (!isEvading)

@@ -5,7 +5,7 @@ using UnityEngine;
 public enum PlayerState { Idle, Move, Jump, Crouch, Attack, Climb, Hang, Hooked, Hurt, Dead };
 
 public class Player : MonoBehaviour
-{
+{/*
     [SerializeField] bool drawDebugRaycast = true;
 
     [Header("Movement Properties")]
@@ -32,7 +32,7 @@ public class Player : MonoBehaviour
     [SerializeField] float evadingDuration = .35f;            //Duration of evade state and animation
     [SerializeField] float evadingDistance = 8f;              //Distance of evade
     [SerializeField] float evadingCooldown = 1f;              //Evade cooldown in sec
-    [SerializeField] int direction { get; private set; } = 1; //Character direction
+    [SerializeField] public int direction { get; private set; } = 1; //Character direction
     [SerializeField] LayerMask groundLayer = 1 << 9;          //9 - Platforms layer
 
     [Header("Status Flags")]
@@ -51,18 +51,7 @@ public class Player : MonoBehaviour
     isHurt,
     isDead,
     canFlip;
-    /*public bool isJumping;
-    public bool isDoubleJump;
-    public bool isHeadBlocked;
-    public bool isCrouching;
-    public bool isAttacking;
-    public bool isEvading;
-    public bool isHanging;
-    public bool isClimbing;
-    bool isHooked;
-    public bool isHurt;
-    public bool isDead;
-    public bool canFlip = true;*/                     //Check whether the character can flip or not
+
     public bool moveInputPriority = true;           //What the hell is this?
 
     [HideInInspector] 
@@ -264,7 +253,7 @@ public class Player : MonoBehaviour
         }
 
         //Evading
-        if (/*input.evade*/input.lastInputs.Contains(InputsEnums.Evade) && attack.attackState != AttackState.Damage && !isEvading && curEvadingCooldown <= Time.time)
+        if (input.lastInputs.Contains(InputsEnum.Evade) && attack.attackState != AttackState.Damage && !isEvading && curEvadingCooldown <= Time.time)
         {
             //If use evade in hanging state
             if (rigidBody.bodyType == RigidbodyType2D.Static)
@@ -286,7 +275,7 @@ public class Player : MonoBehaviour
 
             //Choose evade direction according to the key is pressed or not
             if (input.horizontal != 0)
-                rigidBody.AddForce(new Vector2(evadingDistance /** 1.5f*/ * Mathf.Sign(input.horizontal), 0f), ForceMode2D.Impulse);
+                rigidBody.AddForce(new Vector2(evadingDistance  * Mathf.Sign(input.horizontal), 0f), ForceMode2D.Impulse);
             else
                 rigidBody.AddForce(new Vector2(evadingDistance * direction, 0f), ForceMode2D.Impulse);
 
@@ -305,7 +294,7 @@ public class Player : MonoBehaviour
         }
         //Clear up all evade inputs from the inputs list if CD has not yet passed
         if (curEvadingCooldown > Time.time)
-            input.lastInputs.RemoveAll(x => x == InputsEnums.Evade);
+            input.lastInputs.RemoveAll(x => x == InputsEnum.Evade);
 
         //Climbing
         if (!isEvading)
@@ -327,5 +316,5 @@ public class Player : MonoBehaviour
                 }
             }
         }
-    }
+    }*/
 }

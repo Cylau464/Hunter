@@ -58,7 +58,7 @@ public class EnemyAnimation : MonoBehaviour
         anim.SetBool(deadParamID, enemy.isDead);
         anim.SetBool(castParamID, enemy.isCast);
 
-        anim.SetInt(spellParamID, enemy.spellNumber);
+        anim.SetInteger(spellParamID, enemy.spellNumber);
 
         anim.SetFloat(fallParamID, rigidBody.velocity.y);
 

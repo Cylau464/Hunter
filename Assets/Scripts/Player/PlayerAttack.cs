@@ -83,14 +83,14 @@ public class PlayerAttack : MonoBehaviour
         if (!movement.isDead)
         {
             if (!movement.isEvading && !movement.isClimbing && !movement.isHanging && canAttack &&
-                input.lastInputs.Count != 0 && (input.lastInputs[0] == InputsEnums.StrongAttack || input.lastInputs[0] == InputsEnums.LightAttack)/*input.lastInputs.Exists(x => x == InputsEnums.StrongAttack || x == InputsEnums.LightAttack)*/ && timeBtwAttacks + Time.deltaTime <= Time.time)
+                input.lastInputs.Count != 0 && (input.lastInputs[0] == InputsEnum.StrongAttack || input.lastInputs[0] == InputsEnum.LightAttack)/*input.lastInputs.Exists(x => x == InputsEnums.StrongAttack || x == InputsEnums.LightAttack)*/ && timeBtwAttacks + Time.deltaTime <= Time.time)
             {
                 if (!movement.isOnGround && lightCombo + strongCombo + jointCombo > 0)
                     switchAttack = true;
                 
                 attackState = AttackState.Start;
                 //if list have both attack input...
-                if (input.lastInputs.Contains(InputsEnums.LightAttack) && input.lastInputs.Contains(InputsEnums.StrongAttack))
+                if (input.lastInputs.Contains(InputsEnum.LightAttack) && input.lastInputs.Contains(InputsEnum.StrongAttack))
                 {
                     attackType = AttackTypes.Joint;
                     input.lastInputs.Clear();          //...remove all list element
@@ -98,7 +98,7 @@ public class PlayerAttack : MonoBehaviour
                 //if only one of they...
                 else
                 {
-                    attackType = input.lastInputs[0] == InputsEnums.LightAttack ? AttackTypes.Light : AttackTypes.Strong;
+                    attackType = input.lastInputs[0] == InputsEnum.LightAttack ? AttackTypes.Light : AttackTypes.Strong;
                     input.lastInputs.RemoveAt(0);      //...remove first list element
                 }
 
