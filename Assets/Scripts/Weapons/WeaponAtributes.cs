@@ -68,3 +68,18 @@ public struct Element
         this.value = value;
     }
 }
+/*
+[System.Serializable]
+public struct ValueOfDefense
+{
+    public string title;
+    public DefenseTypes defenseType;
+    public int value;
+
+    public ValueOfDefense(string title, DefenseTypes defenseType, int value)
+    {
+        this.title = title;
+        this.defenseType = defenseType;
+        this.value = value;
+    }
+}*/

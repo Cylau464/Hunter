@@ -4,46 +4,33 @@ using UnityEngine;
 
 public class ElderWolf : Enemy
 {
-    enum Spell { None, LongJump, BackJump, SwingTail, IceBreath };
-    Spell spell = Spell.None;
-
-    object[] spells = {  };
-
-    [SerializeField] float longJumpDistance = 10f;
-    [SerializeField] float longJumpHeight = 5f;
-    [SerializeField] float longJumpDelay = 1.5f;                      //Delay after jump
-    float curLongJumpDelay;
-    [SerializeField] float longJumpCD = 7f;
-    float curLongJumpCD;
-    [SerializeField] float longJumpRangeX = 5f;
-    [SerializeField] float longJumpRangeY = 2f;
-
-    [SerializeField] float backJumpDistance = 6f;
-    [SerializeField] float backJumpHeight = 4f;
-    [SerializeField] float backJumpDelay = .5f;                      //Delay after jump
-    float curBackJumpDelay;
-    [SerializeField] float backJumpCD = 10f;
-    float curBackJumpCD;
-    [SerializeField] float backJumpRangeX = 3f;
-    [SerializeField] float backJumpRangeY = 2f;
-
+    enum SpellEnum { None, LongJump, BackJump, SwingTail, IceBreath };
+    SpellEnum spell = SpellEnum.None;
+    Dictionary<SpellEnum, EnemySpell> mySpells = new Dictionary<SpellEnum, EnemySpell>
+    {
+        { SpellEnum.LongJump, new EnemySpell(10f, 5f, 1.5f, 7f, 5f, 2f, 2) },
+        { SpellEnum.BackJump, new EnemySpell(-6f, 4f, .5f, 10f, 3f, 2f, 1) },
+        { SpellEnum.SwingTail, new EnemySpell() },
+        { SpellEnum.IceBreath, new EnemySpell() }
+    };
+    
     override protected void CastSpell()
     {
         switch(spell)
         {
-            case Spell.None:
+            case SpellEnum.None:
                 Debug.LogError("Enemy try cast spell with none value. Enemy ID: " + gameObject.GetInstanceID());
                 break;
-            case Spell.LongJump:
+            case SpellEnum.LongJump:
                 LongJump();
                 break;
-            case Spell.BackJump:
+            case SpellEnum.BackJump:
                 BackJump();
                 break;
-            case Spell.SwingTail:
+            case SpellEnum.SwingTail:
                 SwingTail();
                 break;
-            case Spell.IceBreath:
+            case SpellEnum.IceBreath:
                 IceBreath();
                 break;
         }
@@ -54,10 +41,11 @@ public class ElderWolf : Enemy
         spellNumber = 1;
         
         //Wait a delay and then switch state
-        if(curLongJumpDelay != 0 && curLongJumpDelay <= Time.time)
+        if(mySpells[spell].curDelay != 0 && mySpells[spell].curDelay <= Time.time)
         {
+            mySpells[spell].curCooldown = Time.time + mySpells[spell].cooldown;
+            mySpells[spell].curDelay = 0;
             SwitchState(State.Chase);
-            curLongJumpDelay = 0;
         }
     }
 
@@ -66,42 +54,27 @@ public class ElderWolf : Enemy
         spellNumber = 2;
 
         //Wait a delay and then switch state
-        if(curBackJumpDelay != 0 && curBackJumpDelay <= Time.time)
+        if(mySpells[spell].curDelay != 0 && mySpells[spell].curDelay <= Time.time)
         {
+            mySpells[spell].curCooldown = Time.time + mySpells[spell].cooldown;
+            mySpells[spell].curDelay = 0;
             SwitchState(State.Chase);
-            curBackJumpDelay = 0;
         }
     }
 
     void StartJump()
     {
-        if(spell == Spell.LongJump)
-            rigidBody.AddForce(new Vector2(longJumpDistance * direction, longJumpHeight), ForceMode2D.Impulse);
-        else if(spell == Spell.BackJump)
-            rigidBody.AddForce(new Vector2(backJumpDistance * -direction, backJumpHeight), ForceMode2D.Impulse);
+        rigidBody.AddForce(new Vector2(mySpells[spell].jumpDistance * direction, mySpells[spell].jumpHeight), ForceMode2D.Impulse);
     }
 
-    void JumpDamage(Spell usedSpell)
+    void JumpDamage()
     {
-        foreach()
-        if(spell == Spell.LongJump)
-        {
-            curLongJumpDelay = Time.time + longJumpDelay;
-            curLongJumpCD = Time.time + longJumpCD;
-        }
-        else if(spell == Spell.BackJump)
-        {
-            curBackJumpDelay = Time.time + backJumpDelay;
-            curBackJumpCD = Time.time + backJumpCD;
-        }
-
+        mySpells[spell].curDelay = Time.time + mySpells[spell].delayAfterCast;
         LayerMask playerLayer = 1 << 10;       //10 - player layer
-
-        Collider2D objectToDamage = Physics2D.OverlapBox(transform.position, new Vector2(1, 1), 0, playerLayer);
+        Collider2D objectToDamage = Physics2D.OverlapBox(transform.position, new Vector2(mySpells[spell].damageRangeX, mySpells[spell].damageRangeY), 0, playerLayer);
 
         if (objectToDamage != null)
-            objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(damage);
-
+            objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].damage);
     }
 
     void SwingTail()

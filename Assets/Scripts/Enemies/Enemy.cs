@@ -9,9 +9,35 @@ public class Enemy : MonoBehaviour
     int health;
     [SerializeField] float viewDistance = 10f;
     public DragType dragType = DragType.Draggable;
+    public Dictionary<DamageTypes, int> valuesOfDefense = new Dictionary<DamageTypes, int>
+    {
+        { DamageTypes.Slash, 0 },
+        { DamageTypes.Chop, 0 },
+        { DamageTypes.Thrust, 0 },
+        { DamageTypes.Blunt, 0 }
+    };
+    public Dictionary<Elements, int> elementDefense = new Dictionary<Elements, int>
+    {
+        { Elements.Earth, 0 },
+        { Elements.Fire, 0 },
+        { Elements.Water, 0 },
+        { Elements.Wind, 0 }
+    };/*
+    public Element[] elementDefense = {
+        new Element("Fire", Elements.Fire, 0),
+        new Element("Wind", Elements.Wind, 0),
+        new Element("Earth", Elements.Earth, 0),
+        new Element("Water", Elements.Water, 0)
+    };*/
 
     [Header("Attack properties")]
     [SerializeField] protected int damage = 1;
+    public Element[] elementDamage = {
+        new Element("Fire", Elements.Fire, 0),
+        new Element("Wind", Elements.Wind, 0),
+        new Element("Earth", Elements.Earth, 0),
+        new Element("Water", Elements.Water, 0)
+    };
     [SerializeField] float attackDistance = 2f;
     //[SerializeField] float attackDuration = 1f;
     [SerializeField] float attackRangeX = 2f;
@@ -65,7 +91,7 @@ public class Enemy : MonoBehaviour
     float patrolDelay      = 0f;   //Delay before start next path
     int dir                = 0;    //Local var direction
 
-    public int spellNumber;
+    public int spellNumber;        //Needful for animator
 
     void Start()
     {
@@ -331,20 +357,39 @@ public class Enemy : MonoBehaviour
 }
 
 [System.Serializable]
-public struct EnemySpell
+protected struct EnemySpell
 {
-    [SerializeField] float longJumpDistance = 10f;
-    [SerializeField] float longJumpHeight = 5f;
-    [SerializeField] float longJumpDelay = 1.5f;                      //Delay after jump
-    float curLongJumpDelay;
-    [SerializeField] float longJumpCD = 7f;
-    float curLongJumpCD;
-    [SerializeField] float longJumpRangeX = 5f;
-    [SerializeField] float longJumpRangeY = 2f;
+    [Header("General vars")]
+    protected float delayAfterCast;
+    protected float curDelay;
+    protected float cooldown;
+    protected float curCooldown;
 
+    [Header("Attack spells")]
+    protected float damageRangeX;
+    protected float damageRangeY;
+
+    protected int damage;
+
+    [Header("Spells with jumps")]
+    protected float jumpDistance;
+    protected float jumpHeight;
+
+    //For spells with jumps
+    public EnemySpell(float jumpDistance, float jumpHeight, float delayAfterCast, float cooldown, float damageRangeX, float damageRangeY, int damage)
+    {
+        this.jumpDistance   = jumpDistance;
+        this.jumpHeight     = jumpHeight;
+        this.delayAfterCast = delayAfterCast;
+        this.cooldown       = cooldown;
+        this.damageRangeX   = damageRangeX;
+        this.damageRangeY   = damageRangeY;
+        this.damage         = damage;
+    }
+
+    //For other spells
     public EnemySpell()
     {
-        this.
-        this.
+
     }
 }
