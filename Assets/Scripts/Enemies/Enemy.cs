@@ -9,20 +9,7 @@ public class Enemy : MonoBehaviour
     int health;
     [SerializeField] float viewDistance = 10f;
     public DragType dragType = DragType.Draggable;
-    public Dictionary<DamageTypes, int> valuesOfDefense = new Dictionary<DamageTypes, int>
-    {
-        { DamageTypes.Slash, 0 },
-        { DamageTypes.Chop, 0 },
-        { DamageTypes.Thrust, 0 },
-        { DamageTypes.Blunt, 0 }
-    };
-    public Dictionary<Elements, int> elementDefense = new Dictionary<Elements, int>
-    {
-        { Elements.Earth, 0 },
-        { Elements.Fire, 0 },
-        { Elements.Water, 0 },
-        { Elements.Wind, 0 }
-    };/*
+/*
     public Element[] elementDefense = {
         new Element("Fire", Elements.Fire, 0),
         new Element("Wind", Elements.Wind, 0),
@@ -357,23 +344,23 @@ public class Enemy : MonoBehaviour
 }
 
 [System.Serializable]
-protected struct EnemySpell
+struct EnemySpell
 {
     [Header("General vars")]
-    protected float delayAfterCast;
-    protected float curDelay;
-    protected float cooldown;
-    protected float curCooldown;
+    public float delayAfterCast;
+    public float curDelay;
+    public float cooldown;
+    public float curCooldown;
 
     [Header("Attack spells")]
-    protected float damageRangeX;
-    protected float damageRangeY;
+    public float damageRangeX;
+    public float damageRangeY;
 
-    protected int damage;
+    public int damage;
 
     [Header("Spells with jumps")]
-    protected float jumpDistance;
-    protected float jumpHeight;
+    public float jumpDistance;
+    public float jumpHeight;
 
     //For spells with jumps
     public EnemySpell(float jumpDistance, float jumpHeight, float delayAfterCast, float cooldown, float damageRangeX, float damageRangeY, int damage)
@@ -385,11 +372,15 @@ protected struct EnemySpell
         this.damageRangeX   = damageRangeX;
         this.damageRangeY   = damageRangeY;
         this.damage         = damage;
-    }
+        this.spell          = spell;
 
+        curCooldown         = 0f;
+        curDelay            = 0f;
+    }
+    /*
     //For other spells
     public EnemySpell()
     {
 
-    }
+    }*/
 }
