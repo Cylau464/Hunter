@@ -54,7 +54,9 @@ public class PlayerAttack : MonoBehaviour
 
     int damage;
 
-    public WeaponType weaponType;
+    public WeaponAttackType weaponAttackType;
+    DamageTypes weaponDamageType;
+    Element weaponElement;
 
     private void OnGUI()
     {
@@ -70,7 +72,7 @@ public class PlayerAttack : MonoBehaviour
         weaponAnimation     = weapon.GetComponent<WeaponAnimation>();
         attackRangeX        = weaponAtributes.attackRangeX;
         attackRangeY        = weaponAtributes.attackRangeY;
-        weaponType          = weaponAtributes.weaponType;
+        weaponAttackType    = weaponAtributes.weaponAttackType;
         //anim = parent.GetComponent<Animator>();
         movement            = GetComponent<PlayerMovement>();
         rigidBody           = GetComponent<Rigidbody2D>();
@@ -83,13 +85,15 @@ public class PlayerAttack : MonoBehaviour
         if (!movement.isDead)
         {
             if (!movement.isEvading && !movement.isClimbing && !movement.isHanging && canAttack &&
-                input.lastInputs.Count != 0 && (input.lastInputs[0] == InputsEnum.StrongAttack || input.lastInputs[0] == InputsEnum.LightAttack)/*input.lastInputs.Exists(x => x == InputsEnums.StrongAttack || x == InputsEnums.LightAttack)*/ && timeBtwAttacks + Time.deltaTime <= Time.time)
+                input.lastInputs.Count != 0 && (input.lastInputs[0] == InputsEnum.StrongAttack || input.lastInputs[0] == InputsEnum.LightAttack || input.lastInputs[0] == InputsEnum.JointAttack) && timeBtwAttacks + Time.deltaTime <= Time.time)
             {
                 if (!movement.isOnGround && lightCombo + strongCombo + jointCombo > 0)
                     switchAttack = true;
                 
                 attackState = AttackState.Start;
-                //if list have both attack input...
+                attackType = input.lastInputs[0] == InputsEnum.JointAttack ? AttackTypes.Joint : input.lastInputs[0] == InputsEnum.StrongAttack ? AttackTypes.Strong : AttackTypes.Light;
+                input.lastInputs.RemoveAt(0);
+                /*//if list have both attack input...
                 if (input.lastInputs.Contains(InputsEnum.LightAttack) && input.lastInputs.Contains(InputsEnum.StrongAttack))
                 {
                     attackType = AttackTypes.Joint;
@@ -101,7 +105,7 @@ public class PlayerAttack : MonoBehaviour
                     attackType = input.lastInputs[0] == InputsEnum.LightAttack ? AttackTypes.Light : AttackTypes.Strong;
                     input.lastInputs.RemoveAt(0);      //...remove first list element
                 }
-
+                */
                 MeleeAttack(attackType);
                 Debug.Log(attackType);
             }
@@ -110,7 +114,7 @@ public class PlayerAttack : MonoBehaviour
 
             //Flip character if shooting
             Vector2 aimDirection = Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position);
-            if (movement.isAttacking && weaponType != WeaponType.Melee && Mathf.Sign(aimDirection.x) != movement.direction)
+            if (movement.isAttacking && weaponAttackType != WeaponAttackType.Melee && Mathf.Sign(aimDirection.x) != movement.direction)
                 movement.FlipCharacterDirection();
         }
 
@@ -138,11 +142,12 @@ public class PlayerAttack : MonoBehaviour
         movement.isAttacking = true;
         input.lightAttack = false;
         input.strongAttack = false;
+        input.jointAttack = false;
 
         GetWeaponAtributes(attackType);
         SetCombo(attackType);
         //Stop character before attack
-        if(weaponType != WeaponType.Range)
+        if(weaponAttackType != WeaponAttackType.Range)
             rigidBody.velocity = Vector2.zero;
     }
 
@@ -153,7 +158,7 @@ public class PlayerAttack : MonoBehaviour
 
     void RotateRangeWeapon()
     {
-        if (weaponType != WeaponType.Melee)
+        if (weaponAttackType != WeaponAttackType.Melee)
         {
             Vector2 angle = Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position);
             rotZ = Mathf.Atan2(angle.y, angle.x) * Mathf.Rad2Deg;
@@ -171,7 +176,7 @@ public class PlayerAttack : MonoBehaviour
         movement.canFlip = false;
         curDelayResetCombo = Time.time + delayResetCombo;
 
-        if (weaponType != WeaponType.Melee)
+        if (weaponAttackType != WeaponAttackType.Melee)
         {
             shellObj = Instantiate(shellPrefab, transform.position, Quaternion.Euler(0f, 0f, rotZ));
             shell = shellObj.GetComponent<Shell>();
@@ -194,7 +199,8 @@ public class PlayerAttack : MonoBehaviour
             for (int i = 0; i < enemiesToDamage.Length; i++)
             {
                 //camShake.Shake(.2f, 1f, 2f);
-                enemiesToDamage[i].GetComponent<Enemy>().TakeDamage(damage);
+                damage = RandomDamage(damage);
+                enemiesToDamage[i].GetComponent<Enemy>().TakeDamage(damage, weaponDamageType, weaponElement);
             }
         }
     }
@@ -226,7 +232,6 @@ public class PlayerAttack : MonoBehaviour
             //input.strongAttack = false;
             movement.isAttacking = false;
             attackType = default;
-            weapon.transform.rotation = weaponAnimation.defaultRot;
             movement.speedDivisor = 1f;
         }
     }
@@ -327,7 +332,7 @@ public class PlayerAttack : MonoBehaviour
 
     void GetWeaponAtributes(AttackTypes type)
     {
-        weaponType = weaponAtributes.weaponType;
+        weaponAttackType = weaponAtributes.weaponAttackType;
         shellPrefab = weaponAtributes.shellPrefab;
         shellSpeed = weaponAtributes.shellSpeed;
         movement.speedDivisor = type == AttackTypes.Light ? weaponAtributes.speedDivisorL : type == AttackTypes.Strong ? weaponAtributes.speedDivisorS : weaponAtributes.speedDivisorJ;
@@ -337,6 +342,8 @@ public class PlayerAttack : MonoBehaviour
             case AttackTypes.Light:
             {
                 damage = weaponAtributes.lightAttackDamage;
+                weaponElement = weaponAtributes.element;
+                weaponDamageType = weaponAtributes.damageTypesOfAttacks[AttackTypes.Light]; //fix it
                 attackForceDistance = weaponAtributes.lightAttackForce;
                 timeBtwAttacks = Time.time + weaponAtributes.lightAttackSpeed;
                 attackDuration = Time.time + weaponAtributes.lightAttackSpeed * 1.5f;
@@ -345,7 +352,8 @@ public class PlayerAttack : MonoBehaviour
             case AttackTypes.Strong:
             {
                 damage = weaponAtributes.strongAttackDamage;
-
+                weaponElement = weaponAtributes.element;
+                weaponDamageType = weaponAtributes.damageTypesOfAttacks[AttackTypes.Strong]; //fix it
                 attackForceDistance = weaponAtributes.strongAttackForce;
                 timeBtwAttacks = Time.time + weaponAtributes.strongAttackSpeed;
                 attackDuration = Time.time + weaponAtributes.strongAttackSpeed * 1.5f;
@@ -354,6 +362,8 @@ public class PlayerAttack : MonoBehaviour
             case AttackTypes.Joint:
             {
                 damage = weaponAtributes.jointAttackDamage;
+                weaponElement = weaponAtributes.elementJA;
+                weaponDamageType = weaponAtributes.damageTypesOfAttacks[AttackTypes.Joint]; //fix it
                 attackForceDistance = weaponAtributes.jointAttackForce;
                 timeBtwAttacks = Time.time + weaponAtributes.jointAttackSpeed;
                 attackDuration = Time.time + weaponAtributes.jointAttackSpeed * 1.5f;
@@ -384,5 +394,12 @@ public class PlayerAttack : MonoBehaviour
             lightCombo = strongCombo = jointCombo = airLightCombo = airStrongCombo = airJointCombo = 0;
             attackState = default;
         }
+    }
+
+    int RandomDamage(int damage)
+    {
+        int percent = Mathf.CeilToInt(damage / 100f * 10f); //Get 10% of damage
+        int newDamage = Random.Range(damage - percent, damage + percent);
+        return newDamage;
     }
 }

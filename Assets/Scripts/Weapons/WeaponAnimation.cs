@@ -11,33 +11,30 @@ public class WeaponAnimation : MonoBehaviour
     int direction;
 
     PlayerMovement cMovement;
+    PlayerAttack cAttack;
     Transform character;
     SpriteRenderer sprite;
 
     void Start()
     {
-        character  = transform.parent;
-        cMovement  = character.GetComponent<PlayerMovement>();
-        sprite     = GetComponent<SpriteRenderer>();
+        character   = transform.parent;
+        cMovement   = character.GetComponent<PlayerMovement>();
+        cAttack     = character.GetComponent<PlayerAttack>();
+        sprite      = GetComponent<SpriteRenderer>();
         direction   = cMovement.direction;
-        flipCond   = sprite.flipX;
-        defaultRot  = transform.rotation;
     }
 
     void Update()
     {
         //Flip weapon following the character
-        if (!cMovement.isAttacking && cMovement.sprite.flipX != sprite.flipX)
+        if (cAttack.attackState != AttackState.Damage && cMovement.direction != direction)
             FlipWeapon();
-
-        if (cMovement.isAttacking)
-            sprite.flipX = false;
     }
 
     void FlipWeapon()
     {
         transform.localPosition = new Vector2(-transform.localPosition.x, transform.localPosition.y);
-        transform.localRotation = Quaternion.Euler(transform.localRotation.eulerAngles.x, transform.localRotation.eulerAngles.y, -transform.localRotation.eulerAngles.z);
+        transform.rotation = Quaternion.Euler(transform.localRotation.eulerAngles.x, transform.localRotation.eulerAngles.y, -transform.localRotation.eulerAngles.z);
         direction = cMovement.direction;
         sprite.flipX = !sprite.flipX;
     }

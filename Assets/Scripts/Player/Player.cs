@@ -68,7 +68,7 @@ public class Player : MonoBehaviour
     Hook hook;
     Transform hookTransform;
 
-    WeaponType weaponType;
+    WeaponAttackType weaponAttackType;
 
     int extraJumpsCount;                          //Current count extra jumps
 
@@ -106,7 +106,7 @@ public class Player : MonoBehaviour
         colliderCrouchSize      = new Vector2(bodyCollider.size.x, .85f);
         colliderCrouchOffset    = new Vector2(bodyCollider.offset.x, -.17f);
 
-        weaponType = weapon.weaponType;
+        weaponAttackType = weapon.weaponAttackType;
     }
 
     private void OnGUI()

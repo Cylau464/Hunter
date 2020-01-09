@@ -126,21 +126,30 @@ MonoBehaviour:
   lightAttackForce: 1
   strongAttackForce: 2
   jointAttackForce: 2.5
+  shellSpeed: 0
   weaponMass: 1
-  damageType: 0
+  speedDivisorL: 1
+  speedDivisorS: 1
+  speedDivisorJ: 1
+  damageTypesOfAttacks:
+    _pairs:
+    - _key: 1
+      _value: 0
+    - _key: 2
+      _value: 0
+    - _key: 3
+      _value: 0
+  damageType: 00000000
+  weaponAttackType: 0
   weaponType: 0
-  elements:
-  - title: Fire
+  shellPrefab: {fileID: 0}
+  element:
+    title: Fire
     element: 0
     value: 0
-  - title: Wind
+  elementJA:
+    title: Wind
     element: 2
-    value: 0
-  - title: Earth
-    element: 3
-    value: 0
-  - title: Water
-    element: 1
     value: 0
 --- !u!114 &-446821498990930878
 MonoBehaviour:
@@ -154,3 +163,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e245c6c5d23de5e4781638163070d4f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultRot: {x: 0, y: 0, z: 0, w: 0}

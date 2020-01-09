@@ -24,20 +24,22 @@ public class WeaponAtributes : MonoBehaviour
     public float speedDivisorL = 1f;                    //Movespeed divisor light attack
     public float speedDivisorS = 1f;                    //Movespeed divisor strong attack
     public float speedDivisorJ = 1f;                    //Movespeed divisor joint attack
-    public DamageTypes damageType = DamageTypes.Slash;
-    public WeaponType weaponType = WeaponType.Melee;
+
+    [Header("Dictionaries of Types")]
+    public DamageTypeOfAttackDictionary damageTypesOfAttacks = new DamageTypeOfAttackDictionary();
+    public DamageTypes[] damageType = { DamageTypes.Slash };
+    public WeaponAttackType weaponAttackType = WeaponAttackType.Melee;
+    public WeaponType weaponType = WeaponType.Sword;
+
     public GameObject shellPrefab;
 
-    public Element[] elements = {
-        new Element("Fire", Elements.Fire, 0),
-        new Element("Wind", Elements.Wind, 0),
-        new Element("Earth", Elements.Earth, 0),
-        new Element("Water", Elements.Water, 0)
-    };
+    [Header("Elements")]
+    public Element element = new Element("Fire", Elements.Fire, 0);
+    public Element elementJA = new Element("Wind", Elements.Wind, 0);
 
     void Start()
     {
-        
+
     }
 
     void Update()
@@ -50,14 +52,16 @@ public class WeaponAtributes : MonoBehaviour
 //Physics types of damage
 public enum DamageTypes { Slash, Chop, Thrust, Blunt }
 
-public enum Elements { Fire, Water, Wind, Earth }
+public enum Elements { Fire, Water, Wind, Earth, Lightning, Primal }
 
-public enum WeaponType { Melee, Range, Magic }
+public enum WeaponAttackType { Melee, Range }
+
+public enum WeaponType { Sword, Lance, Staff, Hammer, Bow, Scythe, Gloves }
 
 [System.Serializable]
 public struct Element
 {
-    public string title;
+    [HideInInspector] public string title;
     public Elements element;
     public int value;
 
@@ -68,18 +72,3 @@ public struct Element
         this.value = value;
     }
 }
-/*
-[System.Serializable]
-public struct ValueOfDefense
-{
-    public string title;
-    public DefenseTypes defenseType;
-    public int value;
-
-    public ValueOfDefense(string title, DefenseTypes defenseType, int value)
-    {
-        this.title = title;
-        this.defenseType = defenseType;
-        this.value = value;
-    }
-}*/

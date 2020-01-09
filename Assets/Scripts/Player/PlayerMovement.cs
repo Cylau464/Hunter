@@ -8,7 +8,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Movement Properties")]
     [SerializeField] float speed                    = 8f;           //Horizontal speed
-    [SerializeField] float crouchSpeedDivisor       = 3f;           //Speed divisor for crouching (Not used now)
+    //[SerializeField] float crouchSpeedDivisor       = 3f;           //Speed divisor for crouching (Not used now)
     [SerializeField] float coyoteDuration           = .05f;         //Little delay for jump after character start falling down
     [SerializeField] float climbingSpeed            = 70f;          //70 = 20 because 50 it's gravity force
 
@@ -62,7 +62,7 @@ public class PlayerMovement : MonoBehaviour
     Hook hook;
     Transform hookTransform;
 
-    WeaponType weaponType;
+    WeaponAttackType weaponAttackType;
 
     int extraJumpsCount;                          //Current count extra jumps
 
@@ -76,7 +76,7 @@ public class PlayerMovement : MonoBehaviour
     Vector2 colliderStandOffset;                  //Collider offset for standing position
     Vector2 colliderCrouchSize;                   //Collider size for crouching position
     Vector2 colliderCrouchOffset;                 //Collider offset for crouching position
-    Vector2 aimDirection;
+    //Vector2 aimDirection;
 
     const float smallAmount = .05f;               //A small amount used for hanging position and something else
 
@@ -91,7 +91,7 @@ public class PlayerMovement : MonoBehaviour
         playerTransform         = GetComponent<Transform>();
         weapon                  = GetComponentInChildren<WeaponAtributes>();
         hook                    = GetComponentInChildren<Hook>();
-        weaponType              = weapon.weaponType;
+        weaponAttackType        = weapon.weaponAttackType;
 
         playerHeight            = bodyCollider.size.y;
 
@@ -107,7 +107,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnGUI()
     {
-        GUI.TextField(new Rect(10, 10, 100, 200), rigidBody.velocity.ToString() + "\n" + playerTransform.position + "\nAim" + aimDirection + "\nAngle " + (Vector2.Angle(transform.right, Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position)) * Mathf.Sign(Vector3.Dot(transform.forward, Vector3.Cross(transform.right, Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position))))));
+        GUI.TextField(new Rect(10, 10, 150, 200), rigidBody.velocity.ToString() + "\n" + playerTransform.position + "\nAngle " + (Vector2.Angle(transform.right, Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position)) * Mathf.Sign(Vector3.Dot(transform.forward, Vector3.Cross(transform.right, Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position))))) + "\ninputs " + System.String.Join("", new List<InputsEnum>(input.lastInputs).ConvertAll(i => i.ToString()).ToArray()));
     }
 
     void Update()
@@ -182,10 +182,11 @@ public class PlayerMovement : MonoBehaviour
         Vector2 grabDir = new Vector2(direction, 0f);
 
         //Cast three rays to look for a wall grab
-        RaycastHit2D blockedCheck   = Raycast(new Vector2(footOffset * direction, playerHeight / 2), grabDir, grabDistance);
-        RaycastHit2D ledgeCheck     = Raycast(new Vector2(reachOffset * direction, playerHeight / 2), Vector2.down, grabDistance);
+        RaycastHit2D blockedCheck   = Raycast(new Vector2(footOffset * direction, playerHeight / 2f), grabDir, grabDistance);
+        RaycastHit2D ledgeCheck     = Raycast(new Vector2(reachOffset * direction, playerHeight / 2f), Vector2.down, grabDistance);
         RaycastHit2D wallCheck      = Raycast(new Vector2(footOffset * direction, eyeHeight), grabDir, grabDistance);
-        RaycastHit2D climbCheck     = Raycast(new Vector2(footOffset * direction, -playerHeight / 2), grabDir, grabDistance);
+        RaycastHit2D climbCheck     = Raycast(new Vector2(footOffset * direction, -playerHeight / 2f), grabDir, grabDistance);
+        RaycastHit2D climbCheck2    = Raycast(new Vector2(footOffset * direction, -playerHeight / 4f), grabDir, grabDistance);
 
         //If the player is off the ground AND is not hanging AND is falling AND
         //found a ledge AND found a wall AND the grab is NOT blocked...
@@ -251,7 +252,7 @@ public class PlayerMovement : MonoBehaviour
         //Climbing
         if (!isEvading)
         {
-            if (!isClimbing && !isAttacking && climbCheck && !wallCheck && input.horizontal != 0)
+            if (!isClimbing && !isAttacking && (climbCheck || climbCheck2) && !wallCheck && input.horizontal != 0)
             {
                 Climb();
             }
@@ -259,11 +260,11 @@ public class PlayerMovement : MonoBehaviour
             {
                 rigidBody.AddForce(Vector2.up * climbingSpeed, ForceMode2D.Force);
 
-                if (!climbCheck)
+                if (!climbCheck && !climbCheck2)
                 {
                     isClimbing = false;
                     rigidBody.velocity = Vector2.zero;
-                    rigidBody.AddForce(new Vector2(5 * direction, 0), ForceMode2D.Impulse);
+                    rigidBody.AddForce(new Vector2(5f * direction, 0f), ForceMode2D.Impulse);
                     Invoke("HorizontalAcces", 0.05f);
                 }
             }
@@ -285,7 +286,7 @@ public class PlayerMovement : MonoBehaviour
 
         float xVelocity;
 
-        if (input.horizontalAccess && !isAttacking || attack.weaponType == WeaponType.Range)
+        if (input.horizontalAccess && !isAttacking || attack.weaponAttackType == WeaponAttackType.Range)
         {
             xVelocity = speed * speedDivisor/*/ weapon.weaponMass*/ * input.horizontal;
             rigidBody.velocity = new Vector2(xVelocity, rigidBody.velocity.y);

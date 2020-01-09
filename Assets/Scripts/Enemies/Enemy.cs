@@ -9,28 +9,35 @@ public class Enemy : MonoBehaviour
     int health;
     [SerializeField] float viewDistance = 10f;
     public DragType dragType = DragType.Draggable;
-/*
-    public Element[] elementDefense = {
+
+    /*public Element[] elementDefense = {
         new Element("Fire", Elements.Fire, 0),
         new Element("Wind", Elements.Wind, 0),
         new Element("Earth", Elements.Earth, 0),
-        new Element("Water", Elements.Water, 0)
+        new Element("Water", Elements.Water, 0),
+        new Element("Lightning", Elements.Lightning, 0),
+        new Element("Primal", Elements.Primal, 0)
     };*/
 
-    [Header("Attack properties")]
+    [Header("Attack Properties")]
     [SerializeField] protected int damage = 1;
-    public Element[] elementDamage = {
+    public ElementDictionary elementDamage = new ElementDictionary();
+    /*public Element[] elementDamage = {
         new Element("Fire", Elements.Fire, 0),
         new Element("Wind", Elements.Wind, 0),
         new Element("Earth", Elements.Earth, 0),
-        new Element("Water", Elements.Water, 0)
-    };
+        new Element("Water", Elements.Water, 0),
+    };*/
     [SerializeField] float attackDistance = 2f;
     //[SerializeField] float attackDuration = 1f;
     [SerializeField] float attackRangeX = 2f;
     [SerializeField] float attackRangeY = 1f;
     public float attackCD = 1.5f;
     float curAttackCD = 0f;
+
+    [Header("Defence Properties")]
+    public ElementDictionary elementDefence = new ElementDictionary();
+    public DamageTypeDefenceDictionary physicDefence = new DamageTypeDefenceDictionary();
 
     [Header("Speed Properties")]
     [SerializeField] float patrolSpeed = 2f;
@@ -43,8 +50,8 @@ public class Enemy : MonoBehaviour
     bool pathPassed = true;
 
     [Header("Hurt Properties")]
-    [SerializeField] float dazedTime = .5f;
-    float curDazedTime;
+    //[SerializeField] float dazedTime = .5f;
+    //float curDazedTime;
 
     [Header("State Flags")]
     public bool isPatrol;
@@ -134,7 +141,7 @@ public class Enemy : MonoBehaviour
                 break;
             case State.Dead:
                 isDead = true;
-                Invoke("Dead()", 3f);
+                Invoke("Dead", 3f);
                 currentState = State.Null;
                 break;
         }
@@ -247,12 +254,13 @@ public class Enemy : MonoBehaviour
 
     protected void Hurt()
     {
+        /*
         if (hookTransform != null)
             transform.position = hookTransform.position - myHookTarget.localPosition;
         else if (curDazedTime <= Time.time)
-            SwitchState(State.Chase);
+            SwitchState(State.Chase);*/
     }
-
+    
     public void HookOn(Transform hook)
     {
         hookTransform = hook;
@@ -262,7 +270,7 @@ public class Enemy : MonoBehaviour
     public void HookOff(float dazedTime)
     {
         hookTransform = null;
-        curDazedTime = Time.time + dazedTime;
+        //curDazedTime = Time.time + dazedTime;
     }
 
     protected void Dead()
@@ -270,13 +278,25 @@ public class Enemy : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void TakeDamage(int damage /*, bool crit*/)
+    public void TakeDamage(int damage, DamageTypes damageType, Element element /*, bool crit*/)
     {
-        health -= damage;
+        if (currentState == State.Dead || currentState == State.Null) return;
+        Debug.Log("BEFORE damage " + damage + " element " + element.value);
+        element.value = element.value - Mathf.CeilToInt(element.value / 100f * elementDefence[element.element]);    //Calculation of defence from elements
+        damage = damage - Mathf.CeilToInt(damage / 100f * physicDefence[damageType]);                               //Calculation of physical defence
+        health -= damage + element.value;
         spriteBlinkingEnabled = true;
-
+        Debug.Log("POST damage " + damage + " element " + element.value);
         /*if(crit)
             currentState = State.Hurt;*/
+        TakeDamageEffects(damage + element.value);
+    }
+
+    void TakeDamageEffects(int damage)
+    {
+        GameObject damageText = Resources.Load<GameObject>("DamageNumber");
+        damageText = Instantiate(damageText, transform);
+        damageText.GetComponent<DamageNumber>().damage = damage;
     }
 
     void SpriteBlinkingEffect()
@@ -284,7 +304,7 @@ public class Enemy : MonoBehaviour
         //Timer of total blinking duration
         blinkingTimer += Time.deltaTime;
         if(blinkingTimer >= spriteBlinkingDuration)
-        {
+        { 
             spriteBlinkingEnabled = false;
             blinkingTimer = 0f;
             sprite.color = Color.white;
@@ -372,7 +392,7 @@ struct EnemySpell
         this.damageRangeX   = damageRangeX;
         this.damageRangeY   = damageRangeY;
         this.damage         = damage;
-        this.spell          = spell;
+        //this.spell          = spell;
 
         curCooldown         = 0f;
         curDelay            = 0f;

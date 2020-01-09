@@ -23,7 +23,7 @@ public class Shell : MonoBehaviour
     {
         if (collision.gameObject.tag == "Enemy")
         {
-            collision.gameObject.GetComponent<Enemy>().TakeDamage(damage);
+            //collision.gameObject.GetComponent<Enemy>().TakeDamage(damage);
             Invoke("DestroyShell", 1f);
         }
     }

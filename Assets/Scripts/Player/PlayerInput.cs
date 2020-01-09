@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum InputsEnum { Evade, StrongAttack, LightAttack }
+public enum InputsEnum { Evade, StrongAttack, LightAttack, JointAttack }
 
 [DefaultExecutionOrder(-100)]
 
@@ -15,6 +15,7 @@ public class PlayerInput : MonoBehaviour
     [HideInInspector] public bool crouchPressed;
     [HideInInspector] public bool lightAttack;
     [HideInInspector] public bool strongAttack;
+    [HideInInspector] public bool jointAttack;
     [HideInInspector] public bool evade;
     [HideInInspector] public bool hook;
     [HideInInspector] public bool horizontalAccess = true;
@@ -24,6 +25,8 @@ public class PlayerInput : MonoBehaviour
     bool readyToClear;
 
     PlayerAttack attack;
+
+    Coroutine lastInputsCoroutine;
 
     private void Start()
     {
@@ -95,27 +98,50 @@ public class PlayerInput : MonoBehaviour
 
         if (Input.GetButtonDown("LightAttack"))
         {
-            lightAttack = true;
-            if(lastInputs.Count < lastInputs.Capacity)
-                lastInputs.Add(InputsEnum.LightAttack);
+            if (strongAttack)
+            {
+                strongAttack = false;
+                jointAttack = true;
+                StopCoroutine(lastInputsCoroutine);
+                lastInputsCoroutine = StartCoroutine(SetLastInputs(InputsEnum.JointAttack, .07f));
+            }
             else
             {
-                lastInputs.RemoveAt(0);
-                lastInputs.Add(InputsEnum.LightAttack);
+                lightAttack = true;
+                //StopCoroutine(lastInputsCoroutine);
+                lastInputsCoroutine = StartCoroutine(SetLastInputs(InputsEnum.LightAttack, .07f));
             }
         }
         if (Input.GetButtonDown("StrongAttack"))
         {
-            strongAttack = true;
-            if (lastInputs.Count < lastInputs.Capacity)
-                lastInputs.Add(InputsEnum.StrongAttack);
+            if (lightAttack)
+            {
+                lightAttack = false;
+                jointAttack = true;
+                StopCoroutine(lastInputsCoroutine);
+                lastInputsCoroutine = StartCoroutine(SetLastInputs(InputsEnum.JointAttack, .07f));
+            }
             else
             {
-                lastInputs.RemoveAt(0);
-                lastInputs.Add(InputsEnum.StrongAttack);
+                strongAttack = true;
+                //StopCoroutine(lastInputsCoroutine);
+                lastInputsCoroutine = StartCoroutine(SetLastInputs(InputsEnum.StrongAttack, .07f));
             }
         }
 
         restart = restart || Input.GetKeyDown(KeyCode.R);
+    }
+
+    IEnumerator SetLastInputs(InputsEnum key, float delayTime)
+    {
+        yield return new WaitForSeconds(delayTime);
+
+        if (lastInputs.Count < lastInputs.Capacity)
+            lastInputs.Add(key);
+        else
+        {
+            lastInputs.RemoveAt(0);
+            lastInputs.Add(key);
+        }
     }
 }
