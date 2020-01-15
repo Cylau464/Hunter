@@ -34,6 +34,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] float attackRangeY = 1f;
     public float attackCD = 1.5f;
     float curAttackCD = 0f;
+    protected float curGlobalSpellCD = 0f;
 
     [Header("Defence Properties")]
     public ElementDictionary elementDefence = new ElementDictionary();
@@ -115,6 +116,8 @@ public class Enemy : MonoBehaviour
 
     void FixedUpdate()
     {
+        if(currentState == State.Dead) return;
+
         CheckPlayer();
 
         switch (currentState)
@@ -142,7 +145,7 @@ public class Enemy : MonoBehaviour
             case State.Dead:
                 isDead = true;
                 Invoke("Dead", 3f);
-                currentState = State.Null;
+                //currentState = State.Null;
                 break;
         }
     }
@@ -247,7 +250,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    protected virtual void CastSpell()
+    protected virtual void CastSpell<T>(T spellEnum)
     {
 
     }
@@ -280,7 +283,7 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int damage, DamageTypes damageType, Element element /*, bool crit*/)
     {
-        if (currentState == State.Dead || currentState == State.Null) return;
+        if (currentState == State.Dead) return;
         Debug.Log("BEFORE damage " + damage + " element " + element.value);
         element.value = element.value - Mathf.CeilToInt(element.value / 100f * elementDefence[element.element]);    //Calculation of defence from elements
         damage = damage - Mathf.CeilToInt(damage / 100f * physicDefence[damageType]);                               //Calculation of physical defence
@@ -356,10 +359,19 @@ public class Enemy : MonoBehaviour
 
     void CheckPlayer()
     {
+        //Find the player in area of view
         target = target ?? Physics2D.OverlapCircle(transform.position, viewDistance, 1 << 10);
 
         if(target && isPatrol)
             SwitchState(State.Chase);
+    }
+
+    bool IsPlayerBehind()
+    {
+        if(Mathf.Sign(myTransform.position.x - target.transform.position.x) * direction < 0)
+            return false;
+        else
+            return true;
     }
 }
 
@@ -370,6 +382,7 @@ struct EnemySpell
     public float delayAfterCast;
     public float curDelay;
     public float cooldown;
+    public float globalCD;
     public float curCooldown;
 
     [Header("Attack spells")]
@@ -382,19 +395,23 @@ struct EnemySpell
     public float jumpDistance;
     public float jumpHeight;
 
+    //Сделать для всех полей свойства
+
     //For spells with jumps
-    public EnemySpell(float jumpDistance, float jumpHeight, float delayAfterCast, float cooldown, float damageRangeX, float damageRangeY, int damage)
+    public EnemySpell(float jumpDistance, float jumpHeight, float delayAfterCast, float cooldown, float globalCD, float damageRangeX, float damageRangeY, int damage)
     {
         this.jumpDistance   = jumpDistance;
         this.jumpHeight     = jumpHeight;
         this.delayAfterCast = delayAfterCast;
         this.cooldown       = cooldown;
+        this.globalCD       = globalCD;
         this.damageRangeX   = damageRangeX;
         this.damageRangeY   = damageRangeY;
         this.damage         = damage;
         //this.spell          = spell;
 
         curCooldown         = 0f;
+        curGlobalCD         = 0f;
         curDelay            = 0f;
     }
     /*

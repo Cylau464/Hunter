@@ -6,15 +6,37 @@ public class ElderWolf : Enemy
 {
     enum SpellEnum { None, LongJump, BackJump, SwingTail, IceBreath };
     SpellEnum spell = SpellEnum.None;
-    Dictionary<SpellEnum, EnemySpell> mySpells = new Dictionary<SpellEnum, EnemySpell>
+    EnemySpellDictionary mySpells = new EnemySpellDictionary();
+    /*Dictionary<SpellEnum, EnemySpell> mySpells = new Dictionary<SpellEnum, EnemySpell>
     {
         { SpellEnum.LongJump, new EnemySpell(10f, 5f, 1.5f, 7f, 5f, 2f, 2) },
         { SpellEnum.BackJump, new EnemySpell(-6f, 4f, .5f, 10f, 3f, 2f, 1) },
         { SpellEnum.SwingTail, new EnemySpell() },
         { SpellEnum.IceBreath, new EnemySpell() }
-    };
+    };*/
+
+    void Update() 
+    {
+        base.Update();
+
+        if (Input.GetKeyDown("J"))
+        mySpells.RemoveAt(0);//or mySpells.Remove(SpellEnum.LongJump); DebugRemoveList<EnemySpellDictionary>(ref mySpells);
+
+
+    }
+
+    void FixedUpdate() 
+    {
+        base.FixedUpdate();
+
+        if(curGlobalSpellCD <= Time.time && )
+    }
+    void DebugRemoveList<T>(ref T list)
+    {
+        list.RemoveAt(0);
+    }
     
-    override protected void CastSpell()
+    override protected void CastSpell<SpellEnum>(SpellEnum spell)
     {
         switch(spell)
         {
