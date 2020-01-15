@@ -104,7 +104,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void Update()
+    protected void Update()
     {
         if(health <= 0 && currentState != State.Dead && currentState != State.Null)
             SwitchState(State.Dead);
@@ -114,7 +114,7 @@ public class Enemy : MonoBehaviour
             SpriteBlinkingEffect();
     }
 
-    void FixedUpdate()
+    protected void FixedUpdate()
     {
         if(currentState == State.Dead) return;
 
@@ -250,7 +250,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    protected virtual void CastSpell<T>(T spellEnum)
+    protected virtual void CastSpell()
     {
 
     }
@@ -376,7 +376,7 @@ public class Enemy : MonoBehaviour
 }
 
 [System.Serializable]
-struct EnemySpell
+public struct EnemySpell
 {
     [Header("General vars")]
     public float delayAfterCast;
@@ -384,6 +384,9 @@ struct EnemySpell
     public float cooldown;
     public float globalCD;
     public float curCooldown;
+    public float curGlobalCD;
+
+    public float CurCooldown { set { curCooldown = value; } }
 
     [Header("Attack spells")]
     public float damageRangeX;

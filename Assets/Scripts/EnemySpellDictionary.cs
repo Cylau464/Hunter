@@ -5,24 +5,24 @@ using UnityEngine;
 namespace System.Collections.Generic
 {
     [Serializable]
-    public class EnemySpellTuple : SerializableKeyValuePair<SpellEnum, EnemySpell>
+    public class EnemySpellTuple : SerializableKeyValuePair<string, EnemySpell>
     {
-        public EnemySpellTuple(SpellEnum item1, EnemySpell item2) : base(item1, item2) { }
+        public EnemySpellTuple(string item1, EnemySpell item2) : base(item1, item2) { }
     }
 
     [Serializable]
-    public class EnemySpellDictionary : SerializableDictionary<SpellEnum, EnemySpell>
+    public class EnemySpellDictionary : SerializableDictionary<string, EnemySpell>
     {
         [SerializeField] private List<EnemySpellTuple> _pairs = new List<EnemySpellTuple>();
 
-        protected override List<SerializableKeyValuePair<SpellEnum, EnemySpell>> _keyValuePairs
+        protected override List<SerializableKeyValuePair<string, EnemySpell>> _keyValuePairs
         {
             get
             {
-                var list = new List<SerializableKeyValuePair<SpellEnum, EnemySpell>>();
+                var list = new List<SerializableKeyValuePair<string, EnemySpell>>();
                 foreach (var pair in _pairs)
                 {
-                    list.Add(new SerializableKeyValuePair<SpellEnum, EnemySpell>(pair.Key, pair.Value));
+                    list.Add(new SerializableKeyValuePair<string, EnemySpell>(pair.Key, pair.Value));
                 }
                 return list;
             }

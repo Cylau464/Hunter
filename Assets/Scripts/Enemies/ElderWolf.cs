@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class ElderWolf : Enemy
 {
-    enum SpellEnum { None, LongJump, BackJump, SwingTail, IceBreath };
-    SpellEnum spell = SpellEnum.None;
-    EnemySpellDictionary mySpells = new EnemySpellDictionary();
+    //enum SpellEnum { None, LongJump, BackJump, SwingTail, IceBreath };
+    //SpellEnum spell = SpellEnum.None;
+    string spell = "None";
+    public EnemySpellDictionary mySpells = new EnemySpellDictionary();
     /*Dictionary<SpellEnum, EnemySpell> mySpells = new Dictionary<SpellEnum, EnemySpell>
     {
         { SpellEnum.LongJump, new EnemySpell(10f, 5f, 1.5f, 7f, 5f, 2f, 2) },
@@ -15,44 +16,40 @@ public class ElderWolf : Enemy
         { SpellEnum.IceBreath, new EnemySpell() }
     };*/
 
-    void Update() 
+    new void Update() 
     {
         base.Update();
 
         if (Input.GetKeyDown("J"))
-        mySpells.RemoveAt(0);//or mySpells.Remove(SpellEnum.LongJump); DebugRemoveList<EnemySpellDictionary>(ref mySpells);
+        mySpells.Remove("Long Jump");//or mySpells.Remove(SpellEnum.LongJump); DebugRemoveList<EnemySpellDictionary>(ref mySpells);
 
 
     }
 
-    void FixedUpdate() 
+    new void FixedUpdate() 
     {
         base.FixedUpdate();
 
-        if(curGlobalSpellCD <= Time.time && )
-    }
-    void DebugRemoveList<T>(ref T list)
-    {
-        list.RemoveAt(0);
+        //if(curGlobalSpellCD <= Time.time && )
     }
     
-    override protected void CastSpell<SpellEnum>(SpellEnum spell)
+    override protected void CastSpell()
     {
         switch(spell)
         {
-            case SpellEnum.None:
+            case "None":
                 Debug.LogError("Enemy try cast spell with none value. Enemy ID: " + gameObject.GetInstanceID());
                 break;
-            case SpellEnum.LongJump:
+            case "Long Jump":
                 LongJump();
                 break;
-            case SpellEnum.BackJump:
+            case "Back Jump":
                 BackJump();
                 break;
-            case SpellEnum.SwingTail:
+            case "Swing Tail":
                 SwingTail();
                 break;
-            case SpellEnum.IceBreath:
+            case "Ice Breath":
                 IceBreath();
                 break;
         }
@@ -65,8 +62,9 @@ public class ElderWolf : Enemy
         //Wait a delay and then switch state
         if(mySpells[spell].curDelay != 0 && mySpells[spell].curDelay <= Time.time)
         {
-            mySpells[spell].curCooldown = Time.time + mySpells[spell].cooldown;
+            mySpells[spell].CurCooldown = Time.time + mySpells[spell].cooldown;
             mySpells[spell].curDelay = 0;
+            mySpells[spell].
             SwitchState(State.Chase);
         }
     }

@@ -1554,10 +1554,26 @@ PrefabInstance:
       propertyPath: m_Size.y
       value: 2.5333333
       objectReference: {fileID: 0}
+    - target: {fileID: 3205944958286040064, guid: 1b00b37d08923724481287bb221d8aa3,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -3037453330189687227, guid: 07a8e9dc30ce61547b2e9ca272e80da0,
+        type: 3}
+    - target: {fileID: 3205944958286040064, guid: 1b00b37d08923724481287bb221d8aa3,
+        type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3205944958286040067, guid: 1b00b37d08923724481287bb221d8aa3,
         type: 3}
       propertyPath: m_Name
       value: Elder Wolf
+      objectReference: {fileID: 0}
+    - target: {fileID: 3205944958286040067, guid: 1b00b37d08923724481287bb221d8aa3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3205944958286040079, guid: 1b00b37d08923724481287bb221d8aa3,
         type: 3}
@@ -1616,6 +1632,52 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b00b37d08923724481287bb221d8aa3, type: 3}
+--- !u!1 &752039247 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3205944958286040067, guid: 1b00b37d08923724481287bb221d8aa3,
+    type: 3}
+  m_PrefabInstance: {fileID: 752039246}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &752039248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 752039247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7da6e8ed9131bf04484b1b5fa9ce51a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 5
+  viewDistance: 10
+  dragType: 1
+  damage: 1
+  elementDamage:
+    _pairs: []
+  attackDistance: 2
+  attackRangeX: 2
+  attackRangeY: 1
+  attackCD: 1.5
+  elementDefence:
+    _pairs: []
+  physicDefence:
+    _pairs: []
+  patrolSpeed: 2
+  chaseSpeed: 4
+  minWaitTime: 1
+  maxWaitTime: 4
+  patrolDistance: 10
+  isPatrol: 0
+  isChase: 0
+  isAttack: 0
+  isCast: 0
+  isHurt: 0
+  isDead: 0
+  spriteBlinkingDuration: 0.6
+  spriteBlinkingPeriod: 0.1
+  spellNumber: 0
 --- !u!4 &994899411 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8836084032477501014, guid: b88e9d6a57e33424594175416cf73520,
