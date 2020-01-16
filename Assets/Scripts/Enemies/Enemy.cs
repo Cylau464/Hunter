@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    public enum SpellEnum { };
     [Header("Atributes Properties")]
     [SerializeField] int maxHealth = 5;
     int health;
@@ -33,9 +34,11 @@ public class Enemy : MonoBehaviour
     [SerializeField] float attackRangeX = 2f;
     [SerializeField] float attackRangeY = 1f;
     public float attackCD = 1.5f;
-    float curAttackCD = 0f;
+
     protected float curGlobalSpellCD = 0f;
 
+    protected float curAttackCD = 0f;
+    
     [Header("Defence Properties")]
     public ElementDictionary elementDefence = new ElementDictionary();
     public DamageTypeDefenceDictionary physicDefence = new DamageTypeDefenceDictionary();
@@ -71,13 +74,14 @@ public class Enemy : MonoBehaviour
 
     protected enum State { Null, Patrol, Chase, Attack, CastSpell, Hurt, Dead };
     protected State currentState;
-    Transform myTransform;
+    protected Transform myTransform;
     Transform hookTransform;
     Transform myHookTarget;
     protected Rigidbody2D rigidBody;
     SpriteRenderer sprite;
     Vector2 startPos;
-    Collider2D target;
+    protected Collider2D target;
+    protected LayerMask playerLayer = 1 << 10;       //10 - player layer
 
     protected int direction = 1;
 
@@ -88,7 +92,7 @@ public class Enemy : MonoBehaviour
 
     public int spellNumber;        //Needful for animator
 
-    void Start()
+    protected void Start()
     {
         health         = maxHealth;
         currentState   = State.Patrol;
@@ -106,8 +110,11 @@ public class Enemy : MonoBehaviour
 
     protected void Update()
     {
-        if(health <= 0 && currentState != State.Dead && currentState != State.Null)
+        if (health <= 0 && currentState != State.Dead)
+        {
+            target = null;
             SwitchState(State.Dead);
+        }
 
         //Blinking after take damage
         if(spriteBlinkingEnabled)
@@ -143,8 +150,8 @@ public class Enemy : MonoBehaviour
                 Hurt();
                 break;
             case State.Dead:
-                isDead = true;
-                Invoke("Dead", 3f);
+                //isDead = true;
+                //Invoke("Dead", 3f);
                 //currentState = State.Null;
                 break;
         }
@@ -161,6 +168,12 @@ public class Enemy : MonoBehaviour
 
         spellNumber = 0;
         currentState = newState;
+
+        if (newState == State.Dead)
+        {
+            isDead = true;
+            Invoke("Dead", 3f);
+        }
     }
 
     protected void Patrol()
@@ -211,7 +224,8 @@ public class Enemy : MonoBehaviour
         if(Mathf.Sign(target.transform.position.x - transform.position.x) != direction)
             FlipCharacter(false);
 
-        if (Mathf.Abs(target.transform.position.x - transform.position.x) <= 20f)
+        //Chase while the player in view area
+        if (DistanceToPlayer() <= 20f)
         {
             //Move towards the player until the attack distance is reached...
             if ((target.transform.position.x - transform.position.x - attackDistance * direction) * direction > 0)
@@ -231,15 +245,14 @@ public class Enemy : MonoBehaviour
     {
         if(curAttackCD <= Time.time && !isAttack)
         {
-            //If player too far
             if (target != null)
             {
-                if (Mathf.Abs(target.transform.position.x - transform.position.x) > attackDistance)
+                //If player too far
+                if (DistanceToPlayer() > attackDistance)
                 {
                     SwitchState(State.Chase);
                     return;
                 }
-
 
                 //Flip enemy towards the player
                 if (Mathf.Sign(target.transform.position.x - transform.position.x) != direction)
@@ -284,6 +297,7 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(int damage, DamageTypes damageType, Element element /*, bool crit*/)
     {
         if (currentState == State.Dead) return;
+
         Debug.Log("BEFORE damage " + damage + " element " + element.value);
         element.value = element.value - Mathf.CeilToInt(element.value / 100f * elementDefence[element.element]);    //Calculation of defence from elements
         damage = damage - Mathf.CeilToInt(damage / 100f * physicDefence[damageType]);                               //Calculation of physical defence
@@ -329,12 +343,11 @@ public class Enemy : MonoBehaviour
     void GiveDamage()
     {
         curAttackCD = Time.time + attackCD;       //Start cooldown of attack
-        LayerMask playerLayer = 1 << 10;       //10 - player layer
 
         Collider2D objectToDamage = Physics2D.OverlapBox(transform.position, new Vector2(attackRangeX, attackRangeY), 0, playerLayer);
 
         if (objectToDamage != null)
-            objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(damage);
+            objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(damage, HurtTypesEnum.Repulsion);
     }
 
     void EndOfAttack()
@@ -366,61 +379,75 @@ public class Enemy : MonoBehaviour
             SwitchState(State.Chase);
     }
 
-    bool IsPlayerBehind()
+    protected bool IsPlayerBehind()
     {
         if(Mathf.Sign(myTransform.position.x - target.transform.position.x) * direction < 0)
             return false;
         else
             return true;
     }
+
+    protected float DistanceToPlayer()
+    {
+        return Mathf.Abs(target.transform.position.x - transform.position.x);
+    }
 }
 
-[System.Serializable]
-public struct EnemySpell
+
+namespace Structures
 {
-    [Header("General vars")]
-    public float delayAfterCast;
-    public float curDelay;
-    public float cooldown;
-    public float globalCD;
-    public float curCooldown;
-    public float curGlobalCD;
-
-    public float CurCooldown { set { curCooldown = value; } }
-
-    [Header("Attack spells")]
-    public float damageRangeX;
-    public float damageRangeY;
-
-    public int damage;
-
-    [Header("Spells with jumps")]
-    public float jumpDistance;
-    public float jumpHeight;
-
-    //Сделать для всех полей свойства
-
-    //For spells with jumps
-    public EnemySpell(float jumpDistance, float jumpHeight, float delayAfterCast, float cooldown, float globalCD, float damageRangeX, float damageRangeY, int damage)
+    [System.Serializable]
+    public struct EnemySpell
     {
-        this.jumpDistance   = jumpDistance;
-        this.jumpHeight     = jumpHeight;
-        this.delayAfterCast = delayAfterCast;
-        this.cooldown       = cooldown;
-        this.globalCD       = globalCD;
-        this.damageRangeX   = damageRangeX;
-        this.damageRangeY   = damageRangeY;
-        this.damage         = damage;
-        //this.spell          = spell;
+        [Header("General vars")]
+        public float delayAfterCast;
+        public float cooldown;
+        public float globalCD;
 
-        curCooldown         = 0f;
-        curGlobalCD         = 0f;
-        curDelay            = 0f;
+        [Header("Attack spells")]
+        public float damageRangeX;
+        public float damageRangeY;
+
+        public int damage;
+
+        [Header("Spells with jumps")]
+        public float jumpDistance;
+        public float jumpHeight;
+        public int jumpDirection;       //-1 = left, 1 = right
+
+        //Сделать для всех полей свойства
+
+        //For spells with jumps
+        public EnemySpell(float jumpDistance, float jumpHeight, int jumpDirection, float delayAfterCast, float cooldown, float globalCD, float damageRangeX, float damageRangeY, int damage)
+        {
+            this.jumpDistance   = jumpDistance;
+            this.jumpHeight     = jumpHeight;
+            this.jumpDirection  = jumpDirection;
+            this.delayAfterCast = delayAfterCast;
+            this.cooldown       = cooldown;
+            this.globalCD       = globalCD;
+            this.damageRangeX   = damageRangeX;
+            this.damageRangeY   = damageRangeY;
+            this.damage         = damage;
+            //this.spell          = spell;
+        }
+        /*
+        //For other spells
+        public EnemySpell()
+        {
+
+        }*/
     }
-    /*
-    //For other spells
-    public EnemySpell()
-    {
 
-    }*/
+    public struct EnemySpellCD
+    {
+        public float curCooldown;
+        public float curDelay;
+
+        public EnemySpellCD(float curCooldown, float curDelay)
+        {
+            this.curCooldown    = curCooldown;
+            this.curDelay       = curDelay;
+        }
+    }
 }

@@ -19,8 +19,10 @@ public class PlayerAtributes : MonoBehaviour
 
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, HurtTypesEnum hurtType)
     {
+        if (movement.isHurt) return;
+
         health -= damage;
         
         if(health <= 0)

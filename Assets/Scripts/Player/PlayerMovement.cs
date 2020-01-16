@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum HurtTypesEnum { None, Repulsion, Grab };
+
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] bool drawDebugRaycast = true;
@@ -32,6 +34,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float evadingCooldown          = 1f;           //Evade cooldown in sec
     public int direction { get; private set; }      = 1;            //Character direction
     [SerializeField] LayerMask groundLayer          = 1 << 9;       //9 - Platforms layer
+
+    [Header("Hurt Properties")]
+    float curDazedTime;
+    HurtTypesEnum hurtType;
 
     [Header("Status Flags")]
     public bool isOnGround;
@@ -140,8 +146,12 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(isHooked)
+        if (isDead) return;
+
+        if (isHooked)
             Hooked();
+        else if (isHurt)
+            Hurt();
         else
         {
             PhysicsCheck();
@@ -454,6 +464,19 @@ public class PlayerMovement : MonoBehaviour
         isHooked = false;
         hookTransform = null;
         rigidBody.bodyType = RigidbodyType2D.Dynamic;
+    }
+
+    void Hurt()
+    {
+
+    }
+
+    public void HurtOn(HurtTypesEnum hurtType, float hurtDuration)
+    {
+        isOnGround = isJumping = isDoubleJump = isHeadBlocked = isCrouching = isAttacking = isEvading = isHanging = isClimbing = isHooked = false;
+        this.hurtType = hurtType;
+        curDazedTime = hurtDuration + Time.time;
+        isHurt = true;
     }
 
     RaycastHit2D Raycast(Vector2 offset, Vector2 rayDirection, float length)
