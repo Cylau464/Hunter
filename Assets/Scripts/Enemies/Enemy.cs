@@ -344,10 +344,10 @@ public class Enemy : MonoBehaviour
     {
         curAttackCD = Time.time + attackCD;       //Start cooldown of attack
 
-        Collider2D objectToDamage = Physics2D.OverlapBox(transform.position, new Vector2(attackRangeX, attackRangeY), 0, playerLayer);
+        Collider2D _objectToDamage = Physics2D.OverlapBox(transform.position, new Vector2(attackRangeX, attackRangeY), 0, playerLayer);
 
-        if (objectToDamage != null)
-            objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(damage, HurtTypesEnum.Repulsion);
+        if (_objectToDamage != null)
+            _objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(damage, HurtTypesEnum.Repulsion);
     }
 
     void EndOfAttack()
@@ -399,16 +399,20 @@ namespace Structures
     [System.Serializable]
     public struct EnemySpell
     {
-        [Header("General vars")]
-        public float delayAfterCast;
+        [Header("General Properties")]
+        //public float delayAfterCast;
+        //public float hurtDuration;
         public float cooldown;
         public float globalCD;
 
-        [Header("Attack spells")]
+        [Header("Attack Properties")]
         public float damageRangeX;
         public float damageRangeY;
+        public float dazedTime;
+        public Vector2 repulseVector;
 
-        public int damage;
+        public int firstDamage;
+        public int lastDamage;
 
         [Header("Spells with jumps")]
         public float jumpDistance;
@@ -418,17 +422,20 @@ namespace Structures
         //Сделать для всех полей свойства
 
         //For spells with jumps
-        public EnemySpell(float jumpDistance, float jumpHeight, int jumpDirection, float delayAfterCast, float cooldown, float globalCD, float damageRangeX, float damageRangeY, int damage)
+        public EnemySpell(float jumpDistance, float jumpHeight, int jumpDirection, float cooldown, float globalCD, float damageRangeX, float damageRangeY, Vector2 repulseVector, float dazedTime, int firstDamage, int lastDamage)
         {
             this.jumpDistance   = jumpDistance;
             this.jumpHeight     = jumpHeight;
             this.jumpDirection  = jumpDirection;
-            this.delayAfterCast = delayAfterCast;
+            //this.delayAfterCast = delayAfterCast;
             this.cooldown       = cooldown;
             this.globalCD       = globalCD;
             this.damageRangeX   = damageRangeX;
             this.damageRangeY   = damageRangeY;
-            this.damage         = damage;
+            this.repulseVector  = repulseVector;
+            this.dazedTime      = dazedTime;
+            this.firstDamage    = firstDamage;
+            this.lastDamage     = lastDamage;
             //this.spell          = spell;
         }
         /*

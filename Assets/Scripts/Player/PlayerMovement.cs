@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum HurtTypesEnum { None, Repulsion, Grab };
+public enum HurtTypesEnum { None, Repulsion, Catch };
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -36,7 +36,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] LayerMask groundLayer          = 1 << 9;       //9 - Platforms layer
 
     [Header("Hurt Properties")]
-    float curDazedTime;
+    float curDazedTime = 0f;
     HurtTypesEnum hurtType;
 
     [Header("Status Flags")]
@@ -53,7 +53,7 @@ public class PlayerMovement : MonoBehaviour
     public bool isHurt;
     public bool isDead;
     public bool canFlip = true;
-    public bool moveInputPriority = true;      //What the hell is this?
+    public bool moveInputPriority = true;          //What the hell is this?
 
     [HideInInspector] 
     public float speedDivisor = 1f;                //Used to decrease horizontal speed
@@ -61,12 +61,13 @@ public class PlayerMovement : MonoBehaviour
     PlayerInput input;
     Rigidbody2D rigidBody;
     BoxCollider2D bodyCollider;
-    public SpriteRenderer sprite;                  //Maybe create property for public get?
+    SpriteRenderer sprite;                  //Maybe create property for public get?
     PlayerAttack attack;
     Transform playerTransform;
     WeaponAtributes weapon;
     Hook hook;
     Transform hookTransform;
+    Transform catchAnchorPoint;
 
     WeaponAttackType weaponAttackType;
 
@@ -468,15 +469,41 @@ public class PlayerMovement : MonoBehaviour
 
     void Hurt()
     {
+        if (curDazedTime != 0f && curDazedTime <= Time.time)
+        {
+            curDazedTime = 0f;
+            isHurt = false;
+            hurtType = HurtTypesEnum.None;
+            catchAnchorPoint = null;
+
+        }
+        else
+        {
+            //Follow for catch source
+            if (hurtType == HurtTypesEnum.Catch)
+                playerTransform.position = catchAnchorPoint.position;
+        }
+    }
+
+    public void GetCaught(HurtTypesEnum hurtType, Transform anchorPoint)
+    {
+        isJumping = isDoubleJump = isHeadBlocked = isCrouching = isAttacking = isEvading = isHanging = isClimbing = isHooked = false;
+        this.hurtType = hurtType;
+        catchAnchorPoint = anchorPoint;
+        isHurt = true;
+    }
+
+    public void GetReleased()
+    {
 
     }
 
-    public void HurtOn(HurtTypesEnum hurtType, float hurtDuration)
+    public void Repulse(Vector2 repulseDistantion, float dazedTime)
     {
-        isOnGround = isJumping = isDoubleJump = isHeadBlocked = isCrouching = isAttacking = isEvading = isHanging = isClimbing = isHooked = false;
-        this.hurtType = hurtType;
-        curDazedTime = hurtDuration + Time.time;
-        isHurt = true;
+        rigidBody.AddForce(repulseDistantion, ForceMode2D.Impulse);
+        curDazedTime = dazedTime + Time.time;
+        //Pushed up
+        //Pushed back
     }
 
     RaycastHit2D Raycast(Vector2 offset, Vector2 rayDirection, float length)

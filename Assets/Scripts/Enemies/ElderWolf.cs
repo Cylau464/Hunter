@@ -22,9 +22,11 @@ public class ElderWolf : Enemy
     };*/
 
     bool isSpellCasted;
+    bool isPlayerCaught;      //Was the player caught
 
     Transform frontLegs;
     BoxCollider2D frontLegsCol;
+    Collider2D objectToDamage;
 
     new void Start()
     {
@@ -39,7 +41,7 @@ public class ElderWolf : Enemy
         base.Update();
 
         if (Input.GetKeyDown("J"))
-        mySpells.Remove((Enemy.SpellEnum) SpellEnum.LongJump);//or mySpells.Remove(SpellEnum.LongJump); DebugRemoveList<EnemySpellDictionary>(ref mySpells);
+        mySpells.Remove((Enemy.SpellEnum) SpellEnum.LongJump);//or mySpells.Remove(SpellEnum.LongJump);
 
 
     }
@@ -94,19 +96,24 @@ public class ElderWolf : Enemy
     {
         spellNumber = 1;
         //Повесить начало прыжка (StartJump()) на начало анимации
+        if (objectToDamage == null)
+            objectToDamage = Physics2D.OverlapBox(frontLegs.position, new Vector2(frontLegsCol.size.x, frontLegsCol.size.y), 0f, playerLayer);
         //If player collided with front legs
-        Collider2D _objectToDamage = Physics2D.OverlapBox(frontLegs.position, new Vector2(frontLegsCol.size.x, frontLegsCol.size.y), 0, playerLayer);
-
-        if(_objectToDamage != null)
-            _objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[(Enemy.SpellEnum) spell].damage, HurtTypesEnum.Grab);
+        else if (!isPlayerCaught)
+        {
+            objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[(Enemy.SpellEnum)spell].firstDamage, HurtTypesEnum.Catch, frontLegs);
+            isPlayerCaught = true;
+        }
 
         if (isSpellCasted)
         {
+            objectToDamage = null;
+            isPlayerCaught = false;
             curAttackCD = attackCD + Time.time;
             //longJumpTiming.curDelay = mySpells[(Enemy.SpellEnum) spell].delayAfterCast + Time.time;
             longJumpTiming.curCooldown = mySpells[(Enemy.SpellEnum) spell].cooldown + Time.time;
             curGlobalSpellCD = mySpells[(Enemy.SpellEnum) spell].globalCD + Time.time;
-            SwitchState(State.Chase);
+            SwitchState(State.Attack);
         }
     }
 
@@ -117,10 +124,13 @@ public class ElderWolf : Enemy
         //Wait a delay and then switch state
         if(isSpellCasted/* && backJumpTiming.curDelay != 0 && backJumpTiming.curDelay <= Time.time*/)
         {
-            backJumpTiming.curDelay = mySpells[(Enemy.SpellEnum) spell].delayAfterCast + Time.time;
+            objectToDamage = null;
+            isPlayerCaught = false;
+            curAttackCD = attackCD + Time.time;
+            //backJumpTiming.curDelay = mySpells[(Enemy.SpellEnum) spell].delayAfterCast + Time.time;
             backJumpTiming.curCooldown = mySpells[(Enemy.SpellEnum) spell].cooldown + Time.time;
             curGlobalSpellCD = mySpells[(Enemy.SpellEnum)spell].globalCD + Time.time;
-            SwitchState(State.Chase);
+            SwitchState(State.Attack);
         }
     }
 
@@ -133,6 +143,11 @@ public class ElderWolf : Enemy
     {
         //Calling from end of animation
         //Give AOE damage
+        objectToDamage = Physics2D.OverlapBox(frontLegs.position, new Vector2(frontLegsCol.size.x * 2f, frontLegsCol.size.y), 0f, playerLayer);
+
+        if (objectToDamage != null)
+            objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[(Enemy.SpellEnum)spell].lastDamage, HurtTypesEnum.Repulsion, mySpells[(Enemy.SpellEnum)spell].repulseVector, mySpells[(Enemy.SpellEnum)spell].dazedTime);
+        
         isSpellCasted = true;
     }
 
