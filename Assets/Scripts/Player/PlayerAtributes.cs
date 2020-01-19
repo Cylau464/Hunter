@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerAtributes : MonoBehaviour 
 {
     [SerializeField] int maxHealth = 10;
-    int health;
+    [SerializeField] int health;
 
     PlayerMovement movement;
 
@@ -24,7 +24,10 @@ public class PlayerAtributes : MonoBehaviour
         health -= damage;
         
         if(health <= 0)
+        {
             movement.isDead = true;
+            movement.bodyCollider.sharedMaterial = null;        //Delete collider material for turn on friction
+        }
     }
 
     //Catched
@@ -33,7 +36,10 @@ public class PlayerAtributes : MonoBehaviour
         health -= damage;
 
         if (health <= 0)
+        {
             movement.isDead = true;
+            movement.bodyCollider.sharedMaterial = null;
+        }
         else
             movement.GetCaught(hurtType, anchorPoint);
     }
@@ -45,6 +51,9 @@ public class PlayerAtributes : MonoBehaviour
         movement.Repulse(repulseDistantion, dazedTime);
 
         if (health <= 0)
+        {
             movement.isDead = true;
+            movement.bodyCollider.sharedMaterial = null;
+        }
     }
 }

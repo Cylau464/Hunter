@@ -1,7 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using RotaryHeart.Lib.SerializableDictionary;
 
+[System.Serializable]
+public class ElementDictionary : SerializableDictionaryBase<Elements, int> { }
+/*
 namespace System.Collections.Generic
 {
     [Serializable]
@@ -37,4 +41,4 @@ namespace System.Collections.Generic
             }
         }
     }
-}
+}*/

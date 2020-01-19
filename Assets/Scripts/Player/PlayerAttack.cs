@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Structures;
 
 public enum AttackTypes { NotAttacking, Light, Strong, Joint }
 public enum AttackState { Free, Start, Damage, End }
@@ -172,6 +173,7 @@ public class PlayerAttack : MonoBehaviour
         if (!movement.isAttacking)
             return;
 
+        Enemy _enemy;
         attackState = AttackState.Damage;
         movement.canFlip = false;
         curDelayResetCombo = Time.time + delayResetCombo;
@@ -200,7 +202,9 @@ public class PlayerAttack : MonoBehaviour
             {
                 //camShake.Shake(.2f, 1f, 2f);
                 damage = RandomDamage(damage);
-                enemiesToDamage[i].GetComponent<Enemy>().TakeDamage(damage, weaponDamageType, weaponElement);
+                
+                if (_enemy = enemiesToDamage[i].GetComponent<Enemy>())
+                    _enemy.TakeDamage(damage, weaponDamageType, weaponElement);
             }
         }
     }

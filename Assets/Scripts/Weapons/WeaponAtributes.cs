@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Structures;
 
 public class WeaponAtributes : MonoBehaviour
 {
@@ -26,7 +27,12 @@ public class WeaponAtributes : MonoBehaviour
     public float speedDivisorJ = 1f;                    //Movespeed divisor joint attack
 
     [Header("Dictionaries of Types")]
-    public DamageTypeOfAttackDictionary damageTypesOfAttacks = new DamageTypeOfAttackDictionary();
+    public DamageTypeOfAttackDictionary damageTypesOfAttacks = new DamageTypeOfAttackDictionary()
+    {
+        { AttackTypes.Light, DamageTypes.Slash },
+        { AttackTypes.Strong, DamageTypes.Slash },
+        { AttackTypes.Joint, DamageTypes.Thrust }
+    };
     public DamageTypes[] damageType = { DamageTypes.Slash };
     public WeaponAttackType weaponAttackType = WeaponAttackType.Melee;
     public WeaponType weaponType = WeaponType.Sword;
@@ -57,18 +63,3 @@ public enum Elements { Fire, Water, Wind, Earth, Lightning, Primal }
 public enum WeaponAttackType { Melee, Range }
 
 public enum WeaponType { Sword, Lance, Staff, Hammer, Bow, Scythe, Gloves }
-
-[System.Serializable]
-public struct Element
-{
-    [HideInInspector] public string title;
-    public Elements element;
-    public int value;
-
-    public Element(string title, Elements element, int value)
-    {
-        this.title = title;
-        this.element = element;
-        this.value = value;
-    }
-}

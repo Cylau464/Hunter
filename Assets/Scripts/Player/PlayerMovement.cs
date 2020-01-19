@@ -60,7 +60,7 @@ public class PlayerMovement : MonoBehaviour
 
     PlayerInput input;
     Rigidbody2D rigidBody;
-    BoxCollider2D bodyCollider;
+    public BoxCollider2D bodyCollider;
     SpriteRenderer sprite;                  //Maybe create property for public get?
     PlayerAttack attack;
     Transform playerTransform;

@@ -157,7 +157,7 @@ public class Player : MonoBehaviour
     void FixedUpdate()
     {
         if (isDead) return;
-
+        /*
         if (isHooked)
             Hooked();
         else if (isHurt)
@@ -167,7 +167,7 @@ public class Player : MonoBehaviour
             PhysicsCheck();
             GroundMovement();
             AirMovement();
-        }
+        }*/
 
         //Turn off gravity in air attacks 
         if (isAttacking && !isOnGround && attack.attackState != AttackState.End)
@@ -177,7 +177,7 @@ public class Player : MonoBehaviour
         }
         else if (rigidBody.gravityScale != 1f)
             rigidBody.gravityScale = 1f;
-
+        /*
         switch(currentState)
         {
             case PlayerState.Idle:
@@ -210,7 +210,7 @@ public class Player : MonoBehaviour
             case PlayerState.Dead:
             Dead();
             break;
-        }
+        }*/
     }
 
     void SwitchState(PlayerState newState)

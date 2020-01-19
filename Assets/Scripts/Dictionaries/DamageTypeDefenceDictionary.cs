@@ -1,7 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using RotaryHeart.Lib.SerializableDictionary;
 
+[System.Serializable]
+public class DamageTypeDefenceDictionary : SerializableDictionaryBase<DamageTypes, int> { }
+
+/*
 namespace System.Collections.Generic
 {
     [Serializable]
@@ -37,4 +42,4 @@ namespace System.Collections.Generic
             }
         }
     }
-}
+}*/

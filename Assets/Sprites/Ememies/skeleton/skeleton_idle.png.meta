@@ -104,10 +104,10 @@ TextureImporter:
       name: skeleton_idle_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 19
         y: 0
-        width: 100
-        height: 100
+        width: 38
+        height: 68
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,7 +115,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a2df51b3ba0023c47b4ecf424961da17
+      spriteID: 3a778b75435991447875edd9132a882c
       internalID: -1708997961419951014
       vertices: []
       indices: 
@@ -125,10 +125,10 @@ TextureImporter:
       name: skeleton_idle_1
       rect:
         serializedVersion: 2
-        x: 100
+        x: 119
         y: 0
-        width: 100
-        height: 100
+        width: 36
+        height: 68
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -136,7 +136,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: aad434ef891ac664fb9204d24b4bdffc
+      spriteID: c36fac808b30b6247b4baf6d5b47ef83
       internalID: 2148123082584908
       vertices: []
       indices: 
@@ -146,10 +146,10 @@ TextureImporter:
       name: skeleton_idle_2
       rect:
         serializedVersion: 2
-        x: 200
+        x: 219
         y: 0
-        width: 100
-        height: 100
+        width: 36
+        height: 67
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -157,7 +157,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0b0d914658999fd44b3b11b31766951a
+      spriteID: 1fa7ffbbd0b176f4d912b6df0d5bea2f
       internalID: -3835917868862761571
       vertices: []
       indices: 
@@ -167,10 +167,10 @@ TextureImporter:
       name: skeleton_idle_3
       rect:
         serializedVersion: 2
-        x: 300
+        x: 319
         y: 0
-        width: 100
-        height: 100
+        width: 38
+        height: 67
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -178,7 +178,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 566a0bd94ca562f4fb4b8974900a1379
+      spriteID: 2c22e113ad30f9f4683c34ad4db81bdd
       internalID: 8813561051025670744
       vertices: []
       indices: 
@@ -188,10 +188,10 @@ TextureImporter:
       name: skeleton_idle_4
       rect:
         serializedVersion: 2
-        x: 400
+        x: 419
         y: 0
-        width: 100
-        height: 100
+        width: 38
+        height: 67
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -199,7 +199,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 17adef6a583f6bb418324cc1643ea15e
+      spriteID: 833192e70925db649b5f8382f7001f23
       internalID: -6930698019378787929
       vertices: []
       indices: 

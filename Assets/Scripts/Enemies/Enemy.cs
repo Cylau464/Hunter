@@ -1,34 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Structures;
+
+public enum SpellStates { None, Prepare, Cast, End }
 
 public class Enemy : MonoBehaviour
 {
-    public enum SpellEnum { };
     [Header("Atributes Properties")]
     [SerializeField] int maxHealth = 5;
     int health;
     [SerializeField] float viewDistance = 10f;
     public DragType dragType = DragType.Draggable;
 
-    /*public Element[] elementDefense = {
-        new Element("Fire", Elements.Fire, 0),
-        new Element("Wind", Elements.Wind, 0),
-        new Element("Earth", Elements.Earth, 0),
-        new Element("Water", Elements.Water, 0),
-        new Element("Lightning", Elements.Lightning, 0),
-        new Element("Primal", Elements.Primal, 0)
-    };*/
-
     [Header("Attack Properties")]
     [SerializeField] protected int damage = 1;
-    public ElementDictionary elementDamage = new ElementDictionary();
-    /*public Element[] elementDamage = {
-        new Element("Fire", Elements.Fire, 0),
-        new Element("Wind", Elements.Wind, 0),
-        new Element("Earth", Elements.Earth, 0),
-        new Element("Water", Elements.Water, 0),
-    };*/
+    [SerializeField] ElementDictionary elementDamage = new ElementDictionary()
+    {
+        { Elements.Fire, 0 },
+        { Elements.Earth, 0 },
+        { Elements.Wind, 0 },
+        { Elements.Water, 0 },
+        { Elements.Lightning, 0 },
+        { Elements.Primal, 0 }
+    };
+
     [SerializeField] float attackDistance = 2f;
     //[SerializeField] float attackDuration = 1f;
     [SerializeField] float attackRangeX = 2f;
@@ -36,12 +32,25 @@ public class Enemy : MonoBehaviour
     public float attackCD = 1.5f;
 
     protected float curGlobalSpellCD = 0f;
-
     protected float curAttackCD = 0f;
     
     [Header("Defence Properties")]
-    public ElementDictionary elementDefence = new ElementDictionary();
-    public DamageTypeDefenceDictionary physicDefence = new DamageTypeDefenceDictionary();
+    [SerializeField] ElementDictionary elementDefence = new ElementDictionary()
+    {
+        { Elements.Fire, 0 },
+        { Elements.Earth, 0 },
+        { Elements.Wind, 0 },
+        { Elements.Water, 0 },
+        { Elements.Lightning, 0 },
+        { Elements.Primal, 0 }
+    };
+    [SerializeField] DamageTypeDefenceDictionary physicDefence = new DamageTypeDefenceDictionary()
+    {
+        { DamageTypes.Blunt, 0 },
+        { DamageTypes.Chop, 0 },
+        { DamageTypes.Slash, 0 },
+        { DamageTypes.Thrust, 0 }
+    };
 
     [Header("Speed Properties")]
     [SerializeField] float patrolSpeed = 2f;
@@ -53,7 +62,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] float patrolDistance = 10f;
     bool pathPassed = true;
 
-    [Header("Hurt Properties")]
+    //[Header("Hurt Properties")]
     //[SerializeField] float dazedTime = .5f;
     //float curDazedTime;
 
@@ -74,14 +83,16 @@ public class Enemy : MonoBehaviour
 
     protected enum State { Null, Patrol, Chase, Attack, CastSpell, Hurt, Dead };
     protected State currentState;
+
     protected Transform myTransform;
-    Transform hookTransform;
-    Transform myHookTarget;
     protected Rigidbody2D rigidBody;
-    SpriteRenderer sprite;
-    Vector2 startPos;
     protected Collider2D target;
     protected LayerMask playerLayer = 1 << 10;       //10 - player layer
+    Transform hookTransform;
+    Transform myHookTarget;
+    PlayerMovement playerMovement;
+    SpriteRenderer sprite;
+    Vector2 startPos;
 
     protected int direction = 1;
 
@@ -90,7 +101,11 @@ public class Enemy : MonoBehaviour
     float patrolDelay      = 0f;   //Delay before start next path
     int dir                = 0;    //Local var direction
 
-    public int spellNumber;        //Needful for animator
+    [Header("Spell Properties")]
+    [HideInInspector] public int spellNumber;        //Needful for animator
+    protected float curSpellPrepareTime;
+    protected float curSpellCastTime;
+    public SpellStates spellState = SpellStates.None;
 
     protected void Start()
     {
@@ -167,6 +182,7 @@ public class Enemy : MonoBehaviour
         isDead      = false;
 
         spellNumber = 0;
+        spellState = SpellStates.None;
         currentState = newState;
 
         if (newState == State.Dead)
@@ -257,9 +273,13 @@ public class Enemy : MonoBehaviour
                 //Flip enemy towards the player
                 if (Mathf.Sign(target.transform.position.x - transform.position.x) != direction)
                     FlipCharacter(false);
-            }
 
-            isAttack = true;
+                isAttack = true;
+            }
+            else
+            {
+                SwitchState(State.Patrol);
+            }
         }
     }
 
@@ -372,8 +392,18 @@ public class Enemy : MonoBehaviour
 
     void CheckPlayer()
     {
+        if (playerMovement != null && playerMovement.isDead)
+        {
+            target = null;
+            return;
+        }
+
         //Find the player in area of view
-        target = target ?? Physics2D.OverlapCircle(transform.position, viewDistance, 1 << 10);
+        if (Physics2D.OverlapCircle(transform.position, viewDistance, 1 << 10) && target == null)
+        {
+            target = Physics2D.OverlapCircle(transform.position, viewDistance, 1 << 10);
+            playerMovement = target.GetComponent<PlayerMovement>();
+        }
 
         if(target && isPatrol)
             SwitchState(State.Chase);
@@ -390,71 +420,5 @@ public class Enemy : MonoBehaviour
     protected float DistanceToPlayer()
     {
         return Mathf.Abs(target.transform.position.x - transform.position.x);
-    }
-}
-
-
-namespace Structures
-{
-    [System.Serializable]
-    public struct EnemySpell
-    {
-        [Header("General Properties")]
-        //public float delayAfterCast;
-        //public float hurtDuration;
-        public float cooldown;
-        public float globalCD;
-
-        [Header("Attack Properties")]
-        public float damageRangeX;
-        public float damageRangeY;
-        public float dazedTime;
-        public Vector2 repulseVector;
-
-        public int firstDamage;
-        public int lastDamage;
-
-        [Header("Spells with jumps")]
-        public float jumpDistance;
-        public float jumpHeight;
-        public int jumpDirection;       //-1 = left, 1 = right
-
-        //Сделать для всех полей свойства
-
-        //For spells with jumps
-        public EnemySpell(float jumpDistance, float jumpHeight, int jumpDirection, float cooldown, float globalCD, float damageRangeX, float damageRangeY, Vector2 repulseVector, float dazedTime, int firstDamage, int lastDamage)
-        {
-            this.jumpDistance   = jumpDistance;
-            this.jumpHeight     = jumpHeight;
-            this.jumpDirection  = jumpDirection;
-            //this.delayAfterCast = delayAfterCast;
-            this.cooldown       = cooldown;
-            this.globalCD       = globalCD;
-            this.damageRangeX   = damageRangeX;
-            this.damageRangeY   = damageRangeY;
-            this.repulseVector  = repulseVector;
-            this.dazedTime      = dazedTime;
-            this.firstDamage    = firstDamage;
-            this.lastDamage     = lastDamage;
-            //this.spell          = spell;
-        }
-        /*
-        //For other spells
-        public EnemySpell()
-        {
-
-        }*/
-    }
-
-    public struct EnemySpellCD
-    {
-        public float curCooldown;
-        public float curDelay;
-
-        public EnemySpellCD(float curCooldown, float curDelay)
-        {
-            this.curCooldown    = curCooldown;
-            this.curDelay       = curDelay;
-        }
     }
 }

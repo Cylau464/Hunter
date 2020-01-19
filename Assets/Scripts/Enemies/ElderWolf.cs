@@ -9,84 +9,92 @@ public class ElderWolf : Enemy
     EnemySpellCD backJumpTiming;
     EnemySpellCD swingTailTiming;
     EnemySpellCD iceBreathTiming;
-    new enum SpellEnum { None, LongJump, BackJump, SwingTail, IceBreath };
-    SpellEnum spell = SpellEnum.None;
-    //string spell = "None";
-    public EnemySpellDictionary mySpells = new EnemySpellDictionary();
-    /*Dictionary<SpellEnum, EnemySpell> mySpells = new Dictionary<SpellEnum, EnemySpell>
-    {
-        { SpellEnum.LongJump, new EnemySpell(10f, 5f, 1.5f, 7f, 5f, 2f, 2) },
-        { SpellEnum.BackJump, new EnemySpell(-6f, 4f, .5f, 10f, 3f, 2f, 1) },
-        { SpellEnum.SwingTail, new EnemySpell() },
-        { SpellEnum.IceBreath, new EnemySpell() }
-    };*/
 
+    [Header("Spell Properties")]
+    [SerializeField] EnemySpellDictionary mySpells = new EnemySpellDictionary()
+    {
+        { "Long Jump", new EnemySpell(10f, 5f, 1, 10f, 2f, 1.5f, .75f, 2f, 2f, new Vector2(5f, 5f), 1.5f, 5, 7) },
+        { "Back Jump", new EnemySpell(0f, 0f, 1, 0f, 0f, 0f, 0f, 0f, 0f, Vector2.zero, 0f, 0, 0) },
+        { "Ice Breath", new EnemySpell(0f, 0f, 1, 0f, 0f, 0f, 0f, 0f, 0f, Vector2.zero, 0f, 0, 0) },
+        { "Swing Tail", new EnemySpell(0f, 0f, 1, 0f, 0f, 0f, 0f, 0f, 0f, Vector2.zero, 0f, 0, 0) }
+    };
     bool isSpellCasted;
     bool isPlayerCaught;      //Was the player caught
 
-    Transform frontLegs;
+    string spell = "None";
+
+    [SerializeField] Transform frontLegs = null;
     BoxCollider2D frontLegsCol;
     Collider2D objectToDamage;
+
+    float spellCastRerandomDelay = 3f;
+    float curSpellCastRerandomDelay;
 
     new void Start()
     {
         base.Start();
 
-        frontLegs = myTransform.Find("Front Legs");
         frontLegsCol = frontLegs.GetComponent<BoxCollider2D>();
     }
 
     new void Update() 
     {
         base.Update();
-
-        if (Input.GetKeyDown("J"))
-        mySpells.Remove((Enemy.SpellEnum) SpellEnum.LongJump);//or mySpells.Remove(SpellEnum.LongJump);
-
-
     }
 
     new void FixedUpdate() 
     {
-        base.FixedUpdate();
+        int _rand = 101;
 
-        //Cast spell with 33% chance if it's possible
-        if(curGlobalSpellCD <= Time.time && target != null && !isAttack && Random.Range(0, 2) == 2)
+        if (curSpellCastRerandomDelay <= Time.time)
         {
-            if(IsPlayerBehind())
-                spell = SpellEnum.SwingTail;
+            _rand = Random.Range(1, 101);
+            curSpellCastRerandomDelay = spellCastRerandomDelay + Time.time;
+        }
+
+        Debug.Log(_rand);
+        //Cast spell with 33% chance if it's possible
+        if (curGlobalSpellCD <= Time.time && target != null && !isAttack && !isCast && _rand <= 33)
+        {
+            if (IsPlayerBehind())
+                spell = "Swing Tail";
             else
             {
                 if (DistanceToPlayer() <= 5f && backJumpTiming.curCooldown <= Time.time)
-                    spell = SpellEnum.BackJump;
-                else if (DistanceToPlayer() <= 15f && iceBreathTiming.curCooldown <= Time.time)
-                    spell = SpellEnum.IceBreath;
-                else if (DistanceToPlayer() <= mySpells[(Enemy.SpellEnum) SpellEnum.LongJump].jumpDistance && longJumpTiming.curCooldown <= Time.time)
-                    spell = SpellEnum.LongJump;
+                    spell = "Back Jump";
+                else if (DistanceToPlayer() <= 7f && iceBreathTiming.curCooldown <= Time.time)
+                    spell = "Ice Breath";
+                else if (DistanceToPlayer() <= mySpells["Long Jump"].jumpDistance && longJumpTiming.curCooldown <= Time.time)
+                    spell = "Long Jump";
                 else return;
             }
 
+            //rigidBody.velocity = Vector2.zero;
+            curSpellPrepareTime = mySpells[spell].prepareTime + Time.time;
             SwitchState(State.CastSpell);
+            spellState = SpellStates.Prepare;
         }
+
+        base.FixedUpdate();
     }
     
     override protected void CastSpell()
     {
         switch(spell)
         {
-            case SpellEnum.None:
+            case "None":
                 Debug.LogError("Enemy try cast spell with none value. Enemy ID: " + gameObject.GetInstanceID());
                 break;
-            case SpellEnum.LongJump:
+            case "Long Jump":
                 LongJump();
                 break;
-            case SpellEnum.BackJump:
+            case "Back Jump":
                 BackJump();
                 break;
-            case SpellEnum.SwingTail:
+            case "Swing Tail":
                 SwingTail();
                 break;
-            case SpellEnum.IceBreath:
+            case "Ice Breath":
                 IceBreath();
                 break;
         }
@@ -95,13 +103,22 @@ public class ElderWolf : Enemy
     void LongJump()
     {
         spellNumber = 1;
-        //Повесить начало прыжка (StartJump()) на начало анимации
+
+        if (spellState == SpellStates.Prepare && curSpellPrepareTime <= Time.time)
+        {
+            spellState = SpellStates.Cast;
+            curSpellCastTime = mySpells[spell].castTime + Time.time;
+        }
+
+        if (spellState == SpellStates.Cast && curSpellCastTime <= Time.time)
+            spellState = SpellStates.End;
+
         if (objectToDamage == null)
             objectToDamage = Physics2D.OverlapBox(frontLegs.position, new Vector2(frontLegsCol.size.x, frontLegsCol.size.y), 0f, playerLayer);
         //If player collided with front legs
-        else if (!isPlayerCaught)
+        else if (!isPlayerCaught && spellState != SpellStates.Prepare)
         {
-            objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[(Enemy.SpellEnum)spell].firstDamage, HurtTypesEnum.Catch, frontLegs);
+            objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].firstDamage, HurtTypesEnum.Catch, frontLegs);
             isPlayerCaught = true;
         }
 
@@ -109,10 +126,11 @@ public class ElderWolf : Enemy
         {
             objectToDamage = null;
             isPlayerCaught = false;
+            isSpellCasted = false;
             curAttackCD = attackCD + Time.time;
             //longJumpTiming.curDelay = mySpells[(Enemy.SpellEnum) spell].delayAfterCast + Time.time;
-            longJumpTiming.curCooldown = mySpells[(Enemy.SpellEnum) spell].cooldown + Time.time;
-            curGlobalSpellCD = mySpells[(Enemy.SpellEnum) spell].globalCD + Time.time;
+            longJumpTiming.curCooldown = mySpells[spell].cooldown + Time.time;
+            curGlobalSpellCD = mySpells[spell].globalCD + Time.time;
             SwitchState(State.Attack);
         }
     }
@@ -126,27 +144,28 @@ public class ElderWolf : Enemy
         {
             objectToDamage = null;
             isPlayerCaught = false;
+            isSpellCasted = false;
             curAttackCD = attackCD + Time.time;
             //backJumpTiming.curDelay = mySpells[(Enemy.SpellEnum) spell].delayAfterCast + Time.time;
-            backJumpTiming.curCooldown = mySpells[(Enemy.SpellEnum) spell].cooldown + Time.time;
-            curGlobalSpellCD = mySpells[(Enemy.SpellEnum)spell].globalCD + Time.time;
+            backJumpTiming.curCooldown = mySpells[spell].cooldown + Time.time;
+            curGlobalSpellCD = mySpells[spell].globalCD + Time.time;
             SwitchState(State.Attack);
         }
     }
 
     void StartJump()
     {
-        rigidBody.AddForce(new Vector2(mySpells[(Enemy.SpellEnum) spell].jumpDistance * mySpells[(Enemy.SpellEnum)spell].jumpDirection, mySpells[(Enemy.SpellEnum)spell].jumpHeight), ForceMode2D.Impulse);
+        rigidBody.AddForce(new Vector2(mySpells[spell].jumpDistance * mySpells[spell].jumpDirection * direction, mySpells[spell].jumpHeight), ForceMode2D.Impulse);
     }
 
     void Landing()
     {
-        //Calling from end of animation
+        rigidBody.velocity = Vector2.zero;
         //Give AOE damage
         objectToDamage = Physics2D.OverlapBox(frontLegs.position, new Vector2(frontLegsCol.size.x * 2f, frontLegsCol.size.y), 0f, playerLayer);
 
         if (objectToDamage != null)
-            objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[(Enemy.SpellEnum)spell].lastDamage, HurtTypesEnum.Repulsion, mySpells[(Enemy.SpellEnum)spell].repulseVector, mySpells[(Enemy.SpellEnum)spell].dazedTime);
+            objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].lastDamage, HurtTypesEnum.Repulsion, mySpells[spell].repulseVector, mySpells[spell].dazedTime);
         
         isSpellCasted = true;
     }

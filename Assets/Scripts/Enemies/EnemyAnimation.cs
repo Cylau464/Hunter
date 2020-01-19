@@ -17,6 +17,9 @@ public class EnemyAnimation : MonoBehaviour
     int fallParamID;
     int castParamID;
     int spellParamID;
+    //int spellPrepareParamID;
+    int spellCastParamID;
+    int spellEndParamID;
 
     // Start is called before the first frame update
     void Start()
@@ -32,6 +35,9 @@ public class EnemyAnimation : MonoBehaviour
         speedParamID           = Animator.StringToHash("speed");
         fallParamID            = Animator.StringToHash("verticalVelocity");
         spellParamID           = Animator.StringToHash("spellNumber");
+        //spellPrepareParamID    = Animator.StringToHash("spellPrepare");
+        spellCastParamID       = Animator.StringToHash("spellCast");
+        spellEndParamID        = Animator.StringToHash("spellEnd");
 
         //Get references to the needed components
         enemy                  = GetComponent<Enemy>();
@@ -63,6 +69,21 @@ public class EnemyAnimation : MonoBehaviour
         anim.SetFloat(fallParamID, rigidBody.velocity.y);
 
         //Use the absolute value of speed so that we only pass in positive numbers
-        anim.SetFloat(speedParamID, rigidBody.velocity.x);
+        anim.SetFloat(speedParamID, Mathf.Abs(rigidBody.velocity.x));
+
+        switch(enemy.spellState)
+        {
+            /*case SpellStates.Prepare:
+                anim.SetTrigger(spellPrepareParamID);
+                break;*/
+            case SpellStates.Cast:
+                anim.ResetTrigger(spellEndParamID);
+                anim.SetTrigger(spellCastParamID);
+                break;
+            case SpellStates.End:
+                anim.ResetTrigger(spellCastParamID);
+                anim.SetTrigger(spellEndParamID);
+                break;
+        }
     }
 }
