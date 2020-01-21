@@ -19,7 +19,7 @@ public class PlayerAtributes : MonoBehaviour
 
     }
 
-    public void TakeDamage(int damage, HurtTypesEnum hurtType)
+    public void TakeDamage(int damage, HurtType hurtType)
     {
         health -= damage;
         
@@ -31,7 +31,7 @@ public class PlayerAtributes : MonoBehaviour
     }
 
     //Catched
-    public void TakeDamage(int damage, HurtTypesEnum hurtType, Transform anchorPoint)
+    public void TakeDamage(int damage, HurtType hurtType, Transform anchorPoint)
     {
         health -= damage;
 
@@ -44,7 +44,7 @@ public class PlayerAtributes : MonoBehaviour
             movement.GetCaught(hurtType, anchorPoint);
     }
 
-    public void TakeDamage(int damage, HurtTypesEnum hurtType, Vector2 repulseDistantion, float dazedTime)
+    public void TakeDamage(int damage, HurtType hurtType, Vector2 repulseDistantion, float dazedTime)
     {
         health -= damage;
 

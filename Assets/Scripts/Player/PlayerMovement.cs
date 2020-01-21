@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum HurtTypesEnum { None, Repulsion, Catch };
+public enum HurtType { None, Repulsion, Catch };
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -37,7 +37,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Hurt Properties")]
     float curDazedTime = 0f;
-    HurtTypesEnum hurtType;
+    HurtType hurtType;
 
     [Header("Status Flags")]
     public bool isOnGround;
@@ -143,6 +143,25 @@ public class PlayerMovement : MonoBehaviour
 
         //if (Mathf.Sign(aimDirection.x) != direction)
         //    FlipCharacterDirection();
+    }
+
+    void OnTriggerStay2D(Collider2D col)
+    {
+        //If interacting with the enemy
+        if (col.gameObject.layer == 1 << 12 && !isHurt && !isDead)
+        {
+            //Not moving - push player from the enemy
+            if (input.horizontal == 0)
+            {
+                float _forceDir = Mathf.Sign(playerTransform.position.x - col.transform.position.x);
+                rigidBody.AddForce(new Vector2(speed / 2f * _forceDir, 0f), ForceMode2D.Force);
+            }
+            //Moving - push player in the opposite direction to the movement
+            else
+            {
+                rigidBody.AddForce(new Vector2(speed / 2f * -Mathf.Sign(input.horizontal), 0f), ForceMode2D.Force);
+            }
+        }
     }
 
     void FixedUpdate()
@@ -473,19 +492,19 @@ public class PlayerMovement : MonoBehaviour
         {
             curDazedTime = 0f;
             isHurt = false;
-            hurtType = HurtTypesEnum.None;
+            hurtType = HurtType.None;
             catchAnchorPoint = null;
 
         }
         else
         {
             //Follow for catch source
-            if (hurtType == HurtTypesEnum.Catch)
+            if (hurtType == HurtType.Catch)
                 playerTransform.position = catchAnchorPoint.position;
         }
     }
 
-    public void GetCaught(HurtTypesEnum hurtType, Transform anchorPoint)
+    public void GetCaught(HurtType hurtType, Transform anchorPoint)
     {
         isJumping = isDoubleJump = isHeadBlocked = isCrouching = isAttacking = isEvading = isHanging = isClimbing = isHooked = false;
         this.hurtType = hurtType;

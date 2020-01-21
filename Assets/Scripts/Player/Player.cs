@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum PlayerState { Idle, Move, Jump, Crouch, Attack, Climb, Evade, Hang, Hooked, Hurt, Dead };
-//public enum HurtTypesEnum { None, Repulsion, Grab };
+//public enum HurtType { None, Repulsion, Grab };
 
 public class Player : MonoBehaviour
 {
@@ -39,7 +39,7 @@ public class Player : MonoBehaviour
 
     [Header("Hurt Properties")]
     float curDazedTime;
-    HurtTypesEnum hurtType;
+    HurtType hurtType;
 
     [Header("Status Flags")]
     PlayerState currentState = PlayerState.Idle;

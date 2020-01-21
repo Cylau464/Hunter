@@ -25,15 +25,14 @@ public class Enemy : MonoBehaviour
         { Elements.Primal, 0 }
     };
 
+    public float attackCD = 1.5f;
     [SerializeField] float attackDistance = 2f;
     //[SerializeField] float attackDuration = 1f;
     [SerializeField] float attackRangeX = 2f;
     [SerializeField] float attackRangeY = 1f;
-    public float attackCD = 1.5f;
-
     protected float curGlobalSpellCD = 0f;
     protected float curAttackCD = 0f;
-    
+
     [Header("Defence Properties")]
     [SerializeField] ElementDictionary elementDefence = new ElementDictionary()
     {
@@ -55,11 +54,12 @@ public class Enemy : MonoBehaviour
     [Header("Speed Properties")]
     [SerializeField] float patrolSpeed = 2f;
     [SerializeField] float chaseSpeed = 4f;
-    
+
     [Header("Patrol Properties")]
     [SerializeField] float minWaitTime = 1f;
     [SerializeField] float maxWaitTime = 4f;
     [SerializeField] float patrolDistance = 10f;
+
     bool pathPassed = true;
 
     //[Header("Hurt Properties")]
@@ -75,7 +75,7 @@ public class Enemy : MonoBehaviour
     public bool isDead;
 
     [SerializeField] float spriteBlinkingDuration = 0.6f;
-    [SerializeField] float spriteBlinkingPeriod   = 0.1f;
+    [SerializeField] float spriteBlinkingPeriod = 0.1f;
     float blinkingTimer = 0f;
     float blinkingPeriod = 0f;
 
@@ -94,17 +94,22 @@ public class Enemy : MonoBehaviour
     SpriteRenderer sprite;
     Vector2 startPos;
 
-    protected int direction = 1;
+    public int direction { get; protected set; } = 1;
 
     //Patrol variables
     float pathDestination  = 0f;   //Point to move around start position
     float patrolDelay      = 0f;   //Delay before start next path
+
     int dir                = 0;    //Local var direction
 
     [Header("Spell Properties")]
     [HideInInspector] public int spellNumber;        //Needful for animator
+
     protected float curSpellPrepareTime;
     protected float curSpellCastTime;
+
+    protected string spell = "None";
+
     public SpellStates spellState = SpellStates.None;
 
     protected void Start()
@@ -367,7 +372,7 @@ public class Enemy : MonoBehaviour
         Collider2D _objectToDamage = Physics2D.OverlapBox(transform.position, new Vector2(attackRangeX, attackRangeY), 0, playerLayer);
 
         if (_objectToDamage != null)
-            _objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(damage, HurtTypesEnum.Repulsion);
+            _objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(damage, HurtType.Repulsion);
     }
 
     void EndOfAttack()
