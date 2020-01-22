@@ -54,6 +54,7 @@ public class PlayerMovement : MonoBehaviour
     public bool isDead;
     public bool canFlip = true;
     public bool moveInputPriority = true;          //What the hell is this?
+    bool isCollideWithEnemy;
 
     [HideInInspector] 
     public float speedDivisor = 1f;                //Used to decrease horizontal speed
@@ -125,13 +126,13 @@ public class PlayerMovement : MonoBehaviour
             Time.timeScale = 1f;
         if (Input.GetKeyDown(KeyCode.T))
             Time.timeScale = 0.01f;
-
+        /*
         //If hook is not throwing or pulling
         if (input.hook && hook.throwCoroutine == null)
         {
             //Value 10f in vector3 compensates for the Z position of the camera. Need to get this value from the camera (-Input.mousePosition.z)
             hook.throwCoroutine = hook.StartCoroutine(hook.Throw(Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10f))));
-        }
+        }*/
         //Reset variables when character landed
         if (isOnGround)
         {
@@ -147,19 +148,23 @@ public class PlayerMovement : MonoBehaviour
 
     void OnTriggerStay2D(Collider2D col)
     {
-        //If interacting with the enemy
-        if (col.gameObject.layer == 1 << 12 && !isHurt && !isDead)
+        //If interacting with the enemy (13 - triggers layer)
+        if (col.gameObject.layer == 13 && !isHurt && !isDead)
         {
+            isCollideWithEnemy = true;
             //Not moving - push player from the enemy
             if (input.horizontal == 0)
             {
                 float _forceDir = Mathf.Sign(playerTransform.position.x - col.transform.position.x);
-                rigidBody.AddForce(new Vector2(speed / 2f * _forceDir, 0f), ForceMode2D.Force);
+                Debug.Log("DOREC " + _forceDir);
+                //rigidBody.AddForce(new Vector2(speed / 2f * _forceDir, 0f), ForceMode2D.Force);
+                rigidBody.velocity = new Vector2(rigidBody.velocity.x + _forceDir * speed / 2f, rigidBody.velocity.y);
             }
             //Moving - push player in the opposite direction to the movement
             else
             {
-                rigidBody.AddForce(new Vector2(speed / 2f * -Mathf.Sign(input.horizontal), 0f), ForceMode2D.Force);
+                //rigidBody.AddForce(new Vector2(speed / 2f * -Mathf.Sign(input.horizontal), 0f), ForceMode2D.Force);
+                rigidBody.velocity = new Vector2(rigidBody.velocity.x + speed / 2f * -Mathf.Sign(input.horizontal), rigidBody.velocity.y);
             }
         }
     }
@@ -519,6 +524,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void Repulse(Vector2 repulseDistantion, float dazedTime)
     {
+        Debug.Log("REPULSE");
         rigidBody.AddForce(repulseDistantion, ForceMode2D.Impulse);
         curDazedTime = dazedTime + Time.time;
         //Pushed up

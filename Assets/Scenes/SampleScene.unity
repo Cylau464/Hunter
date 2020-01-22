@@ -1165,218 +1165,12 @@ Transform:
   m_Father: {fileID: 60158358}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &422111339 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3205944958286040067, guid: b9e459bd3cbef9b4a9a599f02558baaf,
-    type: 3}
-  m_PrefabInstance: {fileID: 3205944958298819623}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &422111346 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3205944958286040079, guid: b9e459bd3cbef9b4a9a599f02558baaf,
     type: 3}
   m_PrefabInstance: {fileID: 3205944958298819623}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &422111347
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 422111339}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7da6e8ed9131bf04484b1b5fa9ce51a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 5
-  viewDistance: 10
-  dragType: 1
-  damage: 1
-  elementDamage:
-    reorderableList:
-      canAdd: 1
-      canRemove: 1
-      draggable: 1
-      expandable: 1
-      multipleSelection: 1
-      isExpanded: 0
-      label:
-        m_Text: Keys
-        m_Image: {fileID: 0}
-        m_Tooltip: 
-      headerHeight: 18
-      footerHeight: 13
-      slideEasing: 0.15
-      verticalSpacing: 2
-      showDefaultBackground: 1
-      elementDisplayType: 0
-      elementNameProperty: 
-      elementNameOverride: 
-      elementIcon: {fileID: 0}
-    reqReferences: {fileID: 0}
-    isExpanded: 0
-    _keyValues: 000000000300000002000000010000000400000005000000
-    _keys: 000000000300000002000000010000000400000005000000
-    _values: 000000000000000000000000000000000000000000000000
-  attackDistance: 2
-  attackRangeX: 2
-  attackRangeY: 1
-  attackCD: 1.5
-  elementDefence:
-    reorderableList:
-      canAdd: 1
-      canRemove: 1
-      draggable: 1
-      expandable: 1
-      multipleSelection: 1
-      isExpanded: 0
-      label:
-        m_Text: Keys
-        m_Image: {fileID: 0}
-        m_Tooltip: 
-      headerHeight: 18
-      footerHeight: 13
-      slideEasing: 0.15
-      verticalSpacing: 2
-      showDefaultBackground: 1
-      elementDisplayType: 0
-      elementNameProperty: 
-      elementNameOverride: 
-      elementIcon: {fileID: 0}
-    reqReferences: {fileID: 0}
-    isExpanded: 0
-    _keyValues: 000000000300000002000000010000000400000005000000
-    _keys: 000000000300000002000000010000000400000005000000
-    _values: 000000000000000000000000000000000000000000000000
-  physicDefence:
-    reorderableList:
-      canAdd: 1
-      canRemove: 1
-      draggable: 1
-      expandable: 1
-      multipleSelection: 1
-      isExpanded: 0
-      label:
-        m_Text: Keys
-        m_Image: {fileID: 0}
-        m_Tooltip: 
-      headerHeight: 18
-      footerHeight: 13
-      slideEasing: 0.15
-      verticalSpacing: 2
-      showDefaultBackground: 1
-      elementDisplayType: 0
-      elementNameProperty: 
-      elementNameOverride: 
-      elementIcon: {fileID: 0}
-    reqReferences: {fileID: 0}
-    isExpanded: 0
-    _keyValues: 03000000010000000000000002000000
-    _keys: 03000000010000000000000002000000
-    _values: 00000000000000000000000000000000
-  patrolSpeed: 2
-  chaseSpeed: 4
-  minWaitTime: 1
-  maxWaitTime: 4
-  patrolDistance: 10
-  isPatrol: 0
-  isChase: 0
-  isAttack: 0
-  isCast: 0
-  isHurt: 0
-  isDead: 0
-  spriteBlinkingDuration: 0.6
-  spriteBlinkingPeriod: 0.1
-  spellNumber: 0
-  spellState: 0
-  mySpells:
-    reorderableList:
-      canAdd: 1
-      canRemove: 1
-      draggable: 1
-      expandable: 1
-      multipleSelection: 1
-      isExpanded: 1
-      label:
-        m_Text: Keys
-        m_Image: {fileID: 0}
-        m_Tooltip: 
-      headerHeight: 18
-      footerHeight: 13
-      slideEasing: 0.15
-      verticalSpacing: 2
-      showDefaultBackground: 1
-      elementDisplayType: 0
-      elementNameProperty: 
-      elementNameOverride: 
-      elementIcon: {fileID: 0}
-    reqReferences: {fileID: 0}
-    isExpanded: 1
-    _keyValues:
-    - Long Jump
-    - Back Jump
-    - Ice Breath
-    - Swing Tail
-    _keys:
-    - Long Jump
-    - Back Jump
-    - Ice Breath
-    - Swing Tail
-    _values:
-    - cooldown: 10
-      globalCD: 2
-      prepareTime: 1.5
-      castTime: 0.75
-      damageRangeX: 2
-      damageRangeY: 2
-      dazedTime: 1.5
-      repulseVector: {x: 5, y: 5}
-      firstDamage: 5
-      lastDamage: 7
-      jumpDistance: 15
-      jumpHeight: 20
-      jumpDirection: 1
-    - cooldown: 0
-      globalCD: 0
-      prepareTime: 0
-      castTime: 0
-      damageRangeX: 0
-      damageRangeY: 0
-      dazedTime: 0
-      repulseVector: {x: 0, y: 0}
-      firstDamage: 0
-      lastDamage: 0
-      jumpDistance: 0
-      jumpHeight: 0
-      jumpDirection: 1
-    - cooldown: 0
-      globalCD: 0
-      prepareTime: 0
-      castTime: 0
-      damageRangeX: 0
-      damageRangeY: 0
-      dazedTime: 0
-      repulseVector: {x: 0, y: 0}
-      firstDamage: 0
-      lastDamage: 0
-      jumpDistance: 0
-      jumpHeight: 0
-      jumpDirection: 1
-    - cooldown: 0
-      globalCD: 0
-      prepareTime: 0
-      castTime: 0
-      damageRangeX: 0
-      damageRangeY: 0
-      dazedTime: 0
-      repulseVector: {x: 0, y: 0}
-      firstDamage: 0
-      lastDamage: 0
-      jumpDistance: 0
-      jumpHeight: 0
-      jumpDirection: 1
-  frontLegs: {fileID: 0}
 --- !u!1001 &426284350
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1516,7 +1310,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 452924006}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.48, y: 0.96, z: 0}
+  m_LocalPosition: {x: 3.68, y: 1.42, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 752039254}
@@ -1532,7 +1326,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.09074068, y: 0.31220222}
@@ -1931,12 +1725,12 @@ PrefabInstance:
     - target: {fileID: 3205944958286040064, guid: 1b00b37d08923724481287bb221d8aa3,
         type: 3}
       propertyPath: m_Size.x
-      value: 6.6666665
+      value: 5.733333
       objectReference: {fileID: 0}
     - target: {fileID: 3205944958286040064, guid: 1b00b37d08923724481287bb221d8aa3,
         type: 3}
       propertyPath: m_Size.y
-      value: 8
+      value: 2.5333333
       objectReference: {fileID: 0}
     - target: {fileID: 3205944958286040064, guid: 1b00b37d08923724481287bb221d8aa3,
         type: 3}
@@ -2049,6 +1843,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3205944958771815866, guid: 1b00b37d08923724481287bb221d8aa3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3205944958286040076, guid: 1b00b37d08923724481287bb221d8aa3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 1b00b37d08923724481287bb221d8aa3, type: 3}
@@ -2067,7 +1866,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 752039247}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7da6e8ed9131bf04484b1b5fa9ce51a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 6867c7fca87d37d49b209b42fc939de9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 5
@@ -2100,10 +1899,10 @@ MonoBehaviour:
     _keyValues: 000000000300000002000000010000000400000005000000
     _keys: 000000000300000002000000010000000400000005000000
     _values: 000000000000000000000000000000000000000000000000
+  attackCD: 1.5
   attackDistance: 2
   attackRangeX: 2
   attackRangeY: 1
-  attackCD: 1.5
   elementDefence:
     reorderableList:
       canAdd: 1
@@ -2199,64 +1998,79 @@ MonoBehaviour:
     - Back Jump
     - Ice Breath
     - Swing Tail
+    - Ice Spikes
     _keys:
     - Long Jump
     - Back Jump
     - Ice Breath
     - Swing Tail
+    - Ice Spikes
     _values:
     - cooldown: 10
-      globalCD: 2
+      globalCD: 3
       prepareTime: 1.5
       castTime: 0.75
-      damageRangeX: 2
-      damageRangeY: 2
+      castRange: 10
+      periodicityDamage: 0
       dazedTime: 1.5
       repulseVector: {x: 5, y: 5}
+      damageRange: {x: 2, y: 2}
       firstDamage: 5
       lastDamage: 7
-      jumpDistance: 15
-      jumpHeight: 20
+      jumpDistance: {x: 15, y: 15}
       jumpDirection: 1
-    - cooldown: 0
-      globalCD: 0
-      prepareTime: 0
-      castTime: 0
-      damageRangeX: 0
-      damageRangeY: 0
-      dazedTime: 0
-      repulseVector: {x: 0, y: 0}
-      firstDamage: 0
+    - cooldown: 12
+      globalCD: 3
+      prepareTime: 0.5
+      castTime: 0.5
+      castRange: 3
+      periodicityDamage: 0
+      dazedTime: 1
+      repulseVector: {x: 3, y: 0}
+      damageRange: {x: 2, y: 2}
+      firstDamage: 2
+      lastDamage: 5
+      jumpDistance: {x: 7, y: 12}
+      jumpDirection: -1
+    - cooldown: 8
+      globalCD: 2
+      prepareTime: 1
+      castTime: 3
+      castRange: 7
+      periodicityDamage: 0.5
+      dazedTime: 0.3
+      repulseVector: {x: 2, y: 0}
+      damageRange: {x: 10, y: 5}
+      firstDamage: 2
       lastDamage: 0
-      jumpDistance: 0
-      jumpHeight: 0
-      jumpDirection: 1
-    - cooldown: 0
-      globalCD: 0
-      prepareTime: 0
-      castTime: 0
-      damageRangeX: 0
-      damageRangeY: 0
-      dazedTime: 0
-      repulseVector: {x: 0, y: 0}
-      firstDamage: 0
+      jumpDistance: {x: 0, y: 0}
+      jumpDirection: 0
+    - cooldown: 8
+      globalCD: 2
+      prepareTime: 1
+      castTime: 0.5
+      castRange: 5
+      periodicityDamage: 0
+      dazedTime: 1.5
+      repulseVector: {x: 5, y: 2}
+      damageRange: {x: 2, y: 2}
+      firstDamage: 10
       lastDamage: 0
-      jumpDistance: 0
-      jumpHeight: 0
-      jumpDirection: 1
-    - cooldown: 0
-      globalCD: 0
-      prepareTime: 0
-      castTime: 0
-      damageRangeX: 0
-      damageRangeY: 0
-      dazedTime: 0
-      repulseVector: {x: 0, y: 0}
-      firstDamage: 0
+      jumpDistance: {x: 0, y: 0}
+      jumpDirection: 0
+    - cooldown: 15
+      globalCD: 2
+      prepareTime: 1
+      castTime: 2
+      castRange: 11
+      periodicityDamage: 0
+      dazedTime: 2
+      repulseVector: {x: 4, y: 2}
+      damageRange: {x: 2, y: 5}
+      firstDamage: 15
       lastDamage: 0
-      jumpDistance: 0
-      jumpHeight: 0
-      jumpDirection: 1
+      jumpDistance: {x: 0, y: 0}
+      jumpDirection: 0
   frontLegs: {fileID: 452924007}
 --- !u!4 &752039254 stripped
 Transform:
@@ -2270,6 +2084,82 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1218602855}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1010206983
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1010206984}
+  - component: {fileID: 1010206986}
+  - component: {fileID: 1010206985}
+  m_Layer: 13
+  m_Name: Ice Breath
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1010206984
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1010206983}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.22, y: 1.75, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 752039254}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!60 &1010206985
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1010206983}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0, y: 1}
+      - {x: 0, y: -1}
+      - {x: 15, y: -2.5}
+      - {x: 15, y: 2.5}
+--- !u!114 &1010206986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1010206983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2dba1c2078f039469bc77da80c0d27f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colliderSize: {x: 0, y: 0}
+  yOffsetCollider: 1
+  playerCol: {fileID: 0}
 --- !u!1 &1183156873
 GameObject:
   m_ObjectHideFlags: 0
@@ -2426,6 +2316,63 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b88e9d6a57e33424594175416cf73520, type: 3}
+--- !u!1 &1356983574
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1356983575}
+  - component: {fileID: 1356983576}
+  m_Layer: 13
+  m_Name: Trigger-Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1356983575
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1356983574}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 752039254}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &1356983576
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1356983574}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.09, y: 1.25}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0}
+    oldSize: {x: 5.733333, y: 2.5333333}
+    newSize: {x: 5.733333, y: 2.5333333}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 5.5, y: 2.5}
+  m_EdgeRadius: 0
 --- !u!1 &1547733852
 GameObject:
   m_ObjectHideFlags: 0

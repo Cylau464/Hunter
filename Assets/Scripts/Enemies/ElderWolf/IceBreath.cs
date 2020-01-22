@@ -16,14 +16,14 @@ public class IceBreath : MonoBehaviour
     {
         enemy = transform.parent.GetComponent<Enemy>();
         direction = enemy.direction;
-
+        
         myCollider = transform.GetComponent<PolygonCollider2D>();
         myCollider.enabled = false;
-        myCollider.pathCount = 4;
+        myCollider.pathCount = 1;
         myCollider.SetPath(0, new[] {
-                    new Vector2(myCollider.transform.position.x, myCollider.transform.position.y - yOffsetCollider), new Vector2(myCollider.transform.position.x, myCollider.transform.position.y + yOffsetCollider),
-                    new Vector2((myCollider.transform.position.x + colliderSize.x) * direction, myCollider.transform.position.y + colliderSize.y / 2f),
-                    new Vector2((myCollider.transform.position.x + colliderSize.x) * direction, myCollider.transform.position.y - colliderSize.y / 2f)
+                    new Vector2(0f, yOffsetCollider), new Vector2(0, -yOffsetCollider),
+                    new Vector2((colliderSize.x) * direction, -colliderSize.y / 2f),
+                    new Vector2((colliderSize.x) * direction, colliderSize.y / 2f)
                 });
         myCollider.enabled = true;
     }
@@ -40,11 +40,11 @@ public class IceBreath : MonoBehaviour
         direction = enemy.direction;
 
         myCollider.enabled = false;
-        myCollider.pathCount = 4;
+        myCollider.pathCount = 1;
         myCollider.SetPath(0, new[] {
-                    new Vector2(myCollider.transform.position.x, myCollider.transform.position.y - yOffsetCollider), new Vector2(myCollider.transform.position.x, myCollider.transform.position.y + yOffsetCollider),
-                    new Vector2((myCollider.transform.position.x + colliderSize.x) * direction, myCollider.transform.position.y + colliderSize.y / 2f),
-                    new Vector2((myCollider.transform.position.x + colliderSize.x) * direction, myCollider.transform.position.y - colliderSize.y / 2f)
+                    new Vector2(0f, yOffsetCollider), new Vector2(0, -yOffsetCollider),
+                    new Vector2((colliderSize.x) * direction, -colliderSize.y / 2f),
+                    new Vector2((colliderSize.x) * direction, colliderSize.y / 2f)
                 });
         myCollider.enabled = true;
     }
@@ -53,6 +53,7 @@ public class IceBreath : MonoBehaviour
     {
         if (col.gameObject.layer == 10)
             playerCol = col;
+
     }
 
     void OnTriggerExit2D(Collider2D col)

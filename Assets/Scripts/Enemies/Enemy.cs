@@ -112,7 +112,7 @@ public class Enemy : MonoBehaviour
 
     public SpellStates spellState = SpellStates.None;
 
-    protected void Start()
+    protected void Awake()
     {
         health         = maxHealth;
         currentState   = State.Patrol;

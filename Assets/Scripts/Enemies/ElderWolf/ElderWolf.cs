@@ -14,8 +14,8 @@ public class ElderWolf : Enemy
     [Header("Spell Properties")]
     [SerializeField] EnemySpellDictionary mySpells = new EnemySpellDictionary()
     {
-        { "Long Jump", new EnemySpell(10f, new Vector2(10f, 5f), 1, 10f, 2f, 1.5f, .75f, new Vector2(2f, 2f), new Vector2(5f, 5f), 1.5f, 5, 7) },
-        { "Back Jump", new EnemySpell(3f, new Vector2(0f, 0f), 1, 0f, 0f, 0f, 0f, new Vector2(0f, 0f), Vector2.zero, 0f, 0, 0) },
+        { "Long Jump", new EnemySpell(10f, new Vector2(10f, 5f), 1, 10f, 3f, 1.5f, .75f, new Vector2(2f, 2f), new Vector2(5f, 5f), 1.5f, 5, 7) },
+        { "Back Jump", new EnemySpell(3f, new Vector2(7f, 4f), -1, 12f, 3f, .5f, .5f, new Vector2(2f, 2f), new Vector2(3f, 0f), 1f, 2, 5) },
         { "Ice Breath", new EnemySpell(7f, 8f, 2f, 1f, .5f, new Vector2(10f, 5f), new Vector2(2f, 0f), .3f, 2, .5f) },
         { "Swing Tail", new EnemySpell(5f, 8f, 2f, 1f, .5f, new Vector2(2f, 2f), new Vector2(5f, 2f), 1.5f, 10) },
         { "Ice Spikes", new EnemySpell(11f, 15f, 2f, 1f, 2f, new Vector2(2f, 5f), new Vector2(4f, 2f), 2f, 15) }
@@ -33,13 +33,11 @@ public class ElderWolf : Enemy
     float curSpellCastRerandomDelay;
     float curSpellDelayBtwDamage;
 
-    new void Start()
+    new void Awake()
     {
-        base.Start();
+        base.Awake();
 
-        frontLegsCol = frontLegs.GetComponent<BoxCollider2D>();
-
-        foreach(Transform child in myTransform)
+        foreach (Transform child in myTransform)
         {
             if (child.name == "Tail")
                 tailCol = child.GetComponent<BoxCollider2D>();
@@ -52,9 +50,17 @@ public class ElderWolf : Enemy
         }
     }
 
+    void Start()
+    {
+        //base.Start();
+
+        frontLegsCol = frontLegs.GetComponent<BoxCollider2D>();
+    }
+
     new void Update() 
     {
         base.Update();
+        Debug.Log("spell: " + spellNumber);
     }
 
     new void FixedUpdate() 
@@ -67,7 +73,6 @@ public class ElderWolf : Enemy
             curSpellCastRerandomDelay = spellCastRerandomDelay + Time.time;
         }
 
-        Debug.Log(_rand);
         //Cast spell with 33% chance if it's possible
         if (curGlobalSpellCD <= Time.time && target != null && !isAttack && !isCast && _rand <= 33)
         {
@@ -230,7 +235,8 @@ public class ElderWolf : Enemy
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.red;
+       Gizmos.color = Color.red;
+        if (frontLegsCol != null)
         Gizmos.DrawWireCube(frontLegs.position, new Vector3(frontLegsCol.size.x * 2f, frontLegsCol.size.y, 0f));
     }
 
@@ -251,7 +257,7 @@ public class ElderWolf : Enemy
         objectToDamage = Physics2D.OverlapBox(tailCol.transform.position, new Vector2(tailCol.size.x, tailCol.size.y), 0, playerLayer);
 
         if (objectToDamage != null)
-            objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(damage, HurtType.Repulsion, new Vector2(mySpells[spell].repulseVector.x * -direction, mySpells[spell].repulseVector.y), mySpells[spell].dazedTime);
+            objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].firstDamage, HurtType.Repulsion, new Vector2(mySpells[spell].repulseVector.x * -direction, mySpells[spell].repulseVector.y), mySpells[spell].dazedTime);
     }
 
     void SpellPeriodicDamage()
@@ -261,7 +267,7 @@ public class ElderWolf : Enemy
             objectToDamage = iceBreathCol.GetComponent<IceBreath>().playerCol;
 
             if (objectToDamage != null)
-                objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(damage, HurtType.Repulsion, new Vector2(mySpells[spell].repulseVector.x * direction, mySpells[spell].repulseVector.y), mySpells[spell].dazedTime);
+                objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].firstDamage, HurtType.Repulsion, new Vector2(mySpells[spell].repulseVector.x * direction, mySpells[spell].repulseVector.y), mySpells[spell].dazedTime);
 
             curSpellDelayBtwDamage = mySpells[spell].periodicityDamage + Time.time;
         }
