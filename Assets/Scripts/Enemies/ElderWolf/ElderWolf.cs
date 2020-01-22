@@ -10,6 +10,15 @@ public class ElderWolf : Enemy
     EnemySpellCD swingTailTiming;
     EnemySpellCD iceBreathTiming;
     EnemySpellCD iceSpikesTiming;
+    EnemySpellCD howlTiming;
+
+    new protected EnemyComboDictionary combos = new EnemyComboDictionary()
+    {
+        { "One Attack", new EnemyCombo(1, WeaponAttackType.Melee, 30, new int[] { 3 }, new float[] { 0f }, new float[] { .2f }, 2f, new Vector2[] { new Vector2(5f, 0f) }) },
+        { "Two Fast Attack", new EnemyCombo(2, WeaponAttackType.Melee, 25, new int[] { 2, 2 }, new float[] { .2f, 0f }, new float[] { .2f, .2f }, 2f, new Vector2[] { new Vector2(1f, 0f), new Vector2(1f, 0f) }) },
+        { "Two Slow Attack", new EnemyCombo(2, WeaponAttackType.Melee, 25, new int[] { 3, 3 }, new float[] { .4f, 0f }, new float[] { .3f, .3f }, 3f, new Vector2[] { new Vector2(1f, 0f), new Vector2(3f, 0f) }) },
+        { "Three Attack", new EnemyCombo(3, WeaponAttackType.Melee, 20, new int[] { 2, 2, 4 }, new float[] { .2f, .3f, 0f }, new float[] { .2f, .2f, .4f }, 4f, new Vector2[] { new Vector2(1f, 0f), new Vector2(2f, 0f), new Vector2(4f, 0f) }) },
+    };
 
     [Header("Spell Properties")]
     [SerializeField] EnemySpellDictionary mySpells = new EnemySpellDictionary()
@@ -18,7 +27,8 @@ public class ElderWolf : Enemy
         { "Back Jump", new EnemySpell(3f, new Vector2(7f, 4f), -1, 12f, 3f, .5f, .5f, new Vector2(2f, 2f), new Vector2(3f, 0f), 1f, 2, 5) },
         { "Ice Breath", new EnemySpell(7f, 8f, 2f, 1f, .5f, new Vector2(10f, 5f), new Vector2(2f, 0f), .3f, 2, .5f) },
         { "Swing Tail", new EnemySpell(5f, 8f, 2f, 1f, .5f, new Vector2(2f, 2f), new Vector2(5f, 2f), 1.5f, 10) },
-        { "Ice Spikes", new EnemySpell(11f, 15f, 2f, 1f, 2f, new Vector2(2f, 5f), new Vector2(4f, 2f), 2f, 15) }
+        { "Ice Spikes", new EnemySpell(11f, 15f, 2f, 1f, 2f, new Vector2(2f, 5f), new Vector2(4f, 2f), 2f, 15) },
+        { "Howl", new EnemySpell(11f, 15f, 2f, 1f, 2f, new Vector2(2f, 5f), new Vector2(4f, 2f), 2f, 15) }
     };
     bool isSpellCasted;
     bool isPlayerCaught;      //Was the player caught
@@ -65,20 +75,20 @@ public class ElderWolf : Enemy
 
     new void FixedUpdate() 
     {
-        int _rand = 101;
+        int _rand = 100;
 
         if (curSpellCastRerandomDelay <= Time.time)
         {
-            _rand = Random.Range(1, 101);
+            _rand = Random.Range(0, 100);
             curSpellCastRerandomDelay = spellCastRerandomDelay + Time.time;
         }
 
         //Cast spell with 33% chance if it's possible
-        if (curGlobalSpellCD <= Time.time && target != null && !isAttack && !isCast && _rand <= 33)
+        if (curGlobalSpellCD <= Time.time && target != null && !isAttack && !isCast && _rand <= 32)
         {
             if (IsPlayerBehind())
             {
-                if (DistanceToPlayer() <= 5 && swingTailTiming.curCooldown <= Time.time)
+                if (DistanceToPlayer() <= mySpells["Swint Tail"].castRange && swingTailTiming.curCooldown <= Time.time)
                     spell = "Swing Tail";
                 else return;
             }
@@ -135,6 +145,9 @@ public class ElderWolf : Enemy
             case "Ice Spikes":
                 IceSpikes();
                 break;
+            case "Howl":
+                Howl();
+                break;
         }
     }
     
@@ -190,7 +203,7 @@ public class ElderWolf : Enemy
             isSpellCasted = false;
             curAttackCD = attackCD + Time.time;
             //backJumpTiming.curDelay = mySpells[(Enemy.SpellEnum) spell].delayAfterCast + Time.time;
-            backJumpTiming.curCooldown = mySpells[spell].cooldown + Time.time;
+            swingTailTiming.curCooldown = mySpells[spell].cooldown + Time.time;
             curGlobalSpellCD = mySpells[spell].globalCD + Time.time;
             SwitchState(State.Attack);
         }
@@ -206,7 +219,7 @@ public class ElderWolf : Enemy
             isSpellCasted = false;
             curAttackCD = attackCD + Time.time;
             //backJumpTiming.curDelay = mySpells[(Enemy.SpellEnum) spell].delayAfterCast + Time.time;
-            backJumpTiming.curCooldown = mySpells[spell].cooldown + Time.time;
+            iceBreathTiming.curCooldown = mySpells[spell].cooldown + Time.time;
             curGlobalSpellCD = mySpells[spell].globalCD + Time.time;
             SwitchState(State.Attack);
         }
@@ -222,7 +235,23 @@ public class ElderWolf : Enemy
             isSpellCasted = false;
             curAttackCD = attackCD + Time.time;
             //backJumpTiming.curDelay = mySpells[(Enemy.SpellEnum) spell].delayAfterCast + Time.time;
-            backJumpTiming.curCooldown = mySpells[spell].cooldown + Time.time;
+            iceSpikesTiming.curCooldown = mySpells[spell].cooldown + Time.time;
+            curGlobalSpellCD = mySpells[spell].globalCD + Time.time;
+            SwitchState(State.Attack);
+        }
+    }
+
+    void Howl()
+    {
+        spellNumber = 6;
+
+        if (isSpellCasted)
+        {
+            objectToDamage = null;
+            isSpellCasted = false;
+            curAttackCD = attackCD + Time.time;
+            //backJumpTiming.curDelay = mySpells[(Enemy.SpellEnum) spell].delayAfterCast + Time.time;
+            howlTiming.curCooldown = mySpells[spell].cooldown + Time.time;
             curGlobalSpellCD = mySpells[spell].globalCD + Time.time;
             SwitchState(State.Attack);
         }
@@ -277,4 +306,31 @@ public class ElderWolf : Enemy
     {
         isSpellCasted = true;
     }
+
+    //Attacks:
+    //  One slow attack
+    //  Two fast attacks 
+    //  Two normal attacks
+    //  Three attacks
+    //Patterns:
+    //Back Jump:
+    //  After take many damage in last seconds and player in front of the wolf (50% chance)
+    //  Two fast attack combo if one of them hit the player then Back Jump and Ice Breath
+    //Long Jump:
+    //  If player on cast range between Long Jump and Ice Spikes
+    //  When player jump (50% chance)
+    //Ice Breath:
+    //  Two fast attack combo if one of them hit the player then Back Jump and Ice Breath
+    //  If one slow attack hit player (and repulse him from wolf)
+    //  After Long Jump if player get caught (50% chance)
+    //  Player in cast range (30% chance)
+    //Swing Tail:
+    //  Player behind wolf in cast range
+    //Ice Spikes:
+    //  After Long Jump if player get caught (50% chance)
+    //  Player out in cast range
+    //  Three-attack combo ends with Ice Spikes
+    //Howl:
+    //  After take many damage in last seconds (50% chance if player in front of the wolf)
+    //  If wolf dont hit player more few seconds
 }

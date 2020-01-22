@@ -149,23 +149,25 @@ public class PlayerMovement : MonoBehaviour
     void OnTriggerStay2D(Collider2D col)
     {
         //If interacting with the enemy (13 - triggers layer)
-        if (col.gameObject.layer == 13 && !isHurt && !isDead)
+        if (col.gameObject.layer == 13 && !isHurt && !isDead && input.horizontalAccess)
         {
-            isCollideWithEnemy = true;
             //Not moving - push player from the enemy
             if (input.horizontal == 0)
             {
                 float _forceDir = Mathf.Sign(playerTransform.position.x - col.transform.position.x);
-                Debug.Log("DOREC " + _forceDir);
-                //rigidBody.AddForce(new Vector2(speed / 2f * _forceDir, 0f), ForceMode2D.Force);
-                rigidBody.velocity = new Vector2(rigidBody.velocity.x + _forceDir * speed / 2f, rigidBody.velocity.y);
+
+                rigidBody.AddForce(new Vector2(speed / 2f * _forceDir, 0f), ForceMode2D.Force);
+                //rigidBody.velocity = new Vector2(rigidBody.velocity.x + _forceDir * speed / 2f, rigidBody.velocity.y);
             }
             //Moving - push player in the opposite direction to the movement
             else
             {
-                //rigidBody.AddForce(new Vector2(speed / 2f * -Mathf.Sign(input.horizontal), 0f), ForceMode2D.Force);
-                rigidBody.velocity = new Vector2(rigidBody.velocity.x + speed / 2f * -Mathf.Sign(input.horizontal), rigidBody.velocity.y);
+                rigidBody.AddForce(new Vector2(speed / 2f * -Mathf.Sign(input.horizontal), 0f), ForceMode2D.Force);
+                //rigidBody.velocity = new Vector2(rigidBody.velocity.x + speed / 2f * -Mathf.Sign(input.horizontal), rigidBody.velocity.y);
             }
+
+            input.horizontalAccess = false;
+            Invoke("HorizontalAcces", .2f);
         }
     }
 

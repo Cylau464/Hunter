@@ -102,6 +102,56 @@ namespace Structures
         }
     }
 
+    /// <summary>
+    /// Stores attacks properties
+    /// </summary>
+    [Serializable]
+    public struct EnemyCombo
+    {
+        public int attackCount;
+        public int chance;
+        public int[] damage;
+        public float[] timeBtwAttack;
+        public float[] dazedTime;
+        public float attackCD;
+        public float attackRange;
+        public Vector2[] repulseDistantion;
+        public WeaponAttackType attackType;
+
+        /// <summary>
+        /// For melee attacks. In arrays indicate values in order
+        /// </summary>
+        public EnemyCombo(int attackCount, WeaponAttackType attackType, int chance, int[] damage, float[] timeBtwAttack, float[] dazedTime, float attackCD, Vector2[] repulseDistantion)
+        {
+            this.attackCount = attackCount;
+            this.attackType = attackType;
+            this.chance = chance;
+            this.damage = damage;
+            this.timeBtwAttack = timeBtwAttack;
+            this.dazedTime = dazedTime;
+            this.attackCD = attackCD;
+            this.repulseDistantion = repulseDistantion;
+
+            attackRange = 0f;
+        }
+
+        /// <summary>
+        /// For range attacks. In arrays indicate values in order
+        /// </summary>
+        public EnemyCombo(int attackCount, WeaponAttackType attackType, int chance, int[] damage, float[] timeBtwAttack, float[] dazedTime, float attackCD, float attackRange, Vector2[] repulseDistantion)
+        {
+            this.attackCount = attackCount;
+            this.attackType = attackType;
+            this.chance = chance;
+            this.damage = damage;
+            this.timeBtwAttack = timeBtwAttack;
+            this.dazedTime = dazedTime;
+            this.attackCD = attackCD;
+            this.repulseDistantion = repulseDistantion;
+            this.attackRange = attackRange;
+        }
+    }
+
     public struct EnemySpellCD
     {
         public float curCooldown;

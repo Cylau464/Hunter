@@ -12,8 +12,15 @@ public class Enemy : MonoBehaviour
     int health;
     [SerializeField] float viewDistance = 10f;
     public DragType dragType = DragType.Draggable;
-
+    
     [Header("Attack Properties")]
+    [SerializeField] protected EnemyComboDictionary combos = new EnemyComboDictionary()
+    {
+        { "One Attack", new EnemyCombo(1, WeaponAttackType.Melee, 30, new int[] { 3 }, new float[] { 0f }, new float[] { .2f }, 2f, new Vector2[] { new Vector2(5f, 0f) }) },
+        { "Two Fast Attack", new EnemyCombo(2, WeaponAttackType.Melee, 25, new int[] { 2, 2 }, new float[] { .2f, 0f }, new float[] { .2f, .2f }, 2f, new Vector2[] { new Vector2(1f, 0f), new Vector2(1f, 0f) }) },
+        { "Two Slow Attack", new EnemyCombo(2, WeaponAttackType.Melee, 25, new int[] { 3, 3 }, new float[] { .4f, 0f }, new float[] { .3f, .3f }, 3f, new Vector2[] { new Vector2(1f, 0f), new Vector2(3f, 0f) }) },
+        { "Three Attack", new EnemyCombo(3, WeaponAttackType.Melee, 20, new int[] { 2, 2, 4 }, new float[] { .2f, .3f, 0f }, new float[] { .2f, .2f, .4f }, 4f, new Vector2[] { new Vector2(1f, 0f), new Vector2(2f, 0f), new Vector2(4f, 0f) }) },
+    };
     [SerializeField] protected int damage = 1;
     [SerializeField] ElementDictionary elementDamage = new ElementDictionary()
     {
@@ -26,12 +33,15 @@ public class Enemy : MonoBehaviour
     };
 
     public float attackCD = 1.5f;
-    [SerializeField] float attackDistance = 2f;
-    //[SerializeField] float attackDuration = 1f;
+    [SerializeField] protected float attackDistance = 2f;
     [SerializeField] float attackRangeX = 2f;
     [SerializeField] float attackRangeY = 1f;
     protected float curGlobalSpellCD = 0f;
     protected float curAttackCD = 0f;
+
+    [HideInInspector] public int comboNumber;       //For animations
+    [HideInInspector] public int curAttackNumber;   //For switch animations
+    EnemyCombo curCombo;
 
     [Header("Defence Properties")]
     [SerializeField] ElementDictionary elementDefence = new ElementDictionary()
@@ -268,11 +278,26 @@ public class Enemy : MonoBehaviour
         {
             if (target != null)
             {
-                //If player too far
-                if (DistanceToPlayer() > attackDistance)
+                int _random = Random.Range(0, 100);
+                int _chance = 0;
+
+                foreach(KeyValuePair<string, EnemyCombo> combo in combos)
                 {
-                    SwitchState(State.Chase);
-                    return;
+                    if (_random < combo.Value.chance + _chance)
+                    {
+                        //If player too far
+                        if (DistanceToPlayer() > attackDistance + combo.Value.attackRange)
+                        {
+                            SwitchState(State.Chase);
+                            return;
+                        }
+
+                        curAttackNumber = 0;
+                        comboNumber = combo.Key.GetHashCode(); //check this
+                        curCombo = combo.Value;
+                    }
+
+                    _chance += combo.Value.chance;
                 }
 
                 //Flip enemy towards the player
