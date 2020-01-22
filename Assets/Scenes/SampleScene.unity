@@ -1872,6 +1872,100 @@ MonoBehaviour:
   maxHealth: 5
   viewDistance: 10
   dragType: 1
+  combos:
+    reorderableList:
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
+      isExpanded: 1
+      label:
+        m_Text: Keys
+        m_Image: {fileID: 0}
+        m_Tooltip: 
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
+      elementDisplayType: 0
+      elementNameProperty: 
+      elementNameOverride: 
+      elementIcon: {fileID: 0}
+    reqReferences: {fileID: 0}
+    isExpanded: 1
+    _keyValues:
+    - One Attack
+    - Two Fast Attack
+    - Two Slow Attack
+    - Three Attack
+    _keys:
+    - One Attack
+    - Two Fast Attack
+    - Two Slow Attack
+    - Three Attack
+    _values:
+    - attackCount: 1
+      chance: 30
+      damage: 03000000
+      timeBtwAttack:
+      - 0
+      dazedTime:
+      - 0.2
+      attackCD: 2
+      attackRange: 0
+      repulseDistantion:
+      - {x: 5, y: 0}
+      attackType: 0
+    - attackCount: 2
+      chance: 25
+      damage: 0200000002000000
+      timeBtwAttack:
+      - 0.2
+      - 0
+      dazedTime:
+      - 0.2
+      - 0.2
+      attackCD: 2
+      attackRange: 0
+      repulseDistantion:
+      - {x: 1, y: 0}
+      - {x: 1, y: 0}
+      attackType: 0
+    - attackCount: 2
+      chance: 25
+      damage: 0300000003000000
+      timeBtwAttack:
+      - 0.4
+      - 0
+      dazedTime:
+      - 0.3
+      - 0.3
+      attackCD: 3
+      attackRange: 0
+      repulseDistantion:
+      - {x: 1, y: 0}
+      - {x: 3, y: 0}
+      attackType: 0
+    - attackCount: 3
+      chance: 20
+      damage: 020000000200000004000000
+      timeBtwAttack:
+      - 0.2
+      - 0.3
+      - 0
+      dazedTime:
+      - 0.2
+      - 0.2
+      - 0.4
+      attackCD: 4
+      attackRange: 0
+      repulseDistantion:
+      - {x: 1, y: 0}
+      - {x: 2, y: 0}
+      - {x: 4, y: 0}
+      attackType: 0
   damage: 1
   elementDamage:
     reorderableList:
@@ -1903,6 +1997,8 @@ MonoBehaviour:
   attackDistance: 2
   attackRangeX: 2
   attackRangeY: 1
+  comboNumber: 0
+  curAttackNumber: 0
   elementDefence:
     reorderableList:
       canAdd: 1
@@ -2095,7 +2191,7 @@ GameObject:
   - component: {fileID: 1010206984}
   - component: {fileID: 1010206986}
   - component: {fileID: 1010206985}
-  m_Layer: 13
+  m_Layer: 12
   m_Name: Ice Breath
   m_TagString: Untagged
   m_Icon: {fileID: 0}

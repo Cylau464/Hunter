@@ -149,20 +149,20 @@ public class PlayerMovement : MonoBehaviour
     void OnTriggerStay2D(Collider2D col)
     {
         //If interacting with the enemy (13 - triggers layer)
-        if (col.gameObject.layer == 13 && !isHurt && !isDead && input.horizontalAccess)
+        if (col.gameObject.layer == 13 && !isHurt && !isDead && !isEvading && isOnGround && input.horizontalAccess)
         {
             //Not moving - push player from the enemy
             if (input.horizontal == 0)
             {
                 float _forceDir = Mathf.Sign(playerTransform.position.x - col.transform.position.x);
 
-                rigidBody.AddForce(new Vector2(speed / 2f * _forceDir, 0f), ForceMode2D.Force);
+                rigidBody.AddForce(new Vector2(speed / 2f * _forceDir, 0f), ForceMode2D.Impulse);
                 //rigidBody.velocity = new Vector2(rigidBody.velocity.x + _forceDir * speed / 2f, rigidBody.velocity.y);
             }
             //Moving - push player in the opposite direction to the movement
             else
             {
-                rigidBody.AddForce(new Vector2(speed / 2f * -Mathf.Sign(input.horizontal), 0f), ForceMode2D.Force);
+                rigidBody.AddForce(new Vector2(speed / 2f * -Mathf.Sign(input.horizontal), 0f), ForceMode2D.Impulse);
                 //rigidBody.velocity = new Vector2(rigidBody.velocity.x + speed / 2f * -Mathf.Sign(input.horizontal), rigidBody.velocity.y);
             }
 
@@ -259,6 +259,7 @@ public class PlayerMovement : MonoBehaviour
             isEvading = true;
             isClimbing = false;
             isHanging = false;
+            CancelInvoke("HorizontalAcces");
             input.horizontalAccess = false;
             canFlip = false;
             curEvadingDuration = Time.time + evadingDuration;
