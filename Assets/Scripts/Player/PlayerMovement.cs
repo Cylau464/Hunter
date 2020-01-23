@@ -37,7 +37,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Hurt Properties")]
     float curDazedTime = 0f;
-    HurtType hurtType;
+    [HideInInspector] public HurtType hurtType;
 
     [Header("Status Flags")]
     public bool isOnGround;

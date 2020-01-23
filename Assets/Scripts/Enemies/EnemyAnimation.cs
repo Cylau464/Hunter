@@ -20,6 +20,8 @@ public class EnemyAnimation : MonoBehaviour
     //int spellPrepareParamID;
     int spellCastParamID;
     int spellEndParamID;
+    int comboNumberParamID;
+    int comboAttackNumberParamID;
 
     // Start is called before the first frame update
     void Start()
@@ -28,16 +30,18 @@ public class EnemyAnimation : MonoBehaviour
         //than passing strings into the animator
         //patrolParamID          = Animator.StringToHash("isPatroling");
         //chaseParamID           = Animator.StringToHash("isChasing");
-        attackingParamID       = Animator.StringToHash("isAttacking");
-        hurtParamID            = Animator.StringToHash("isHurt");
-        deadParamID            = Animator.StringToHash("isDead");
-        castParamID            = Animator.StringToHash("isCast");
-        speedParamID           = Animator.StringToHash("speed");
-        fallParamID            = Animator.StringToHash("verticalVelocity");
-        spellParamID           = Animator.StringToHash("spellNumber");
+        attackingParamID            = Animator.StringToHash("isAttacking");
+        hurtParamID                 = Animator.StringToHash("isHurt");
+        deadParamID                 = Animator.StringToHash("isDead");
+        castParamID                 = Animator.StringToHash("isCast");
+        speedParamID                = Animator.StringToHash("speed");
+        fallParamID                 = Animator.StringToHash("verticalVelocity");
+        spellParamID                = Animator.StringToHash("spellNumber");
         //spellPrepareParamID    = Animator.StringToHash("spellPrepare");
-        spellCastParamID       = Animator.StringToHash("spellCast");
-        spellEndParamID        = Animator.StringToHash("spellEnd");
+        spellCastParamID            = Animator.StringToHash("spellCast");
+        spellEndParamID             = Animator.StringToHash("spellEnd");
+        comboNumberParamID          = Animator.StringToHash("comboNumber");
+        comboAttackNumberParamID    = Animator.StringToHash("comboAttackNumber");
 
         //Get references to the needed components
         enemy                  = GetComponent<Enemy>();
@@ -65,6 +69,8 @@ public class EnemyAnimation : MonoBehaviour
         anim.SetBool(castParamID, enemy.isCast);
 
         anim.SetInteger(spellParamID, enemy.spellNumber);
+        anim.SetInteger(comboNumberParamID, enemy.comboNumber);
+        anim.SetInteger(comboAttackNumberParamID, enemy.curAttackNumber);
 
         anim.SetFloat(fallParamID, rigidBody.velocity.y);
 

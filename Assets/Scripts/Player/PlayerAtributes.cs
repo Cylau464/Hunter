@@ -7,6 +7,8 @@ public class PlayerAtributes : MonoBehaviour
     [SerializeField] int maxHealth = 10;
     [SerializeField] int health;
 
+    public float timeOfLastTakenDamage;
+
     PlayerMovement movement;
 
     void Start()
@@ -22,6 +24,7 @@ public class PlayerAtributes : MonoBehaviour
     public void TakeDamage(int damage, HurtType hurtType)
     {
         health -= damage;
+        timeOfLastTakenDamage = Time.time;
         
         if(health <= 0)
         {
@@ -34,6 +37,7 @@ public class PlayerAtributes : MonoBehaviour
     public void TakeDamage(int damage, HurtType hurtType, Transform anchorPoint)
     {
         health -= damage;
+        timeOfLastTakenDamage = Time.time;
 
         if (health <= 0)
         {
@@ -47,6 +51,7 @@ public class PlayerAtributes : MonoBehaviour
     public void TakeDamage(int damage, HurtType hurtType, Vector2 repulseDistantion, float dazedTime)
     {
         health -= damage;
+        timeOfLastTakenDamage = Time.time;
 
         movement.Repulse(repulseDistantion, dazedTime);
 

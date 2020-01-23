@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Structures;
+using System.Linq;
 
 public enum SpellStates { None, Prepare, Cast, End }
 
 public class Enemy : MonoBehaviour
 {
     [Header("Atributes Properties")]
-    [SerializeField] int maxHealth = 5;
+    [SerializeField] protected int maxHealth = 100;
     int health;
     [SerializeField] float viewDistance = 10f;
     public DragType dragType = DragType.Draggable;
@@ -32,7 +33,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] float attackRangeY = 1f;
     protected float curGlobalSpellCD = 0f;
     protected float curAttackCD = 0f;
-
+    protected string lastAttack;
+    protected bool isHitPlayer;
     [HideInInspector] public int comboNumber;       //For animations
     [HideInInspector] public int curAttackNumber;   //For switch animations
     EnemyCombo curCombo;
@@ -94,7 +96,8 @@ public class Enemy : MonoBehaviour
     protected LayerMask playerLayer = 1 << 10;       //10 - player layer
     Transform hookTransform;
     Transform myHookTarget;
-    PlayerMovement playerMovement;
+    protected PlayerMovement playerMovement;
+    protected PlayerAtributes playerAtributes;
     SpriteRenderer sprite;
     Vector2 startPos;
 
@@ -104,15 +107,26 @@ public class Enemy : MonoBehaviour
     float pathDestination  = 0f;   //Point to move around start position
     float patrolDelay      = 0f;   //Delay before start next path
 
-    int dir                = 0;    //Local var direction
+    int dir                = 0;    //Local var direction of patrol
 
     [Header("Spell Properties")]
     [HideInInspector] public int spellNumber;        //Needful for animator
+    /// <summary>
+    /// Damage taken for the last times and time when it been
+    /// </summary>
+    //protected Dictionary<float, int> damageTaken = new Dictionary<float, int>();
+    protected List<Dictionary<float, int>> damageTaken = new List<Dictionary<float, int>>();
 
+    /// <summary>
+    /// Time of taken damage and duration for calculate DPS
+    /// </summary>
+    protected float damageTakenDPS;
+    protected float delayOfRemoveOldTakenDamage = 2f;
     protected float curSpellPrepareTime;
     protected float curSpellCastTime;
 
     protected string spell = "None";
+    protected string lastSpell;
 
     public SpellStates spellState = SpellStates.None;
 
@@ -140,6 +154,19 @@ public class Enemy : MonoBehaviour
             SwitchState(State.Dead);
         }
 
+        if(!isCast && !isAttack)
+        {
+            isHitPlayer = false;
+            lastAttack = null;
+
+            if(!isCast)
+                lastSpell = null;
+        }
+
+        //Remove first list element if he's was added too long
+        if (damageTaken != null && System.Convert.ToSingle(damageTaken.First().Keys) + delayOfRemoveOldTakenDamage <= Time.time)
+            damageTaken.RemoveAt(0);
+        
         //Blinking after take damage
         if(spriteBlinkingEnabled)
             SpriteBlinkingEffect();
@@ -150,6 +177,7 @@ public class Enemy : MonoBehaviour
         if(currentState == State.Dead) return;
 
         CheckPlayer();
+        SwitchSpell();
 
         switch (currentState)
         {
@@ -290,7 +318,7 @@ public class Enemy : MonoBehaviour
                         curAttackNumber = 0;
                         comboNumber = _serNumber;
                         curCombo = combo.Value;
-                        Debug.Log("combo " + comboNumber);
+                        lastAttack = combo.Key;
                         break;
                     }
 
@@ -312,6 +340,11 @@ public class Enemy : MonoBehaviour
     }
 
     protected virtual void CastSpell()
+    {
+
+    }
+
+    protected virtual void SwitchSpell()
     {
 
     }
@@ -350,6 +383,12 @@ public class Enemy : MonoBehaviour
         element.value = element.value - Mathf.CeilToInt(element.value / 100f * elementDefence[element.element]);    //Calculation of defence from elements
         damage = damage - Mathf.CeilToInt(damage / 100f * physicDefence[damageType]);                               //Calculation of physical defence
         health -= damage + element.value;
+        damageTaken.Add(new Dictionary<float, int>());
+        damageTaken.Last().Add(Time.time, damage + element.value);
+
+        //Calculate duration between first taken damage and last, then devide all taken damage on it
+        damageTakenDPS = damageTaken.Sum(x => System.Convert.ToInt32(x.Values) / (System.Convert.ToSingle(damageTaken.Last().Keys) - System.Convert.ToSingle(damageTaken.First().Keys)));
+        Debug.Log("DPS: " + damageTakenDPS);
         spriteBlinkingEnabled = true;
         Debug.Log("POST damage " + damage + " element " + element.value);
         /*if(crit)
@@ -368,6 +407,7 @@ public class Enemy : MonoBehaviour
     {
         //Timer of total blinking duration
         blinkingTimer += Time.deltaTime;
+
         if(blinkingTimer >= spriteBlinkingDuration)
         { 
             spriteBlinkingEnabled = false;
@@ -390,17 +430,30 @@ public class Enemy : MonoBehaviour
 
     void GiveDamage()
     {
-        curAttackCD = Time.time + attackCD;       //Start cooldown of attack
+        if (curCombo.attackCount <= curAttackNumber + 1)
+            curAttackCD = Time.time + curCombo.attackCD;//attackCD;             //Cooldown of attack
+        else
+            curAttackCD = Time.time + curCombo.timeBtwAttack[curAttackNumber];  //Cooldown between combo attacks
 
-        Collider2D _objectToDamage = Physics2D.OverlapBox(transform.position, new Vector2(attackRangeX, attackRangeY), 0, playerLayer);
+        Collider2D _objectToDamage = Physics2D.OverlapBox(transform.position, new Vector2(attackRangeX, attackRangeY), 0, playerLayer); //Need to create child object "Attack Point"
 
         if (_objectToDamage != null)
-            _objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(damage, HurtType.Repulsion);
+        {
+            _objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(curCombo.damage[curAttackNumber], HurtType.Repulsion, curCombo.repulseDistantion[curAttackNumber], curCombo.dazedTime[curAttackNumber]);
+            isHitPlayer = true;
+        }
+        else
+            isHitPlayer = false;
     }
 
     void EndOfAttack()
     {
-        isAttack = false;
+        //If combo is not ended
+        if(curCombo.attackCount <= curAttackNumber + 1)
+            isAttack = false;
+        else
+            curAttackNumber++;      //This will switch the animation to the next attack
+
     }
 
     void FlipCharacter(bool onlyDir)

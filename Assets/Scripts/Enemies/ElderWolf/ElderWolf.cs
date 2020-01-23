@@ -24,12 +24,12 @@ public class ElderWolf : Enemy
     [Header("Spell Properties")]
     [SerializeField] EnemySpellDictionary mySpells = new EnemySpellDictionary()
     {
-        { "Long Jump", new EnemySpell(10f, new Vector2(10f, 5f), 1, 10f, 3f, 1.5f, .75f, new Vector2(2f, 2f), new Vector2(5f, 5f), 1.5f, 5, 7) },
-        { "Back Jump", new EnemySpell(3f, new Vector2(7f, 4f), -1, 12f, 3f, .5f, .5f, new Vector2(2f, 2f), new Vector2(3f, 0f), 1f, 2, 5) },
+        { "Long Jump",  new EnemySpell(10f, new Vector2(10f, 5f), 1, 10f, 3f, 1.5f, .75f, new Vector2(2f, 2f), new Vector2(5f, 5f), 1.5f, 5, 7) },
+        { "Back Jump",  new EnemySpell(3f, new Vector2(7f, 4f), -1, 12f, 3f, .5f, .5f, new Vector2(2f, 2f), new Vector2(3f, 0f), 1f, 2, 5) },
         { "Ice Breath", new EnemySpell(7f, 8f, 2f, 1f, .5f, new Vector2(10f, 5f), new Vector2(2f, 0f), .3f, 2, .5f) },
         { "Swing Tail", new EnemySpell(5f, 8f, 2f, 1f, .5f, new Vector2(2f, 2f), new Vector2(5f, 2f), 1.5f, 10) },
         { "Ice Spikes", new EnemySpell(11f, 15f, 2f, 1f, 2f, new Vector2(2f, 5f), new Vector2(4f, 2f), 2f, 15) },
-        { "Howl", new EnemySpell(11f, 15f, 2f, 1f, 2f, new Vector2(2f, 5f), new Vector2(4f, 2f), 2f, 15) }
+        { "Howl",       new EnemySpell(15f, 15f, 3f, 1.5f, 3f, new Vector2(0f, 0f), new Vector2(2f, 0f), .5f, 0, .5f) }
     };
     bool isSpellCasted;
     bool isPlayerCaught;      //Was the player caught
@@ -39,7 +39,9 @@ public class ElderWolf : Enemy
     BoxCollider2D tailCol;
     PolygonCollider2D iceBreathCol;
     Collider2D objectToDamage;
+    CircleCollider2D howlCircleCollider;
 
+    float maxDurationWithoutDamage = 10f;       //For Howl and other spells which used if Wolf can't give damage a long time
     float spellCastRerandomDelay = 3f;
     float curSpellCastRerandomDelay;
     float curSpellDelayBtwDamage;
@@ -74,7 +76,7 @@ public class ElderWolf : Enemy
         Debug.Log("spell: " + spellNumber);
     }
 
-    new void FixedUpdate() 
+    override protected void SwitchSpell()
     {
         int _rand = 100;
 
@@ -84,37 +86,90 @@ public class ElderWolf : Enemy
             curSpellCastRerandomDelay = spellCastRerandomDelay + Time.time;
         }
 
-        //Cast spell with 33% chance if it's possible
-        if (curGlobalSpellCD <= Time.time && target != null && !isAttack && !isCast && _rand <= 32)
+        //Cast spell if it's possible
+        if (curGlobalSpellCD <= Time.time && target != null && !isAttack && !isCast)// && _rand <= 32)
         {
             if (IsPlayerBehind())
             {
-                if (DistanceToPlayer() <= mySpells["Swing Tail"].castRange && swingTailTiming.curCooldown <= Time.time)
-                    spell = "Swing Tail";
+                //Swing Tail:
+                //  Player behind wolf in cast range
+                if (swingTailTiming.curCooldown <= Time.time)
+                {
+                    if(DistanceToPlayer() <= mySpells["Swing Tail"].castRange)
+                        
+                        spell = "Swing Tail";
+                }
                 else return;
             }
             else
             {
-                if (DistanceToPlayer() <= mySpells["Back Jump"].castRange && backJumpTiming.curCooldown <= Time.time)
-                    spell = "Back Jump";
-                else if (DistanceToPlayer() <= mySpells["Ice Breath"].castRange && iceBreathTiming.curCooldown <= Time.time)
-                    spell = "Ice Breath";
-                else if (DistanceToPlayer() <= mySpells["Long Jump"].castRange && longJumpTiming.curCooldown <= Time.time)
-                    spell = "Long Jump";
-                else if (DistanceToPlayer() >= mySpells["Ice Spikes"].castRange && iceSpikesTiming.curCooldown <= Time.time)
-                    spell = "Ice Spikes";
+                //Back Jump:
+                //  After take many damage in last seconds and player in front of the wolf Back Jump -> Howl (50% chance)
+                //  Two fast attack combo if one of them hit the player then Back Jump and Ice Breath
+                if (backJumpTiming.curCooldown <= Time.time)
+                {
+                    if (lastAttack == "Two Fast Attack" && isHitPlayer ||
+                        damageTakenDPS >= maxHealth / 100 * 5 && Random.Range(0, 100) > 50)
+
+                        spell = "Back Jump";
+                }
+                //Ice Breath:
+                //  Two fast attack combo if one of them hit the player then Back Jump and Ice Breath
+                //  If one slow attack hit player (and repulse him from wolf)
+                //  After Long Jump if player get caught (50% chance)
+                //  Player in cast range (30% chance)
+                else if (iceBreathTiming.curCooldown <= Time.time)
+                {
+                    if ((lastAttack == "Two Fast Attack" && lastSpell == "Back Jump") ||
+                         lastAttack == "One Attack" ||
+                        (lastSpell == "Long Jump" && playerMovement.hurtType == HurtType.Catch && Random.Range(0, 100) > 50) ||
+                         DistanceToPlayer() <= mySpells["Ice Breath"].castRange && Random.Range(0, 100) > 30)
+
+                        spell = "Ice Breath";
+                }
+                //Long Jump:
+                //  If player on cast range between Long Jump and Ice Spikes
+                //  When player jump (50% chance)
+                else if (longJumpTiming.curCooldown <= Time.time)
+                {
+                    if (DistanceToPlayer() <= mySpells["Long Jump"].castRange ||
+                       !playerMovement.isOnGround || playerMovement.isJumping && Random.Range(0, 100) > 50)
+
+                        spell = "Long Jump";
+                }
+                //Ice Spikes:
+                //  After Long Jump if player get caught (50% chance)
+                //  Player out in cast range
+                //  Three-attack combo ends with Ice Spikes
+                else if (iceSpikesTiming.curCooldown <= Time.time)
+                {
+                    if((lastSpell == "Long Jump" && playerMovement.hurtType == HurtType.Catch && Random.Range(0, 100) > 50) ||
+                        DistanceToPlayer() >= mySpells["Ice Spikes"].castRange ||
+                        lastAttack == "Three Attack")
+                        
+                        spell = "Ice Spikes";
+                }
+                //Howl:
+                //  After take many damage in last seconds and player in front of the wolf Back Jump -> Howl (50% chance)
+                //  If wolf dont hit player more few seconds
+                else if (howlTiming.curCooldown <= Time.time)
+                {
+                    if(lastSpell == "Back Jump" && damageTakenDPS >= maxHealth / 100 * 5 && Random.Range(0, 100) > 50 ||
+                       playerAtributes.timeOfLastTakenDamage + maxDurationWithoutDamage <= Time.time)
+
+                        spell = "Howl";
+                }
                 else return;
             }
 
             //rigidBody.velocity = Vector2.zero;
+            lastSpell = spell;
             curSpellPrepareTime = mySpells[spell].prepareTime + Time.time;
             SwitchState(State.CastSpell);
             spellState = SpellStates.Prepare;
         }
-
-        base.FixedUpdate();
     }
-    
+
     override protected void CastSpell()
     {
         if (spellState == SpellStates.Prepare && curSpellPrepareTime <= Time.time)
@@ -294,7 +349,17 @@ public class ElderWolf : Enemy
     {
         if(curSpellDelayBtwDamage <= Time.time)
         {
-            objectToDamage = iceBreathCol.GetComponent<IceBreath>().playerCol;
+            if(spell == "Ice Breath")
+                objectToDamage = iceBreathCol.GetComponent<IceBreath>().playerCol;
+            else if(spell == "Howl")
+            {
+                //Cast ray to player and calculate direction for repulse
+                //Cast circle area from 0.1 radius to mySpells[spell].castRange and player take stun effect only when collide with circle
+                howlCircleCollider = gameObject.TryGetComponent(out CircleCollider2D _col) ? _col : gameObject.AddComponent<CircleCollider2D>();
+                //create a courutine for this while(howlCircleCollider.radius < mySpells[spell].castRange)
+                    howlCircleCollider.radius += 
+
+            }
 
             if (objectToDamage != null)
                 objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].firstDamage, HurtType.Repulsion, new Vector2(mySpells[spell].repulseVector.x * direction, mySpells[spell].repulseVector.y), mySpells[spell].dazedTime);
@@ -307,31 +372,4 @@ public class ElderWolf : Enemy
     {
         isSpellCasted = true;
     }
-
-    //Attacks:
-    //  One slow attack
-    //  Two fast attacks 
-    //  Two normal attacks
-    //  Three attacks
-    //Patterns:
-    //Back Jump:
-    //  After take many damage in last seconds and player in front of the wolf (50% chance)
-    //  Two fast attack combo if one of them hit the player then Back Jump and Ice Breath
-    //Long Jump:
-    //  If player on cast range between Long Jump and Ice Spikes
-    //  When player jump (50% chance)
-    //Ice Breath:
-    //  Two fast attack combo if one of them hit the player then Back Jump and Ice Breath
-    //  If one slow attack hit player (and repulse him from wolf)
-    //  After Long Jump if player get caught (50% chance)
-    //  Player in cast range (30% chance)
-    //Swing Tail:
-    //  Player behind wolf in cast range
-    //Ice Spikes:
-    //  After Long Jump if player get caught (50% chance)
-    //  Player out in cast range
-    //  Three-attack combo ends with Ice Spikes
-    //Howl:
-    //  After take many damage in last seconds (50% chance if player in front of the wolf)
-    //  If wolf dont hit player more few seconds
 }
