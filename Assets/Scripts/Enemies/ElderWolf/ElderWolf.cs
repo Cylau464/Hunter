@@ -74,6 +74,15 @@ public class ElderWolf : Enemy
     {
         base.Update();
         Debug.Log("spell: " + spellNumber);
+
+        if(Input.GetKeyDown(KeyCode.Y))
+        {
+            GameObject _spawner = Resources.Load<GameObject>("Enemies/Elder Wolf/Ice Spike Spawner");
+            GameObject _inst = Instantiate(_spawner, myTransform);
+            IceSpikesSpawner _iss = _inst.GetComponent<IceSpikesSpawner>();
+            _iss.spell = mySpells["Ice Spikes"];
+            _iss.player = playerMovement == null ? GameObject.Find("Player").GetComponent<PlayerMovement>() : playerMovement;
+        }
     }
 
     override protected void SwitchSpell()
@@ -339,10 +348,21 @@ public class ElderWolf : Enemy
 
     void SpellOnceDamage()
     {
-        objectToDamage = Physics2D.OverlapBox(tailCol.transform.position, new Vector2(tailCol.size.x, tailCol.size.y), 0, playerLayer);
+        if (spell == "Ice Spikes")
+        {
+            GameObject _spawner = Resources.Load<GameObject>("Enemies/Elder Wolf/Ice Spike Spawner");
+            GameObject _inst = Instantiate(_spawner, myTransform);
+            IceSpikesSpawner _iss = _inst.GetComponent<IceSpikesSpawner>();
+            _iss.spell = mySpells[spell];
+            _iss.player = playerMovement == null ? GameObject.Find("Player").GetComponent<PlayerMovement>() : playerMovement;
+        }
+        else
+        {
+            objectToDamage = Physics2D.OverlapBox(tailCol.transform.position, new Vector2(tailCol.size.x, tailCol.size.y), 0, playerLayer);
 
-        if (objectToDamage != null)
-            objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].firstDamage, HurtType.Repulsion, new Vector2(mySpells[spell].repulseVector.x * -direction, mySpells[spell].repulseVector.y), mySpells[spell].dazedTime);
+            if (objectToDamage != null)
+                objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].firstDamage, HurtType.Repulsion, new Vector2(mySpells[spell].repulseVector.x * -direction, mySpells[spell].repulseVector.y), mySpells[spell].dazedTime);
+        }
     }
 
     void SpellPeriodicDamage()
@@ -357,7 +377,7 @@ public class ElderWolf : Enemy
                 //Cast circle area from 0.1 radius to mySpells[spell].castRange and player take stun effect only when collide with circle
                 howlCircleCollider = gameObject.TryGetComponent(out CircleCollider2D _col) ? _col : gameObject.AddComponent<CircleCollider2D>();
                 //create a courutine for this while(howlCircleCollider.radius < mySpells[spell].castRange)
-                    howlCircleCollider.radius += 
+                //howlCircleCollider.radius += 
 
             }
 
@@ -367,6 +387,8 @@ public class ElderWolf : Enemy
             curSpellDelayBtwDamage = mySpells[spell].periodicityDamage + Time.time;
         }
     }
+
+
 
     void SpellEnded()
     {

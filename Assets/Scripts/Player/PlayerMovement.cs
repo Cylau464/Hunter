@@ -61,7 +61,7 @@ public class PlayerMovement : MonoBehaviour
 
     PlayerInput input;
     Rigidbody2D rigidBody;
-    public BoxCollider2D bodyCollider;
+    [HideInInspector] public BoxCollider2D bodyCollider;
     SpriteRenderer sprite;                  //Maybe create property for public get?
     PlayerAttack attack;
     Transform playerTransform;
@@ -69,6 +69,7 @@ public class PlayerMovement : MonoBehaviour
     Hook hook;
     Transform hookTransform;
     Transform catchAnchorPoint;
+    PhysicsMaterial2D physicMaterial;
 
     WeaponAttackType weaponAttackType;
 
@@ -100,6 +101,7 @@ public class PlayerMovement : MonoBehaviour
         weapon                  = GetComponentInChildren<WeaponAtributes>();
         hook                    = GetComponentInChildren<Hook>();
         weaponAttackType        = weapon.weaponAttackType;
+        physicMaterial          = bodyCollider.sharedMaterial;
 
         playerHeight            = bodyCollider.size.y;
 
@@ -502,10 +504,12 @@ public class PlayerMovement : MonoBehaviour
             isHurt = false;
             hurtType = HurtType.None;
             catchAnchorPoint = null;
-
+            bodyCollider.sharedMaterial = physicMaterial;
         }
         else
         {
+            bodyCollider.sharedMaterial = null;
+
             //Follow for catch source
             if (hurtType == HurtType.Catch)
                 playerTransform.position = catchAnchorPoint.position;
@@ -527,6 +531,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void Repulse(Vector2 repulseDistantion, float dazedTime)
     {
+        isHurt = true;
         Debug.Log("REPULSE");
         rigidBody.AddForce(repulseDistantion, ForceMode2D.Impulse);
         curDazedTime = dazedTime + Time.time;

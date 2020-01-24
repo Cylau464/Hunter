@@ -164,7 +164,7 @@ public class Enemy : MonoBehaviour
         }
 
         //Remove first list element if he's was added too long
-        if (damageTaken != null && System.Convert.ToSingle(damageTaken.First().Keys) + delayOfRemoveOldTakenDamage <= Time.time)
+        if (damageTaken.Count < 0 && System.Convert.ToSingle(damageTaken.First().Keys) + delayOfRemoveOldTakenDamage <= Time.time)
             damageTaken.RemoveAt(0);
         
         //Blinking after take damage
