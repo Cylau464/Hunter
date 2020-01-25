@@ -7,8 +7,8 @@ public class IceSpikesSpawner : MonoBehaviour
 {
     public EnemySpell spell;
     public PlayerMovement player;
-    [SerializeField] int spikesCount = 3;
-    [SerializeField] float minDistantion = 4f;
+    [SerializeField] int spikesCount = 4;
+    [SerializeField] float minDistantion = 2f;
     [SerializeField] float maxDistantion = 8f;
     
     private void Start()
@@ -24,7 +24,7 @@ public class IceSpikesSpawner : MonoBehaviour
         Debug.Log(_spike.Count);
         BoxCollider2D _spikeCol = null;
         float _posX = 0f;
-        int _dir = Random.Range(0, 2) * 2 - 1;
+        bool _rerandom = false;
 
         for (int i = 0; i < spikesCount; i++)
         {
@@ -32,8 +32,23 @@ public class IceSpikesSpawner : MonoBehaviour
                 _posX = player.transform.position.x;
             else
             {
-                _posX = Random.Range(_spike[0].transform.position.x + _dir * (minDistantion + _spikeCol.size.x / 2), _spike[0].transform.position.x + _dir * (maxDistantion + _spikeCol.size.x / 2));
-                _dir = -_dir;
+                do
+                {
+                    _posX = Random.Range(_spike[0].transform.position.x - maxDistantion - _spikeCol.size.x / 2f, _spike[0].transform.position.x + maxDistantion + _spikeCol.size.x / 2f);
+
+                    foreach (GameObject spike in _spike)
+                    {
+                        //Randomed posX in contact with one of the existing Ice Spikes
+                        if (Mathf.Abs(_posX - spike.transform.position.x) < minDistantion)
+                        {
+                            _rerandom = true;
+                            break;
+                        }
+                        else
+                            _rerandom = false;
+                    }
+                }
+                while (_rerandom);
             }
 
             _spike.Add(_inst = Instantiate(_spikeRes, new Vector3(_posX, transform.position.y, 0f), Quaternion.identity));

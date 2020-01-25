@@ -539,6 +539,12 @@ public class PlayerMovement : MonoBehaviour
         //Pushed back
     }
 
+    public void Stunned(float dazedTime)
+    {
+        isHurt = true;
+        curDazedTime = dazedTime + Time.time;
+    }
+
     RaycastHit2D Raycast(Vector2 offset, Vector2 rayDirection, float length)
     {
         //If ray used without layer

@@ -20,7 +20,9 @@ public class PlayerAtributes : MonoBehaviour
     {
 
     }
-
+    /// <summary>
+    /// Just damage
+    /// </summary>
     public void TakeDamage(int damage, HurtType hurtType)
     {
         health -= damage;
@@ -33,7 +35,9 @@ public class PlayerAtributes : MonoBehaviour
         }
     }
 
-    //Catched
+    /// <summary>
+    /// Damage with catching
+    /// </summary>
     public void TakeDamage(int damage, HurtType hurtType, Transform anchorPoint)
     {
         health -= damage;
@@ -48,12 +52,32 @@ public class PlayerAtributes : MonoBehaviour
             movement.GetCaught(hurtType, anchorPoint);
     }
 
+    /// <summary>
+    /// Damage with repulse
+    /// </summary>
     public void TakeDamage(int damage, HurtType hurtType, Vector2 repulseDistantion, float dazedTime)
     {
         health -= damage;
         timeOfLastTakenDamage = Time.time;
 
         movement.Repulse(repulseDistantion, dazedTime);
+
+        if (health <= 0)
+        {
+            movement.isDead = true;
+            movement.bodyCollider.sharedMaterial = null;
+        }
+    }
+
+    /// <summary>
+    /// Damage with stun
+    /// </summary>
+    public void TakeDamage(int damage, HurtType hurtType, float dazedTime)
+    {
+        health -= damage;
+        timeOfLastTakenDamage = Time.time;
+
+        movement.Stunned(dazedTime);
 
         if (health <= 0)
         {

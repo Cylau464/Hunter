@@ -35,15 +35,13 @@ public class ElderWolf : Enemy
     bool isPlayerCaught;      //Was the player caught
 
     [SerializeField] Transform frontLegs = null;
+    [SerializeField] Transform head = null;
     BoxCollider2D frontLegsCol;
     BoxCollider2D tailCol;
     PolygonCollider2D iceBreathCol;
     Collider2D objectToDamage;
-    CircleCollider2D howlCircleCollider;
 
     float maxDurationWithoutDamage = 10f;       //For Howl and other spells which used if Wolf can't give damage a long time
-    float spellCastRerandomDelay = 3f;
-    float curSpellCastRerandomDelay;
     float curSpellDelayBtwDamage;
 
     new void Awake()
@@ -73,7 +71,7 @@ public class ElderWolf : Enemy
     new void Update() 
     {
         base.Update();
-        Debug.Log("spell: " + spellNumber);
+        Debug.Log("spell: " + spell);
 
         if(Input.GetKeyDown(KeyCode.Y))
         {
@@ -87,16 +85,8 @@ public class ElderWolf : Enemy
 
     override protected void SwitchSpell()
     {
-        int _rand = 100;
-
-        if (curSpellCastRerandomDelay <= Time.time)
-        {
-            _rand = Random.Range(0, 100);
-            curSpellCastRerandomDelay = spellCastRerandomDelay + Time.time;
-        }
-
         //Cast spell if it's possible
-        if (curGlobalSpellCD <= Time.time && target != null && !isAttack && !isCast)// && _rand <= 32)
+        if (curGlobalSpellCD <= Time.time && target != null && !isAttack && !isCast)
         {
             if (IsPlayerBehind())
             {
@@ -117,8 +107,8 @@ public class ElderWolf : Enemy
                 //  Two fast attack combo if one of them hit the player then Back Jump and Ice Breath
                 if (backJumpTiming.curCooldown <= Time.time)
                 {
-                    if (lastAttack == "Two Fast Attack" && isHitPlayer ||
-                        damageTakenDPS >= maxHealth / 100 * 5 && Random.Range(0, 100) > 50)
+                    if ((lastAttack == "Two Fast Attack" && isHitPlayer) ||
+                        (damageTakenDPS >= maxHealth / 100 * 5 && Random.Range(0, 100) > 50))
 
                         spell = "Back Jump";
                 }
@@ -142,7 +132,8 @@ public class ElderWolf : Enemy
                 else if (longJumpTiming.curCooldown <= Time.time)
                 {
                     if (DistanceToPlayer() <= mySpells["Long Jump"].castRange ||
-                       !playerMovement.isOnGround || playerMovement.isJumping && Random.Range(0, 100) > 50)
+                       !playerMovement.isOnGround ||
+                        (playerMovement.isJumping && Random.Range(0, 100) > 50))
 
                         spell = "Long Jump";
                 }
@@ -163,7 +154,7 @@ public class ElderWolf : Enemy
                 //  If wolf dont hit player more few seconds
                 else if (howlTiming.curCooldown <= Time.time)
                 {
-                    if(lastSpell == "Back Jump" && damageTakenDPS >= maxHealth / 100 * 5 && Random.Range(0, 100) > 50 ||
+                    if((lastSpell == "Back Jump" && damageTakenDPS >= maxHealth / 100 * 5 && Random.Range(0, 100) > 50) ||
                        playerAtributes.timeOfLastTakenDamage + maxDurationWithoutDamage <= Time.time)
 
                         spell = "Howl";
@@ -171,7 +162,6 @@ public class ElderWolf : Enemy
                 else return;
             }
 
-            //rigidBody.velocity = Vector2.zero;
             lastSpell = spell;
             curSpellPrepareTime = mySpells[spell].prepareTime + Time.time;
             SwitchState(State.CastSpell);
@@ -329,9 +319,10 @@ public class ElderWolf : Enemy
 
     private void OnDrawGizmosSelected()
     {
-       Gizmos.color = Color.red;
+        Gizmos.color = Color.red;
+
         if (frontLegsCol != null)
-        Gizmos.DrawWireCube(frontLegs.position, new Vector3(frontLegsCol.size.x * 2f, frontLegsCol.size.y, 0f));
+            Gizmos.DrawWireCube(frontLegs.position, new Vector3(frontLegsCol.size.x * 2f, frontLegsCol.size.y, 0f));
     }
 
     void Landing()
@@ -367,28 +358,25 @@ public class ElderWolf : Enemy
 
     void SpellPeriodicDamage()
     {
-        if(curSpellDelayBtwDamage <= Time.time)
+        if (spell == "Ice Breath")
         {
-            if(spell == "Ice Breath")
-                objectToDamage = iceBreathCol.GetComponent<IceBreath>().playerCol;
-            else if(spell == "Howl")
+            if (curSpellDelayBtwDamage <= Time.time)
             {
-                //Cast ray to player and calculate direction for repulse
-                //Cast circle area from 0.1 radius to mySpells[spell].castRange and player take stun effect only when collide with circle
-                howlCircleCollider = gameObject.TryGetComponent(out CircleCollider2D _col) ? _col : gameObject.AddComponent<CircleCollider2D>();
-                //create a courutine for this while(howlCircleCollider.radius < mySpells[spell].castRange)
-                //howlCircleCollider.radius += 
+                objectToDamage = iceBreathCol.GetComponent<IceBreath>().playerCol;
 
+                if (objectToDamage != null)
+                    objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].firstDamage, HurtType.Repulsion, new Vector2(mySpells[spell].repulseVector.x * direction, mySpells[spell].repulseVector.y), mySpells[spell].dazedTime);
+
+                curSpellDelayBtwDamage = mySpells[spell].periodicityDamage + Time.time;
             }
-
-            if (objectToDamage != null)
-                objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].firstDamage, HurtType.Repulsion, new Vector2(mySpells[spell].repulseVector.x * direction, mySpells[spell].repulseVector.y), mySpells[spell].dazedTime);
-
-            curSpellDelayBtwDamage = mySpells[spell].periodicityDamage + Time.time;
+        }
+        else if (spell == "Howl")
+        {
+            HowlCirclePulse _hcp = head.GetComponent<HowlCirclePulse>();
+            _hcp.spell = mySpells[spell];
+            _hcp.StartCoroutine(_hcp.CirclePulse());
         }
     }
-
-
 
     void SpellEnded()
     {
