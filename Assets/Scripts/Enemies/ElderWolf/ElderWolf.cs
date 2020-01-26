@@ -94,8 +94,8 @@ public class ElderWolf : Enemy
                 //  Player behind wolf in cast range
                 if (swingTailTiming.curCooldown <= Time.time)
                 {
-                    if(DistanceToPlayer() <= mySpells["Swing Tail"].castRange)
-                        
+                    if (DistanceToPlayer() <= mySpells["Swing Tail"].castRange)
+
                         spell = "Swing Tail";
                 }
                 else return;
@@ -162,10 +162,13 @@ public class ElderWolf : Enemy
                 else return;
             }
 
-            lastSpell = spell;
-            curSpellPrepareTime = mySpells[spell].prepareTime + Time.time;
-            SwitchState(State.CastSpell);
-            spellState = SpellStates.Prepare;
+            if (spell != "None")
+            {
+                lastSpell = spell;
+                curSpellPrepareTime = mySpells[spell].prepareTime + Time.time;
+                SwitchState(State.CastSpell);
+                spellState = SpellStates.Prepare;
+            }
         }
     }
 
@@ -228,6 +231,7 @@ public class ElderWolf : Enemy
             //longJumpTiming.curDelay = mySpells[(Enemy.SpellEnum) spell].delayAfterCast + Time.time;
             longJumpTiming.curCooldown = mySpells[spell].cooldown + Time.time;
             curGlobalSpellCD = mySpells[spell].globalCD + Time.time;
+            spell = "None";
             SwitchState(State.Attack);
         }
     }
@@ -244,6 +248,7 @@ public class ElderWolf : Enemy
             //backJumpTiming.curDelay = mySpells[(Enemy.SpellEnum) spell].delayAfterCast + Time.time;
             backJumpTiming.curCooldown = mySpells[spell].cooldown + Time.time;
             curGlobalSpellCD = mySpells[spell].globalCD + Time.time;
+            spell = "None";
             SwitchState(State.Attack);
         }
     }
@@ -260,6 +265,7 @@ public class ElderWolf : Enemy
             //backJumpTiming.curDelay = mySpells[(Enemy.SpellEnum) spell].delayAfterCast + Time.time;
             swingTailTiming.curCooldown = mySpells[spell].cooldown + Time.time;
             curGlobalSpellCD = mySpells[spell].globalCD + Time.time;
+            spell = "None";
             SwitchState(State.Attack);
         }
     }
@@ -276,6 +282,7 @@ public class ElderWolf : Enemy
             //backJumpTiming.curDelay = mySpells[(Enemy.SpellEnum) spell].delayAfterCast + Time.time;
             iceBreathTiming.curCooldown = mySpells[spell].cooldown + Time.time;
             curGlobalSpellCD = mySpells[spell].globalCD + Time.time;
+            spell = "None";
             SwitchState(State.Attack);
         }
     }
@@ -292,6 +299,7 @@ public class ElderWolf : Enemy
             //backJumpTiming.curDelay = mySpells[(Enemy.SpellEnum) spell].delayAfterCast + Time.time;
             iceSpikesTiming.curCooldown = mySpells[spell].cooldown + Time.time;
             curGlobalSpellCD = mySpells[spell].globalCD + Time.time;
+            spell = "None";
             SwitchState(State.Attack);
         }
     }
@@ -308,6 +316,7 @@ public class ElderWolf : Enemy
             //backJumpTiming.curDelay = mySpells[(Enemy.SpellEnum) spell].delayAfterCast + Time.time;
             howlTiming.curCooldown = mySpells[spell].cooldown + Time.time;
             curGlobalSpellCD = mySpells[spell].globalCD + Time.time;
+            spell = "None";
             SwitchState(State.Attack);
         }
     }
@@ -317,12 +326,13 @@ public class ElderWolf : Enemy
         rigidBody.AddForce(new Vector2(mySpells[spell].jumpDistance.x * mySpells[spell].jumpDirection * direction, mySpells[spell].jumpDistance.y), ForceMode2D.Impulse);
     }
 
-    private void OnDrawGizmosSelected()
+    new private void OnDrawGizmosSelected()
     {
+        base.OnDrawGizmosSelected();
         Gizmos.color = Color.red;
-
+        /*
         if (frontLegsCol != null)
-            Gizmos.DrawWireCube(frontLegs.position, new Vector3(frontLegsCol.size.x * 2f, frontLegsCol.size.y, 0f));
+            Gizmos.DrawWireCube(frontLegs.position, new Vector3(frontLegsCol.size.x * 2f, frontLegsCol.size.y, 0f));*/
     }
 
     void Landing()

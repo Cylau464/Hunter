@@ -1,16 +1,7 @@
 fileFormatVersion: 2
-guid: 92bf0cb2fbff6f443953994a6e580d05
+guid: 29f5de325a64e94468dbc17003f3b73c
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: -9135995513266760987
-    second: ElderWolf_IceBreath_0
-  - first:
-      213: -8212035912607481422
-    second: ElderWolf_IceBreath_1
-  - first:
-      213: 2571647482221488021
-    second: ElderWolf_IceBreath_2
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -49,10 +40,10 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 0
+  alignment: 7
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 15
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
@@ -93,70 +84,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: ElderWolf_IceBreath_0
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 100
-        height: 120
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: dfc32b6433afbaa4d9ff6a92870fdc3d
-      internalID: -9135995513266760987
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ElderWolf_IceBreath_1
-      rect:
-        serializedVersion: 2
-        x: 100
-        y: 0
-        width: 100
-        height: 120
-      alignment: 9
-      pivot: {x: 0.44, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 32b2d0d81cd01b648b6990671b667e74
-      internalID: -8212035912607481422
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ElderWolf_IceBreath_2
-      rect:
-        serializedVersion: 2
-        x: 200
-        y: 0
-        width: 100
-        height: 120
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4ce66d4fea3e6754eb98210cdf81eced
-      internalID: 2571647482221488021
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []

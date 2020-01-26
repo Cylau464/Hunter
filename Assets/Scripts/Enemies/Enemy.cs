@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using UnityEngine;
 using Structures;
 using System.Linq;
@@ -28,13 +29,12 @@ public class Enemy : MonoBehaviour
     };
 
     public float attackCD = 1.5f;
-    [SerializeField] protected float attackDistance = 2f;
-    [SerializeField] float attackRangeX = 2f;
-    [SerializeField] float attackRangeY = 1f;
+    [SerializeField] protected Vector2 attackRange;
     protected float curGlobalSpellCD = 0f;
     protected float curAttackCD = 0f;
     protected string lastAttack;
     protected bool isHitPlayer;
+    bool increaseAttackNumber;
     [HideInInspector] public int comboNumber;       //For animations
     [HideInInspector] public int curAttackNumber;   //For switch animations
     EnemyCombo curCombo;
@@ -92,6 +92,7 @@ public class Enemy : MonoBehaviour
 
     protected Transform myTransform;
     protected Rigidbody2D rigidBody;
+    BoxCollider2D bodyCollider;
     protected Collider2D target;
     protected LayerMask playerLayer = 1 << 10;       //10 - player layer
     Transform hookTransform;
@@ -116,7 +117,7 @@ public class Enemy : MonoBehaviour
     /// </summary>
     //protected Dictionary<float, int> damageTaken = new Dictionary<float, int>();
     protected List<Dictionary<float, int>> damageTaken = new List<Dictionary<float, int>>();
-
+    //protected ListDictionary damageTaken = new ListDictionary();
     /// <summary>
     /// Time of taken damage and duration for calculate DPS
     /// </summary>
@@ -135,6 +136,7 @@ public class Enemy : MonoBehaviour
         health         = maxHealth;
         currentState   = State.Patrol;
         myTransform    = GetComponent<Transform>();
+        bodyCollider   = GetComponent<BoxCollider2D>();
         rigidBody      = GetComponent<Rigidbody2D>();
         sprite         = GetComponent<SpriteRenderer>();
         startPos       = myTransform.position;
@@ -146,8 +148,19 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    protected void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        if(bodyCollider != null)
+            Gizmos.DrawWireCube(new Vector2(transform.position.x + bodyCollider.size.x / 2f + attackRange.x / 2f, transform.position.y + attackRange.y / 2f), attackRange);
+    }
+
     protected void Update()
     {
+        if (Physics2D.OverlapBox(new Vector2(transform.position.x + bodyCollider.size.x / 2f + attackRange.x / 2f, transform.position.y + attackRange.y / 2f), attackRange, 0, playerLayer) != null)
+            Debug.Log("XYU");
+
+
         if (health <= 0 && currentState != State.Dead)
         {
             target = null;
@@ -281,7 +294,7 @@ public class Enemy : MonoBehaviour
         if (DistanceToPlayer() <= 20f)
         {
             //Move towards the player until the attack distance is reached...
-            if ((target.transform.position.x - transform.position.x - attackDistance * direction) * direction > 0)
+            if (Mathf.Abs(target.transform.position.x - transform.position.x) > attackRange.x)
                 rigidBody.velocity = new Vector2(chaseSpeed * direction, rigidBody.velocity.y);
             else
                 //...and attack when it reached
@@ -296,45 +309,53 @@ public class Enemy : MonoBehaviour
 
     protected void Attack()
     {
-        if(curAttackCD <= Time.time && !isAttack)
+        if (curAttackCD <= Time.time)
         {
-            if (target != null)
+            if (!isAttack)
             {
-                int _random = Random.Range(0, 100);
-                int _chance = 0;
-                int _serNumber = 0;         //Combo number
-
-                foreach(KeyValuePair<string, EnemyCombo> combo in combos)
+                if (target != null)
                 {
-                    if (_random < combo.Value.chance + _chance)
+                    int _random = Random.Range(0, 100);
+                    int _chance = 0;
+                    int _serNumber = 0;         //Combo number
+
+                    foreach (KeyValuePair<string, EnemyCombo> combo in combos)
                     {
-                        //If player too far
-                        if (DistanceToPlayer() > attackDistance + combo.Value.attackRange)
+                        if (_random < combo.Value.chance + _chance)
                         {
-                            SwitchState(State.Chase);
-                            return;
+                            //If player too far
+                            if (DistanceToPlayer() > attackRange.x + combo.Value.attackRange)
+                            {
+                                SwitchState(State.Chase);
+                                return;
+                            }
+
+                            curAttackNumber = 0;
+                            comboNumber = _serNumber;
+                            curCombo = combo.Value;
+                            lastAttack = combo.Key;
+                            break;
                         }
 
-                        curAttackNumber = 0;
-                        comboNumber = _serNumber;
-                        curCombo = combo.Value;
-                        lastAttack = combo.Key;
-                        break;
+                        _serNumber++;
+                        _chance += combo.Value.chance;
                     }
 
-                    _serNumber++;
-                    _chance += combo.Value.chance;
+                    //Flip enemy towards the player
+                    if (Mathf.Sign(target.transform.position.x - transform.position.x) != direction)
+                        FlipCharacter(false);
+
+                    isAttack = true;
                 }
-
-                //Flip enemy towards the player
-                if (Mathf.Sign(target.transform.position.x - transform.position.x) != direction)
-                    FlipCharacter(false);
-
-                isAttack = true;
+                else
+                {
+                    SwitchState(State.Patrol);
+                }
             }
-            else
+            else if (increaseAttackNumber)
             {
-                SwitchState(State.Patrol);
+                curAttackNumber++;      //This will switch the animation to the next attack
+                increaseAttackNumber = false;
             }
         }
     }
@@ -379,7 +400,7 @@ public class Enemy : MonoBehaviour
     {
         if (currentState == State.Dead) return;
 
-        Debug.Log("BEFORE damage " + damage + " element " + element.value);
+        //Debug.Log("BEFORE damage " + damage + " element " + element.value);
         element.value = element.value - Mathf.CeilToInt(element.value / 100f * elementDefence[element.element]);    //Calculation of defence from elements
         damage = damage - Mathf.CeilToInt(damage / 100f * physicDefence[damageType]);                               //Calculation of physical defence
         health -= damage + element.value;
@@ -387,10 +408,13 @@ public class Enemy : MonoBehaviour
         damageTaken.Last().Add(Time.time, damage + element.value);
 
         //Calculate duration between first taken damage and last, then devide all taken damage on it
-        damageTakenDPS = damageTaken.Sum(x => System.Convert.ToInt32(x.Values) / (System.Convert.ToSingle(damageTaken.Last().Keys) - System.Convert.ToSingle(damageTaken.First().Keys)));
-        Debug.Log("DPS: " + damageTakenDPS);
+        if (damageTaken.Count > 1)
+            damageTakenDPS = damageTaken.Sum(x => x.Values.Single() / (damageTaken.Last().Keys.Single() - damageTaken.First().Keys.Single()));
+        else
+            damageTakenDPS = damageTaken.First().Values.Single();
+
         spriteBlinkingEnabled = true;
-        Debug.Log("POST damage " + damage + " element " + element.value);
+        //Debug.Log("POST damage " + damage + " element " + element.value);
         /*if(crit)
             currentState = State.Hurt;*/
         TakeDamageEffects(damage + element.value);
@@ -431,11 +455,14 @@ public class Enemy : MonoBehaviour
     void GiveDamage()
     {
         if (curCombo.attackCount <= curAttackNumber + 1)
-            curAttackCD = Time.time + curCombo.attackCD;//attackCD;             //Cooldown of attack
+            curAttackCD = Time.time + curCombo.attackCD;                        //Cooldown of attack
         else
+        {
             curAttackCD = Time.time + curCombo.timeBtwAttack[curAttackNumber];  //Cooldown between combo attacks
+            increaseAttackNumber = true;
+        }
 
-        Collider2D _objectToDamage = Physics2D.OverlapBox(transform.position, new Vector2(attackRangeX, attackRangeY), 0, playerLayer); //Need to create child object "Attack Point"
+        Collider2D _objectToDamage = Physics2D.OverlapBox(new Vector2(transform.position.x + bodyCollider.size.x / 2f + attackRange.x / 2f, transform.position.y + attackRange.y / 2f), attackRange, 0, playerLayer); //Need to create child object "Attack Point"
 
         if (_objectToDamage != null)
         {
@@ -448,12 +475,9 @@ public class Enemy : MonoBehaviour
 
     void EndOfAttack()
     {
-        //If combo is not ended
-        if(curCombo.attackCount <= curAttackNumber + 1)
+        //If combo is ended
+        if (curCombo.attackCount <= curAttackNumber + 1)
             isAttack = false;
-        else
-            curAttackNumber++;      //This will switch the animation to the next attack
-
     }
 
     void FlipCharacter(bool onlyDir)
