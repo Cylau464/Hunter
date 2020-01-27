@@ -7,6 +7,7 @@ public class HowlCirclePulse : MonoBehaviour
 {
     public EnemySpell spell;
     bool damageDone;
+    int isCastParamID;
     CircleCollider2D circleCol;
     Animator anim;
     SpriteRenderer sprite;
@@ -19,14 +20,15 @@ public class HowlCirclePulse : MonoBehaviour
         circleCol = transform.GetComponent<CircleCollider2D>();
         circleCol.radius = .2f;
         sprite.enabled = false;
+        isCastParamID = Animator.StringToHash("isCast");
     }
 
     //Started from ElderWolf script
     public IEnumerator CirclePulse()
     {
-        anim.StartPlayback();
-        circleCol.radius = .2f;
         sprite.enabled = true;
+        anim.SetBool(isCastParamID, true);
+        circleCol.radius = .2f;
         float _castTime = Time.time + spell.castTime;
         float _howlCircleMaxRadius = spell.castRange;
 
@@ -45,12 +47,11 @@ public class HowlCirclePulse : MonoBehaviour
                 damageDone = true;
             }
 
-            circleCol.radius += .3f;
+            circleCol.radius += 1f;
             yield return new WaitForEndOfFrame();
         }
 
-        anim.StopPlayback();
-        anim.playbackTime = 0f; //Check this
+        anim.SetBool(isCastParamID, false);
         sprite.enabled = false;
     }
 

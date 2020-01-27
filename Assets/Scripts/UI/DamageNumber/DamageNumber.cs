@@ -13,11 +13,14 @@ public class DamageNumber : MonoBehaviour
     [SerializeField]
     float lifeTime = 2f;
     float curLifeTime;
+    public Transform target;
 
     // Start is called before the first frame update
     void Start()
     {
         curLifeTime = Time.time + lifeTime;
+        displayNumber.text = damage.ToString();
+        displayNumber.color = target.tag == "Player" ? Color.white : Color.red;
     }
 
     // Update is called once per frame
@@ -26,7 +29,6 @@ public class DamageNumber : MonoBehaviour
         if (curLifeTime <= Time.time)
             Destroy(gameObject);
 
-        displayNumber.text = damage.ToString();
         transform.position = new Vector3(transform.position.x + moveSpeed * Time.deltaTime, transform.position.y + moveSpeed * Time.deltaTime, transform.position.z);
     }
 }

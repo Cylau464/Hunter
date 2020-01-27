@@ -17,7 +17,6 @@ public class Enemy : MonoBehaviour
 
     [Header("Attack Properties")]
     [SerializeField] protected EnemyComboDictionary combos = new EnemyComboDictionary();
-    [SerializeField] protected int damage = 1;
     [SerializeField] ElementDictionary elementDamage = new ElementDictionary()
     {
         { Elements.Fire, 0 },
@@ -133,13 +132,14 @@ public class Enemy : MonoBehaviour
 
     protected void Awake()
     {
-        health         = maxHealth;
-        currentState   = State.Patrol;
-        myTransform    = GetComponent<Transform>();
-        bodyCollider   = GetComponent<BoxCollider2D>();
-        rigidBody      = GetComponent<Rigidbody2D>();
-        sprite         = GetComponent<SpriteRenderer>();
-        startPos       = myTransform.position;
+        health              = maxHealth;
+        currentState        = State.Patrol;
+        myTransform         = GetComponent<Transform>();
+        bodyCollider        = GetComponent<BoxCollider2D>();
+        rigidBody           = GetComponent<Rigidbody2D>();
+        sprite              = GetComponent<SpriteRenderer>();
+        startPos            = myTransform.position;
+        playerAtributes     = GameObject.FindWithTag("Player").GetComponent<PlayerAtributes>();
 
         foreach(Transform t in transform)
         {
@@ -152,15 +152,11 @@ public class Enemy : MonoBehaviour
     {
         Gizmos.color = Color.red;
         if(bodyCollider != null)
-            Gizmos.DrawWireCube(new Vector2(transform.position.x + bodyCollider.size.x / 2f + attackRange.x / 2f, transform.position.y + attackRange.y / 2f), attackRange);
+            Gizmos.DrawWireCube(new Vector2(transform.position.x +(bodyCollider.size.x / 2f + attackRange.x / 2f) * direction, transform.position.y + attackRange.y / 2f), attackRange);
     }
 
     protected void Update()
     {
-        if (Physics2D.OverlapBox(new Vector2(transform.position.x + bodyCollider.size.x / 2f + attackRange.x / 2f, transform.position.y + attackRange.y / 2f), attackRange, 0, playerLayer) != null)
-            Debug.Log("XYU");
-
-
         if (health <= 0 && currentState != State.Dead)
         {
             target = null;
@@ -294,7 +290,7 @@ public class Enemy : MonoBehaviour
         if (DistanceToPlayer() <= 20f)
         {
             //Move towards the player until the attack distance is reached...
-            if (Mathf.Abs(target.transform.position.x - transform.position.x) > attackRange.x)
+            if (Mathf.Abs(target.transform.position.x - transform.position.x - attackRange.x * direction) > attackRange.x)
                 rigidBody.velocity = new Vector2(chaseSpeed * direction, rigidBody.velocity.y);
             else
                 //...and attack when it reached
@@ -417,14 +413,15 @@ public class Enemy : MonoBehaviour
         //Debug.Log("POST damage " + damage + " element " + element.value);
         /*if(crit)
             currentState = State.Hurt;*/
-        TakeDamageEffects(damage + element.value);
+        DamageText(damage + element.value);
     }
 
-    void TakeDamageEffects(int damage)
+    void DamageText(int damage)
     {
         GameObject damageText = Resources.Load<GameObject>("DamageNumber");
         damageText = Instantiate(damageText, transform);
         damageText.GetComponent<DamageNumber>().damage = damage;
+        damageText.GetComponent<DamageNumber>().target = myTransform;
     }
 
     void SpriteBlinkingEffect()
@@ -462,11 +459,11 @@ public class Enemy : MonoBehaviour
             increaseAttackNumber = true;
         }
 
-        Collider2D _objectToDamage = Physics2D.OverlapBox(new Vector2(transform.position.x + bodyCollider.size.x / 2f + attackRange.x / 2f, transform.position.y + attackRange.y / 2f), attackRange, 0, playerLayer); //Need to create child object "Attack Point"
+        Collider2D _objectToDamage = Physics2D.OverlapBox(new Vector2(transform.position.x + (bodyCollider.size.x / 2f + attackRange.x / 2f) * direction, transform.position.y + attackRange.y / 2f), attackRange, 0, playerLayer); //Need to create child object "Attack Point"
 
         if (_objectToDamage != null)
         {
-            _objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(curCombo.damage[curAttackNumber], HurtType.Repulsion, curCombo.repulseDistantion[curAttackNumber], curCombo.dazedTime[curAttackNumber]);
+            _objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(curCombo.damage[curAttackNumber], HurtType.Repulsion, new Vector2(curCombo.repulseDistantion[curAttackNumber].x * direction, curCombo.repulseDistantion[curAttackNumber].y), curCombo.dazedTime[curAttackNumber]);
             isHitPlayer = true;
         }
         else
@@ -524,6 +521,6 @@ public class Enemy : MonoBehaviour
 
     protected float DistanceToPlayer()
     {
-        return Mathf.Abs(target.transform.position.x - transform.position.x);
+        return Mathf.Abs(target.transform.position.x - transform.position.x - attackRange.x * direction);
     }
 }

@@ -88,6 +88,7 @@ public class ElderWolf : Enemy
         //Cast spell if it's possible
         if (curGlobalSpellCD <= Time.time && target != null && !isAttack && !isCast)
         {
+            bool spellSelected = false;
             if (IsPlayerBehind())
             {
                 //Swing Tail:
@@ -105,61 +106,73 @@ public class ElderWolf : Enemy
                 //Back Jump:
                 //  After take many damage in last seconds and player in front of the wolf Back Jump -> Howl (50% chance)
                 //  Two fast attack combo if one of them hit the player then Back Jump and Ice Breath
-                if (backJumpTiming.curCooldown <= Time.time)
+                if (!spellSelected && backJumpTiming.curCooldown <= Time.time)
                 {
                     if ((lastAttack == "Two Fast Attack" && isHitPlayer) ||
                         (damageTakenDPS >= maxHealth / 100 * 5 && Random.Range(0, 100) > 50))
-
+                    {
                         spell = "Back Jump";
+                        spellSelected = true;
+                    }
+                    
                 }
                 //Ice Breath:
                 //  Two fast attack combo if one of them hit the player then Back Jump and Ice Breath
                 //  If one slow attack hit player (and repulse him from wolf)
                 //  After Long Jump if player get caught (50% chance)
                 //  Player in cast range (30% chance)
-                else if (iceBreathTiming.curCooldown <= Time.time)
+                if (!spellSelected && iceBreathTiming.curCooldown <= Time.time)
                 {
                     if ((lastAttack == "Two Fast Attack" && lastSpell == "Back Jump") ||
                          lastAttack == "One Attack" ||
                         (lastSpell == "Long Jump" && playerMovement.hurtType == HurtType.Catch && Random.Range(0, 100) > 50) ||
                          DistanceToPlayer() <= mySpells["Ice Breath"].castRange && Random.Range(0, 100) > 30)
-
+                    {
                         spell = "Ice Breath";
+                        spellSelected = true;
+                    }
                 }
                 //Long Jump:
                 //  If player on cast range between Long Jump and Ice Spikes
                 //  When player jump (50% chance)
-                else if (longJumpTiming.curCooldown <= Time.time)
+                if (!spellSelected && longJumpTiming.curCooldown <= Time.time)
                 {
                     if (DistanceToPlayer() <= mySpells["Long Jump"].castRange ||
-                       !playerMovement.isOnGround ||
-                        (playerMovement.isJumping && Random.Range(0, 100) > 50))
-
+                       ((!playerMovement.isOnGround ||
+                        playerMovement.isJumping) && Random.Range(0, 100) > 50))
+                    {
                         spell = "Long Jump";
+                        spellSelected = true;
+                    }
                 }
                 //Ice Spikes:
                 //  After Long Jump if player get caught (50% chance)
                 //  Player out in cast range
                 //  Three-attack combo ends with Ice Spikes
-                else if (iceSpikesTiming.curCooldown <= Time.time)
+                if (!spellSelected && iceSpikesTiming.curCooldown <= Time.time)
                 {
-                    if((lastSpell == "Long Jump" && playerMovement.hurtType == HurtType.Catch && Random.Range(0, 100) > 50) ||
+                    if ((lastSpell == "Long Jump" && playerMovement.hurtType == HurtType.Catch /*&& Random.Range(0, 100) > 50*/) ||
                         DistanceToPlayer() >= mySpells["Ice Spikes"].castRange ||
                         lastAttack == "Three Attack")
-                        
+                    {
                         spell = "Ice Spikes";
+                        spellSelected = true;
+                    }
                 }
                 //Howl:
                 //  After take many damage in last seconds and player in front of the wolf Back Jump -> Howl (50% chance)
                 //  If wolf dont hit player more few seconds
-                else if (howlTiming.curCooldown <= Time.time)
+                if (!spellSelected && howlTiming.curCooldown <= Time.time)
                 {
-                    if((lastSpell == "Back Jump" && damageTakenDPS >= maxHealth / 100 * 5 && Random.Range(0, 100) > 50) ||
+                    if ((lastSpell == "Back Jump" && damageTakenDPS >= maxHealth / 100 * 5 && Random.Range(0, 100) > 50) ||
                        playerAtributes.timeOfLastTakenDamage + maxDurationWithoutDamage <= Time.time)
-
+                    {
                         spell = "Howl";
+                        spellSelected = true;
+                    }
                 }
-                else return;
+
+                if(!spellSelected) return;
             }
 
             if (spell != "None")
@@ -342,7 +355,7 @@ public class ElderWolf : Enemy
         objectToDamage = Physics2D.OverlapBox(frontLegs.position, new Vector2(frontLegsCol.size.x * 2f, frontLegsCol.size.y), 0f, playerLayer);
 
         if (objectToDamage != null)
-            objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].lastDamage, HurtType.Repulsion, mySpells[spell].repulseVector, mySpells[spell].dazedTime);
+            objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].lastDamage, HurtType.Repulsion, new Vector2(mySpells[spell].repulseVector.x * direction, mySpells[spell].repulseVector.y), mySpells[spell].dazedTime);
 
         isSpellCasted = true;
     }
@@ -357,12 +370,18 @@ public class ElderWolf : Enemy
             _iss.spell = mySpells[spell];
             _iss.player = playerMovement == null ? GameObject.Find("Player").GetComponent<PlayerMovement>() : playerMovement;
         }
-        else
+        else if(spell == "Swing Tail")
         {
             objectToDamage = Physics2D.OverlapBox(tailCol.transform.position, new Vector2(tailCol.size.x, tailCol.size.y), 0, playerLayer);
 
             if (objectToDamage != null)
                 objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].firstDamage, HurtType.Repulsion, new Vector2(mySpells[spell].repulseVector.x * -direction, mySpells[spell].repulseVector.y), mySpells[spell].dazedTime);
+        }
+        else if (spell == "Howl")
+        {
+            HowlCirclePulse _hcp = head.GetComponent<HowlCirclePulse>();
+            _hcp.spell = mySpells[spell];
+            _hcp.StartCoroutine(_hcp.CirclePulse());
         }
     }
 
@@ -375,16 +394,11 @@ public class ElderWolf : Enemy
                 objectToDamage = iceBreathCol.GetComponent<IceBreath>().playerCol;
 
                 if (objectToDamage != null)
+                { 
                     objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].firstDamage, HurtType.Repulsion, new Vector2(mySpells[spell].repulseVector.x * direction, mySpells[spell].repulseVector.y), mySpells[spell].dazedTime);
-
-                curSpellDelayBtwDamage = mySpells[spell].periodicityDamage + Time.time;
+                    curSpellDelayBtwDamage = mySpells[spell].periodicityDamage + Time.time;
+                }
             }
-        }
-        else if (spell == "Howl")
-        {
-            HowlCirclePulse _hcp = head.GetComponent<HowlCirclePulse>();
-            _hcp.spell = mySpells[spell];
-            _hcp.StartCoroutine(_hcp.CirclePulse());
         }
     }
 

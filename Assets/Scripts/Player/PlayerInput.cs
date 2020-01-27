@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum InputsEnum { Evade, StrongAttack, LightAttack, JointAttack }
 
@@ -35,6 +36,9 @@ public class PlayerInput : MonoBehaviour
 
     void Update()
     {
+        if(restart)
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
         ClearInput();
 
         //if (GameManager.IsGameOver())

@@ -150,8 +150,8 @@ public class PlayerMovement : MonoBehaviour
 
     void OnTriggerStay2D(Collider2D col)
     {
-        //If interacting with the enemy (13 - triggers layer)
-        if (col.gameObject.layer == 13 && !isHurt && !isDead && !isEvading && isOnGround && input.horizontalAccess)
+        //If interacting with the enemy (14 - enemy body layer)
+        if (col.gameObject.layer == 14 && !isHurt && !isDead && !isEvading && isOnGround && input.horizontalAccess)
         {
             //Not moving - push player from the enemy
             if (input.horizontal == 0)
@@ -532,7 +532,7 @@ public class PlayerMovement : MonoBehaviour
     public void Repulse(Vector2 repulseDistantion, float dazedTime)
     {
         isHurt = true;
-        Debug.Log("REPULSE");
+        Debug.Log("REPULSE " + repulseDistantion);
         rigidBody.AddForce(repulseDistantion, ForceMode2D.Impulse);
         curDazedTime = dazedTime + Time.time;
         //Pushed up

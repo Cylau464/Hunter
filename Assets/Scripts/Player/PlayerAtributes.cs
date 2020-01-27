@@ -33,6 +33,8 @@ public class PlayerAtributes : MonoBehaviour
             movement.isDead = true;
             movement.bodyCollider.sharedMaterial = null;        //Delete collider material for turn on friction
         }
+
+        DamageText(damage);
     }
 
     /// <summary>
@@ -50,6 +52,8 @@ public class PlayerAtributes : MonoBehaviour
         }
         else
             movement.GetCaught(hurtType, anchorPoint);
+
+        DamageText(damage);
     }
 
     /// <summary>
@@ -67,6 +71,8 @@ public class PlayerAtributes : MonoBehaviour
             movement.isDead = true;
             movement.bodyCollider.sharedMaterial = null;
         }
+
+        DamageText(damage);
     }
 
     /// <summary>
@@ -84,5 +90,15 @@ public class PlayerAtributes : MonoBehaviour
             movement.isDead = true;
             movement.bodyCollider.sharedMaterial = null;
         }
+
+        DamageText(damage);
+    }
+
+    void DamageText(int damage)
+    {
+        GameObject damageText = Resources.Load<GameObject>("DamageNumber");
+        damageText = Instantiate(damageText, transform);
+        damageText.GetComponent<DamageNumber>().damage = damage;
+        damageText.GetComponent<DamageNumber>().target = movement.transform;
     }
 }

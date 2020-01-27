@@ -1696,15 +1696,16 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 6147053478746070586, guid: e45b9de3367c5664f941bcabff062999,
+    type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 3.36, y: 3.3649218}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!95 &674716102
@@ -1717,7 +1718,7 @@ Animator:
   m_GameObject: {fileID: 674716097}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9c48e41b077aa2342adaa24be8ce240d, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -2080,7 +2081,7 @@ MonoBehaviour:
       draggable: 1
       expandable: 1
       multipleSelection: 1
-      isExpanded: 1
+      isExpanded: 0
       label:
         m_Text: Keys
         m_Image: {fileID: 0}
@@ -2095,7 +2096,7 @@ MonoBehaviour:
       elementNameOverride: 
       elementIcon: {fileID: 0}
     reqReferences: {fileID: 0}
-    isExpanded: 1
+    isExpanded: 0
     _keyValues:
     - One Attack
     - Two Fast Attack
@@ -2114,7 +2115,7 @@ MonoBehaviour:
       - 0
       dazedTime:
       - 0.2
-      attackCD: 2
+      attackCD: 1
       attackRange: 0
       repulseDistantion:
       - {x: 5, y: 0}
@@ -2128,11 +2129,11 @@ MonoBehaviour:
       dazedTime:
       - 0.2
       - 0.2
-      attackCD: 2
+      attackCD: 1
       attackRange: 0
       repulseDistantion:
-      - {x: 1, y: 0}
-      - {x: 1, y: 0}
+      - {x: 3, y: 0}
+      - {x: 3, y: 0}
       attackType: 0
     - attackCount: 2
       chance: 25
@@ -2143,11 +2144,11 @@ MonoBehaviour:
       dazedTime:
       - 0.3
       - 0.3
-      attackCD: 3
+      attackCD: 1.5
       attackRange: 0
       repulseDistantion:
-      - {x: 1, y: 0}
       - {x: 3, y: 0}
+      - {x: 5, y: 0}
       attackType: 0
     - attackCount: 3
       chance: 20
@@ -2160,14 +2161,13 @@ MonoBehaviour:
       - 0.2
       - 0.2
       - 0.4
-      attackCD: 4
+      attackCD: 2.5
       attackRange: 0
       repulseDistantion:
       - {x: 1, y: 0}
-      - {x: 2, y: 0}
-      - {x: 4, y: 0}
+      - {x: 3, y: 0}
+      - {x: 7, y: 0}
       attackType: 0
-  damage: 1
   elementDamage:
     reorderableList:
       canAdd: 1
@@ -2195,7 +2195,7 @@ MonoBehaviour:
     _keys: 000000000300000002000000010000000400000005000000
     _values: 000000000000000000000000000000000000000000000000
   attackCD: 1.5
-  attackRange: {x: 4, y: 2}
+  attackRange: {x: 2, y: 2}
   comboNumber: 0
   curAttackNumber: 0
   elementDefence:
@@ -2250,8 +2250,8 @@ MonoBehaviour:
     _keyValues: 03000000010000000000000002000000
     _keys: 03000000010000000000000002000000
     _values: 00000000000000000000000000000000
-  patrolSpeed: 2
-  chaseSpeed: 4
+  patrolSpeed: 3
+  chaseSpeed: 6
   minWaitTime: 1
   maxWaitTime: 4
   patrolDistance: 10
@@ -2272,7 +2272,7 @@ MonoBehaviour:
       draggable: 1
       expandable: 1
       multipleSelection: 1
-      isExpanded: 0
+      isExpanded: 1
       label:
         m_Text: Keys
         m_Image: {fileID: 0}
@@ -2287,7 +2287,7 @@ MonoBehaviour:
       elementNameOverride: 
       elementIcon: {fileID: 0}
     reqReferences: {fileID: 0}
-    isExpanded: 0
+    isExpanded: 1
     _keyValues:
     - Long Jump
     - Back Jump
@@ -2304,12 +2304,12 @@ MonoBehaviour:
     - Howl
     _values:
     - cooldown: 10
-      globalCD: 3
+      globalCD: 1.8
       prepareTime: 1.5
       castTime: 0.75
       castRange: 10
       periodicityDamage: 0
-      dazedTime: 1.5
+      dazedTime: 2
       repulseVector: {x: 5, y: 5}
       damageRange: {x: 2, y: 2}
       firstDamage: 5
@@ -2372,7 +2372,7 @@ MonoBehaviour:
       globalCD: 3
       prepareTime: 1.5
       castTime: 3
-      castRange: 15
+      castRange: 10
       periodicityDamage: 0.5
       dazedTime: 0.5
       repulseVector: {x: 2, y: 0}
@@ -2406,7 +2406,7 @@ GameObject:
   - component: {fileID: 1010206984}
   - component: {fileID: 1010206986}
   - component: {fileID: 1010206985}
-  m_Layer: 12
+  m_Layer: 13
   m_Name: Ice Breath
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2637,7 +2637,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1356983575}
   - component: {fileID: 1356983576}
-  m_Layer: 13
+  m_Layer: 14
   m_Name: Trigger-Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3029,7 +3029,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bae182e7b35d794386301fbc7c28758, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 20
+  maxHealth: 100
   health: 0
   timeOfLastTakenDamage: 0
 --- !u!1 &1810593592
