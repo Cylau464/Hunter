@@ -167,9 +167,7 @@ public class Enemy : MonoBehaviour
         {
             isHitPlayer = false;
             lastAttack = null;
-
-            if(!isCast)
-                lastSpell = null;
+            lastSpell = null;
         }
 
         //Remove first list element if he's was added too long

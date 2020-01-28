@@ -524,19 +524,13 @@ public class PlayerMovement : MonoBehaviour
         isHurt = true;
     }
 
-    public void GetReleased()
-    {
-
-    }
-
     public void Repulse(Vector2 repulseDistantion, float dazedTime)
     {
         isHurt = true;
         Debug.Log("REPULSE " + repulseDistantion);
+        hurtType = HurtType.Repulsion;
         rigidBody.AddForce(repulseDistantion, ForceMode2D.Impulse);
         curDazedTime = dazedTime + Time.time;
-        //Pushed up
-        //Pushed back
     }
 
     public void Stunned(float dazedTime)

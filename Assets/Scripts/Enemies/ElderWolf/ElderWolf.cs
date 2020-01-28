@@ -32,7 +32,7 @@ public class ElderWolf : Enemy
         { "Howl",       new EnemySpell(15f, 15f, 3f, 1.5f, 3f, new Vector2(0f, 0f), new Vector2(2f, 0f), .5f, 0, .5f) }
     };
     bool isSpellCasted;
-    bool isPlayerCaught;      //Was the player caught
+    bool isPlayerCaught;      //Was the player caught?
 
     [SerializeField] Transform frontLegs = null;
     [SerializeField] Transform head = null;
@@ -41,6 +41,7 @@ public class ElderWolf : Enemy
     PolygonCollider2D iceBreathCol;
     Collider2D objectToDamage;
 
+    [SerializeField] float minGlobalCD = .5f;
     float maxDurationWithoutDamage = 10f;       //For Howl and other spells which used if Wolf can't give damage a long time
     float curSpellDelayBtwDamage;
 
@@ -57,6 +58,26 @@ public class ElderWolf : Enemy
             {
                 iceBreathCol = child.GetComponent<PolygonCollider2D>();
                 child.GetComponent<IceBreath>().colliderSize = mySpells["Ice Breath"].damageRange;
+            }
+        }
+
+        //Set cooldown for two of three spells with 33% chance
+        for(int i = 0; i < 2; )
+        {
+            switch(i)
+            {
+                case 0:
+                    longJumpTiming.curCooldown = Random.Range(0, 3) == 0 ? mySpells["Long Jump"].cooldown : 0f;
+                    i++;
+                    break;
+                case 1:
+                    iceBreathTiming.curCooldown = Random.Range(0, 3) == 0 ? mySpells["Ice Breath"].cooldown : 0f;
+                    i++;
+                    break;
+                case 2:
+                    iceSpikesTiming.curCooldown = Random.Range(0, 3) == 0 ? mySpells["Ice Spikes"].cooldown : 0f;
+                    i++;
+                    break;
             }
         }
     }
@@ -89,6 +110,7 @@ public class ElderWolf : Enemy
         if (curGlobalSpellCD <= Time.time && target != null && !isAttack && !isCast)
         {
             bool spellSelected = false;
+
             if (IsPlayerBehind())
             {
                 //Swing Tail:
@@ -125,7 +147,7 @@ public class ElderWolf : Enemy
                 {
                     if ((lastAttack == "Two Fast Attack" && lastSpell == "Back Jump") ||
                          lastAttack == "One Attack" ||
-                        (lastSpell == "Long Jump" && playerMovement.hurtType == HurtType.Catch && Random.Range(0, 100) > 50) ||
+                        (lastSpell == "Long Jump" && Random.Range(0, 100) > 50) ||
                          DistanceToPlayer() <= mySpells["Ice Breath"].castRange && Random.Range(0, 100) > 30)
                     {
                         spell = "Ice Breath";
@@ -221,6 +243,16 @@ public class ElderWolf : Enemy
                 break;
         }
     }
+
+    void SpellCasted()
+    {
+        objectToDamage = null;
+        isPlayerCaught = false;
+        isSpellCasted = false;
+        curAttackCD = mySpells[spell].globalCD + Time.time;
+        spell = "None";
+        SwitchState(State.Attack);
+    }
     
     void LongJump()
     {
@@ -229,7 +261,7 @@ public class ElderWolf : Enemy
         if (objectToDamage == null)
             objectToDamage = Physics2D.OverlapBox(frontLegs.position, new Vector2(frontLegsCol.size.x, frontLegsCol.size.y), 0f, playerLayer);
         //If player collided with front legs
-        else if (!isPlayerCaught && spellState != SpellStates.Prepare)
+        else if (!isPlayerCaught && spellState == SpellStates.Cast)
         {
             objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].firstDamage, HurtType.Catch, frontLegs);
             isPlayerCaught = true;
@@ -237,15 +269,9 @@ public class ElderWolf : Enemy
 
         if (isSpellCasted)
         {
-            objectToDamage = null;
-            isPlayerCaught = false;
-            isSpellCasted = false;
-            curAttackCD = attackCD + Time.time;
-            //longJumpTiming.curDelay = mySpells[(Enemy.SpellEnum) spell].delayAfterCast + Time.time;
-            longJumpTiming.curCooldown = mySpells[spell].cooldown + Time.time;
-            curGlobalSpellCD = mySpells[spell].globalCD + Time.time;
-            spell = "None";
-            SwitchState(State.Attack);
+            SpellCasted();
+            longJumpTiming.curCooldown = mySpells[spell].cooldown + Time.time;      //Переделать переменные кулдауна в один словарь с индексом спелла
+            curGlobalSpellCD = (Random.Range(0, 2) == 0 ? mySpells[spell].globalCD : minGlobalCD) + Time.time;
         }
     }
 
@@ -255,14 +281,9 @@ public class ElderWolf : Enemy
 
         if (isSpellCasted)
         {
-            objectToDamage = null;
-            isSpellCasted = false;
-            curAttackCD = attackCD + Time.time;
-            //backJumpTiming.curDelay = mySpells[(Enemy.SpellEnum) spell].delayAfterCast + Time.time;
+            SpellCasted();
             backJumpTiming.curCooldown = mySpells[spell].cooldown + Time.time;
             curGlobalSpellCD = mySpells[spell].globalCD + Time.time;
-            spell = "None";
-            SwitchState(State.Attack);
         }
     }
 
@@ -272,14 +293,9 @@ public class ElderWolf : Enemy
 
         if (isSpellCasted)
         {
-            objectToDamage = null;
-            isSpellCasted = false;
-            curAttackCD = attackCD + Time.time;
-            //backJumpTiming.curDelay = mySpells[(Enemy.SpellEnum) spell].delayAfterCast + Time.time;
+            SpellCasted();
             swingTailTiming.curCooldown = mySpells[spell].cooldown + Time.time;
             curGlobalSpellCD = mySpells[spell].globalCD + Time.time;
-            spell = "None";
-            SwitchState(State.Attack);
         }
     }
 
@@ -289,14 +305,9 @@ public class ElderWolf : Enemy
 
         if (isSpellCasted)
         {
-            objectToDamage = null;
-            isSpellCasted = false;
-            curAttackCD = attackCD + Time.time;
-            //backJumpTiming.curDelay = mySpells[(Enemy.SpellEnum) spell].delayAfterCast + Time.time;
+            SpellCasted();
             iceBreathTiming.curCooldown = mySpells[spell].cooldown + Time.time;
             curGlobalSpellCD = mySpells[spell].globalCD + Time.time;
-            spell = "None";
-            SwitchState(State.Attack);
         }
     }
 
@@ -306,14 +317,9 @@ public class ElderWolf : Enemy
 
         if (isSpellCasted)
         {
-            objectToDamage = null;
-            isSpellCasted = false;
-            curAttackCD = attackCD + Time.time;
-            //backJumpTiming.curDelay = mySpells[(Enemy.SpellEnum) spell].delayAfterCast + Time.time;
+            SpellCasted();
             iceSpikesTiming.curCooldown = mySpells[spell].cooldown + Time.time;
             curGlobalSpellCD = mySpells[spell].globalCD + Time.time;
-            spell = "None";
-            SwitchState(State.Attack);
         }
     }
 
@@ -323,14 +329,9 @@ public class ElderWolf : Enemy
 
         if (isSpellCasted)
         {
-            objectToDamage = null;
-            isSpellCasted = false;
-            curAttackCD = attackCD + Time.time;
-            //backJumpTiming.curDelay = mySpells[(Enemy.SpellEnum) spell].delayAfterCast + Time.time;
+            SpellCasted();
             howlTiming.curCooldown = mySpells[spell].cooldown + Time.time;
             curGlobalSpellCD = mySpells[spell].globalCD + Time.time;
-            spell = "None";
-            SwitchState(State.Attack);
         }
     }
 
