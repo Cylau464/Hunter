@@ -2314,7 +2314,7 @@ MonoBehaviour:
       damageRange: {x: 2, y: 2}
       firstDamage: 5
       lastDamage: 7
-      jumpDistance: {x: 15, y: 15}
+      jumpDistance: {x: 15, y: 17}
       jumpDirection: 1
     - cooldown: 12
       globalCD: 3
@@ -2327,7 +2327,7 @@ MonoBehaviour:
       damageRange: {x: 2, y: 2}
       firstDamage: 2
       lastDamage: 5
-      jumpDistance: {x: 7, y: 12}
+      jumpDistance: {x: 10, y: 15}
       jumpDirection: -1
     - cooldown: 8
       globalCD: 2
@@ -2383,6 +2383,7 @@ MonoBehaviour:
       jumpDirection: 0
   frontLegs: {fileID: 452924007}
   head: {fileID: 674716098}
+  minGlobalCD: 0.5
 --- !u!4 &752039254 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3205944958286040079, guid: 1b00b37d08923724481287bb221d8aa3,

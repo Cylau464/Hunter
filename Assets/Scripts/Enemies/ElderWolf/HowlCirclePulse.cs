@@ -8,19 +8,29 @@ public class HowlCirclePulse : MonoBehaviour
     public EnemySpell spell;
     bool damageDone;
     int isCastParamID;
+    int direction;
     CircleCollider2D circleCol;
     Animator anim;
     SpriteRenderer sprite;
     Transform player;
+    Enemy enemy;
 
     void Start()
     {
+        enemy = transform.parent.GetComponent<Enemy>();
+        direction = enemy.direction;
         sprite = transform.GetComponent<SpriteRenderer>();
         anim = transform.GetComponent<Animator>();
         circleCol = transform.GetComponent<CircleCollider2D>();
         circleCol.radius = .2f;
         sprite.enabled = false;
         isCastParamID = Animator.StringToHash("isCast");
+    }
+
+    private void Update()
+    {
+        if (direction != enemy.direction)
+            FlipObject();
     }
 
     //Started from ElderWolf script
@@ -41,7 +51,7 @@ public class HowlCirclePulse : MonoBehaviour
                 damageDone = false;
             }
 
-            if(player != null && !damageDone)
+            if (player != null && !damageDone)
             {
                 player.GetComponent<PlayerAtributes>().TakeDamage(spell.firstDamage, HurtType.Repulsion, spell.dazedTime);
                 damageDone = true;
@@ -65,5 +75,12 @@ public class HowlCirclePulse : MonoBehaviour
     {
         if (collision.transform.tag == "Player")
             player = null;
+    }
+
+    void FlipObject()
+    {
+        transform.localPosition = new Vector2(-transform.localPosition.x, transform.localPosition.y);
+        direction = enemy.direction;
+
     }
 }

@@ -6,8 +6,8 @@ using Structures;
 public class IceSpike : MonoBehaviour
 {
     [HideInInspector] public EnemySpell spell;
-    [SerializeField] float lifeTime;
-    [SerializeField] float prepareTime;
+    [SerializeField] float lifeTime = 3f;
+    [SerializeField] float prepareTime = 1f;
     float maxColSizeY;
     float maxColOffsetY;
     float curLifeTime;

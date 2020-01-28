@@ -183,7 +183,9 @@ public class Enemy : MonoBehaviour
     {
         if(currentState == State.Dead) return;
 
-        CheckPlayer();
+        if(target == null)
+            CheckPlayer();
+
         SwitchSpell();
 
         switch (currentState)
@@ -490,7 +492,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void CheckPlayer()
+    protected void CheckPlayer()
     {
         if (playerMovement != null && playerMovement.isDead)
         {

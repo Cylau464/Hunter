@@ -151,7 +151,7 @@ public class PlayerMovement : MonoBehaviour
     void OnTriggerStay2D(Collider2D col)
     {
         //If interacting with the enemy (14 - enemy body layer)
-        if (col.gameObject.layer == 14 && !isHurt && !isDead && !isEvading && isOnGround && input.horizontalAccess)
+        if (col.gameObject.layer == 14 && !isHurt && !isDead && !isEvading && !isAttacking && isOnGround && input.horizontalAccess)
         {
             //Not moving - push player from the enemy
             if (input.horizontal == 0)
