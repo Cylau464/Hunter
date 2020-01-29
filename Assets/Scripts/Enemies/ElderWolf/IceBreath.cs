@@ -53,7 +53,6 @@ public class IceBreath : MonoBehaviour
     {
         if (col.gameObject.layer == 10)
             playerCol = col;
-
     }
 
     void OnTriggerExit2D(Collider2D col)

@@ -53,7 +53,7 @@ public class IceSpikesSpawner : MonoBehaviour
 
             _spike.Add(_inst = Instantiate(_spikeRes, new Vector3(_posX, transform.position.y, 0f), Quaternion.identity));
             _inst.GetComponent<IceSpike>().spell = spell;
-            _spikeCol = _spikeCol ?? _spike[i].GetComponent<BoxCollider2D>();
+            _spikeCol ??= _spike[i].GetComponent<BoxCollider2D>();
 
             yield return new WaitForSeconds(spell.periodicityDamage);
         }

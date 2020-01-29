@@ -79,25 +79,23 @@ public class ElderWolf : Enemy
         if (!target)
         {
             int a = Random.Range(0, 3);
+
             switch (a)
             {
                 case 0:
                     longJumpTiming.curCooldown = mySpells["Long Jump"].cooldown + Time.time;
                     iceBreathTiming.curCooldown = 0f;
                     iceSpikesTiming.curCooldown = mySpells["Ice Spikes"].cooldown + Time.time;
-                    Debug.Log("case 0 ");
                     break;
                 case 1:
                     longJumpTiming.curCooldown = 0f;
                     iceBreathTiming.curCooldown = mySpells["Ice Breath"].cooldown + Time.time;
                     iceSpikesTiming.curCooldown = mySpells["Ice Spikes"].cooldown + Time.time;
-                    Debug.Log("case 1 ");
                     break;
                 case 2:
                     longJumpTiming.curCooldown = mySpells["Long Jump"].cooldown + Time.time;
                     iceBreathTiming.curCooldown = mySpells["Ice Breath"].cooldown + Time.time;
                     iceSpikesTiming.curCooldown = 0f;
-                    Debug.Log("case 2");
                     break;
             }
         }
@@ -112,17 +110,11 @@ public class ElderWolf : Enemy
         }
     }
 
-    new void FixedUpdate()
-    {
-        base.FixedUpdate();
-    }
-
     override protected void SwitchSpell()
     {
         //Cast spell if it's possible
         if (curGlobalSpellCD <= Time.time && target != null && !isAttack && !isCast)
         {
-            Debug.Log("BACVK JUMP DPS" + damageTakenDPS + " DPS = " + (damageTakenDPS >= maxHealth / 100 * 5));
             bool spellSelected = false;
 
             if (IsPlayerBehind())
@@ -161,7 +153,7 @@ public class ElderWolf : Enemy
                 {
                     if ((lastAttack == "Two Fast Attack" && lastSpell == "Back Jump") ||
                          lastAttack == "One Attack" ||
-                        (lastSpell == "Long Jump" && Random.Range(0, 100) > 50) ||
+                        (lastSpell  == "Long Jump" && Random.Range(0, 100) > 50) ||
                          DistanceToPlayer() <= mySpells["Ice Breath"].castRange && Random.Range(0, 100) > 30)
                     {
                         spell = "Ice Breath";
@@ -420,10 +412,5 @@ public class ElderWolf : Enemy
     void SpellEnded()
     {
         isSpellCasted = true;
-    }
-
-    private void OnGUI()
-    {
-        GUI.TextField(new Rect(10, 300, 150, 200), "LG: " + longJumpTiming.curCooldown + "\nIB: " + iceBreathTiming.curCooldown + "\nIS: " + iceSpikesTiming.curCooldown);
     }
 }

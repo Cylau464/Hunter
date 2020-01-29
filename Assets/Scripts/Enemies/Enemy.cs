@@ -203,7 +203,7 @@ public class Enemy : MonoBehaviour
                 Attack();
                 break;
             case State.CastSpell:
-                isCast = true;         
+                isCast = true;
                 CastSpell();
                 break;
             case State.Hurt:
@@ -313,7 +313,7 @@ public class Enemy : MonoBehaviour
                 {
                     int _random = Random.Range(0, 100);
                     int _chance = 0;
-                    int _serNumber = 0;         //Combo number
+                    int _comboNumber = 0;
 
                     foreach (KeyValuePair<string, EnemyCombo> combo in combos)
                     {
@@ -327,13 +327,13 @@ public class Enemy : MonoBehaviour
                             }
 
                             curAttackNumber = 0;
-                            comboNumber = _serNumber;
+                            comboNumber = _comboNumber;
                             curCombo = combo.Value;
                             lastAttack = combo.Key;
                             break;
                         }
 
-                        _serNumber++;
+                        _comboNumber++;
                         _chance += combo.Value.chance;
                     }
 
@@ -466,8 +466,6 @@ public class Enemy : MonoBehaviour
             _objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(curCombo.damage[curAttackNumber], HurtType.Repulsion, new Vector2(curCombo.repulseDistantion[curAttackNumber].x * direction, curCombo.repulseDistantion[curAttackNumber].y), curCombo.dazedTime[curAttackNumber]);
             isHitPlayer = true;
         }
-        else
-            isHitPlayer = false;
     }
 
     void EndOfAttack()

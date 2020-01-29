@@ -484,9 +484,9 @@ public class PlayerMovement : MonoBehaviour
 
     void Hooked()
     {
-        Vector2 temp = hookTransform.position;//hook.transform.position;
-        transform.position = Vector2.MoveTowards(transform.position, /*hook.*/hookTransform.position, 20f * Time.deltaTime);
-        hookTransform.position = temp;//hook.transform.position = temp;
+        Vector2 temp = hookTransform.position;
+        transform.position = Vector2.MoveTowards(transform.position, hookTransform.position, 20f * Time.deltaTime);
+        hookTransform.position = temp;
     }
 
     public void HookOff()
