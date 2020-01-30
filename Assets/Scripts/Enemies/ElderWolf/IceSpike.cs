@@ -66,10 +66,10 @@ public class IceSpike : MonoBehaviour
     void Cast()
     {
         if (myCollider.size.y < maxColSizeY)
-            myCollider.size = new Vector2(myCollider.size.x, myCollider.size.y + .3f);
+            myCollider.size = new Vector2(myCollider.size.x, myCollider.size.y + .3f * Time.deltaTime);
 
         if (myCollider.offset.y < maxColOffsetY)
-            myCollider.offset = new Vector2(myCollider.offset.x, myCollider.offset.y + .3f);
+            myCollider.offset = new Vector2(myCollider.offset.x, myCollider.offset.y + .3f * Time.deltaTime);
 
         if (player != null && !damageDone)
         {

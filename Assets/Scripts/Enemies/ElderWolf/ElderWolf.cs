@@ -11,6 +11,7 @@ public class ElderWolf : Enemy
     EnemySpellCD iceBreathTiming;
     EnemySpellCD iceSpikesTiming;
     EnemySpellCD howlTiming;
+    EnemySpellCD knockbackTiming;
 
     /*
     combos = new EnemyComboDictionary()
@@ -29,7 +30,8 @@ public class ElderWolf : Enemy
         { "Ice Breath", new EnemySpell(7f, 8f, 2f, 1f, .5f, new Vector2(10f, 5f), new Vector2(2f, 0f), .3f, 2, .5f) },
         { "Swing Tail", new EnemySpell(5f, 8f, 2f, 1f, .5f, new Vector2(2f, 2f), new Vector2(5f, 2f), 1.5f, 10) },
         { "Ice Spikes", new EnemySpell(11f, 15f, 2f, 1f, 2f, new Vector2(2f, 5f), new Vector2(4f, 2f), 2f, 15) },
-        { "Howl",       new EnemySpell(15f, 15f, 3f, 1.5f, 3f, new Vector2(0f, 0f), new Vector2(2f, 0f), .5f, 0, .5f) }
+        { "Howl",       new EnemySpell(15f, 15f, 3f, 1.5f, 3f, new Vector2(0f, 0f), new Vector2(2f, 0f), .5f, 0, .5f) },
+        { "Knockback",  new EnemySpell(2.5f, 5f, .5f, .5f, 1f, new Vector2(6f, 2f), new Vector2(6f, 6f), 1.5f, 5) },
     };
     bool isSpellCasted;
     bool isPlayerCaught;      //Was the player caught?
@@ -117,86 +119,94 @@ public class ElderWolf : Enemy
         {
             bool spellSelected = false;
 
-            if (IsPlayerBehind())
+            if (knockbackTiming.curCooldown <= Time.time && DistanceToPlayer().x < mySpells["Knockback"].castRange && DistanceToPlayer().y < 2f)
             {
-                //Swing Tail:
-                //  Player behind wolf in cast range
-                if (swingTailTiming.curCooldown <= Time.time)
-                {
-                    if (DistanceToPlayer() <= mySpells["Swing Tail"].castRange)
-
-                        spell = "Swing Tail";
-                }
-                else return;
+                spell = "Knockback";
+                spellSelected = true;
             }
             else
-            {
-                //Back Jump:
-                //  After take many damage in last seconds and player in front of the wolf Back Jump -> Howl (50% chance)
-                //  Two fast attack combo if one of them hit the player then Back Jump and Ice Breath
-                if (!spellSelected && backJumpTiming.curCooldown <= Time.time)
+            { 
+                if (IsPlayerBehind())
                 {
-                    if ((lastAttack == "Two Fast Attack" && isHitPlayer) ||
-                        (damageTakenDPS >= maxHealth / 100 * 5 && Random.Range(0, 100) > 50))
+                    //Swing Tail:
+                    //  Player behind wolf in cast range
+                    if (swingTailTiming.curCooldown <= Time.time)
                     {
-                        spell = "Back Jump";
-                        spellSelected = true;
+                        if (DistanceToPlayer().x <= mySpells["Swing Tail"].castRange && DistanceToPlayer().y < 2f)
+
+                            spell = "Swing Tail";
                     }
+                    else return;
+                }
+                else
+                {
+                    //Back Jump:
+                    //  After take many damage in last seconds and player in front of the wolf Back Jump -> Howl (50% chance)
+                    //  Two fast attack combo if one of them hit the player then Back Jump and Ice Breath
+                    if (!spellSelected && backJumpTiming.curCooldown <= Time.time)
+                    {
+                        if ((lastAttack == "Two Fast Attack" && isHitPlayer) ||
+                            (damageTakenDPS >= maxHealth / 100 * 5 && Random.Range(0, 100) > 50))
+                        {
+                            spell = "Back Jump";
+                            spellSelected = true;
+                        }
                     
-                }
-                //Ice Breath:
-                //  Two fast attack combo if one of them hit the player then Back Jump and Ice Breath
-                //  If one slow attack hit player (and repulse him from wolf)
-                //  After Long Jump if player get caught (50% chance)
-                //  Player in cast range (30% chance)
-                if (!spellSelected && iceBreathTiming.curCooldown <= Time.time)
-                {
-                    if ((lastAttack == "Two Fast Attack" && lastSpell == "Back Jump") ||
-                         lastAttack == "One Attack" ||
-                        (lastSpell  == "Long Jump" && Random.Range(0, 100) > 50) ||
-                         DistanceToPlayer() <= mySpells["Ice Breath"].castRange && Random.Range(0, 100) > 30)
-                    {
-                        spell = "Ice Breath";
-                        spellSelected = true;
                     }
-                }
-                //Long Jump:
-                //  If player on cast range between Long Jump and Ice Spikes
-                //  When player jump (50% chance)
-                if (!spellSelected && longJumpTiming.curCooldown <= Time.time)
-                {
-                    if (DistanceToPlayer() <= mySpells["Long Jump"].castRange ||
-                       ((!playerMovement.isOnGround ||
-                        playerMovement.isJumping) && Random.Range(0, 100) > 50))
+                    //Ice Breath:
+                    //  Two fast attack combo if one of them hit the player then Back Jump and Ice Breath
+                    //  If one slow attack hit player (and repulse him from wolf)
+                    //  After Long Jump if player get caught (50% chance)
+                    //  Player in cast range (30% chance)
+                    if (!spellSelected && iceBreathTiming.curCooldown <= Time.time)
                     {
-                        spell = "Long Jump";
-                        spellSelected = true;
+                        if ((lastAttack == "Two Fast Attack" && lastSpell == "Back Jump") ||
+                             lastAttack == "One Attack" ||
+                            (lastSpell  == "Long Jump" && Random.Range(0, 100) > 50) ||
+                             DistanceToPlayer().x <= mySpells["Ice Breath"].castRange && Random.Range(0, 100) > 30)
+                        {
+                            spell = "Ice Breath";
+                            spellSelected = true;
+                        }
                     }
-                }
-                //Ice Spikes:
-                //  After Long Jump if player get caught (50% chance)
-                //  Player out in cast range
-                //  Three-attack combo ends with Ice Spikes
-                if (!spellSelected && iceSpikesTiming.curCooldown <= Time.time)
-                {
-                    if ((lastSpell == "Long Jump" && playerMovement.hurtType == HurtType.Catch /*&& Random.Range(0, 100) > 50*/) ||
-                        DistanceToPlayer() >= mySpells["Ice Spikes"].castRange ||
-                        lastAttack == "Three Attack")
+                    //Long Jump:
+                    //  If player on cast range between Long Jump and Ice Spikes
+                    //  When player jump (50% chance)
+                    if (!spellSelected && longJumpTiming.curCooldown <= Time.time)
                     {
-                        spell = "Ice Spikes";
-                        spellSelected = true;
+                        if (DistanceToPlayer().x <= mySpells["Long Jump"].castRange ||
+                           ((!playerMovement.isOnGround ||
+                            playerMovement.isJumping) && Random.Range(0, 100) > 50))
+                        {
+                            spell = "Long Jump";
+                            spellSelected = true;
+                        }
                     }
-                }
-                //Howl:
-                //  After take many damage in last seconds and player in front of the wolf Back Jump -> Howl (50% chance)
-                //  If wolf dont hit player more few seconds
-                if (!spellSelected && howlTiming.curCooldown <= Time.time)
-                {
-                    if ((lastSpell == "Back Jump" && damageTakenDPS >= maxHealth / 100 * 5 && Random.Range(0, 100) > 50) ||
-                       playerAtributes.timeOfLastTakenDamage + maxDurationWithoutDamage <= Time.time)
+                    //Ice Spikes:
+                    //  After Long Jump if player get caught (50% chance)
+                    //  Player out in cast range
+                    //  Three-attack combo ends with Ice Spikes
+                    if (!spellSelected && iceSpikesTiming.curCooldown <= Time.time)
                     {
-                        spell = "Howl";
-                        spellSelected = true;
+                        if ((lastSpell == "Long Jump" && playerMovement.hurtType == HurtType.Catch /*&& Random.Range(0, 100) > 50*/) ||
+                            DistanceToPlayer().x >= mySpells["Ice Spikes"].castRange ||
+                            lastAttack == "Three Attack")
+                        {
+                            spell = "Ice Spikes";
+                            spellSelected = true;
+                        }
+                    }
+                    //Howl:
+                    //  After take many damage in last seconds and player in front of the wolf Back Jump -> Howl (50% chance)
+                    //  If wolf dont hit player more few seconds
+                    if (!spellSelected && howlTiming.curCooldown <= Time.time)
+                    {
+                        if ((lastSpell == "Back Jump" && damageTakenDPS >= maxHealth / 100 * 5 && Random.Range(0, 100) > 50) ||
+                           playerAtributes.timeOfLastTakenDamage + maxDurationWithoutDamage <= Time.time)
+                        {
+                            spell = "Howl";
+                            spellSelected = true;
+                        }
                     }
                 }
 

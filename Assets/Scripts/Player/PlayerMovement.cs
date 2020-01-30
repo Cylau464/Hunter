@@ -191,6 +191,7 @@ public class PlayerMovement : MonoBehaviour
         if (isAttacking && !isOnGround && attack.attackState != AttackState.End)
         {
             rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0f);
+
             if (!isOnGround)
                 rigidBody.gravityScale = 0;
         }
@@ -526,6 +527,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void Repulse(Vector2 repulseDistantion, float dazedTime)
     {
+        rigidBody.velocity = Vector2.zero;
         isHurt = true;
         Debug.Log("REPULSE " + repulseDistantion);
         hurtType = HurtType.Repulsion;

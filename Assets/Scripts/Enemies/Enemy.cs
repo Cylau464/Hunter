@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour
     [Header("Atributes Properties")]
     [SerializeField] protected int maxHealth = 100;
     int health;
-    [SerializeField] float viewDistance = 10f;
+    [SerializeField] float viewDistance = 20f;
     public DragType dragType = DragType.Draggable;
 
     [Header("Attack Properties")]
@@ -287,7 +287,7 @@ public class Enemy : MonoBehaviour
             FlipCharacter(false);
 
         //Chase while the player in view area
-        if (DistanceToPlayer() <= 20f)
+        if (DistanceToPlayer().x <= viewDistance)
         {
             //Move towards the player until the attack distance is reached...
             if (Mathf.Abs(target.transform.position.x - transform.position.x - attackRange.x * direction) > attackRange.x)
@@ -320,7 +320,7 @@ public class Enemy : MonoBehaviour
                         if (_random < combo.Value.chance + _chance)
                         {
                             //If player too far
-                            if (DistanceToPlayer() > attackRange.x + combo.Value.attackRange)
+                            if (DistanceToPlayer().x - attackRange.x * direction > attackRange.x + combo.Value.attackRange)
                             {
                                 SwitchState(State.Chase);
                                 return;
@@ -517,8 +517,11 @@ public class Enemy : MonoBehaviour
             return true;
     }
 
-    protected float DistanceToPlayer()
+    protected Vector2 DistanceToPlayer()
     {
-        return Mathf.Abs(target.transform.position.x - transform.position.x - attackRange.x * direction);
+        //return Mathf.Abs(target.transform.position.x - transform.position.x - attackRange.x * direction);
+        float _x = Mathf.Abs(target.transform.position.x - transform.position.x);
+        float _y = target.transform.position.y - transform.position.y;
+        return new Vector2(_x, _y);
     }
 }
