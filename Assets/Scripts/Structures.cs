@@ -152,17 +152,17 @@ namespace Structures
         }
     }
 
-    public struct EnemySpellCD
-    {
-        public float curCooldown;
-        public float curDelay;
+    //public struct EnemySpellCD
+    //{
+    //    public float curCooldown;
+    //    public float curDelay;
 
-        public EnemySpellCD(float curCooldown, float curDelay)
-        {
-            this.curCooldown = curCooldown;
-            this.curDelay = curDelay;
-        }
-    }
+    //    public EnemySpellCD(float curCooldown, float curDelay)
+    //    {
+    //        this.curCooldown = curCooldown;
+    //        this.curDelay = curDelay;
+    //    }
+    //}
 
     /// <summary>
     /// Stores element properties
