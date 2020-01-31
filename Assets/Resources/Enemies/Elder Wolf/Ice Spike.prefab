@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: -4052873853294763013}
   - component: {fileID: 812699101}
   - component: {fileID: 812699100}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Ice Spike
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -61,7 +61,7 @@ MonoBehaviour:
     jumpDistance: {x: 0, y: 0}
     jumpDirection: 0
   lifeTime: 3
-  prepareTime: 1
+  prepareTime: 0.5
 --- !u!61 &-4052873853294763013
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -121,6 +121,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -144,7 +145,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: 8778988058097029962, guid: 0290c06bda5beba4783113e7c629854b,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

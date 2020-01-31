@@ -513,7 +513,10 @@ public class PlayerMovement : MonoBehaviour
 
             //Follow for catch source
             if (hurtType == HurtType.Catch)
+            {
                 playerTransform.position = catchAnchorPoint.position;
+                rigidBody.bodyType = RigidbodyType2D.Static;
+            }
         }
     }
 
@@ -527,9 +530,10 @@ public class PlayerMovement : MonoBehaviour
 
     public void Repulse(Vector2 repulseDistantion, float dazedTime)
     {
+        Debug.Log("REPULSE");
+        rigidBody.bodyType = RigidbodyType2D.Dynamic;
         rigidBody.velocity = Vector2.zero;
         isHurt = true;
-        Debug.Log("REPULSE " + repulseDistantion);
         hurtType = HurtType.Repulsion;
         rigidBody.AddForce(repulseDistantion, ForceMode2D.Impulse);
         curDazedTime = dazedTime + Time.time;

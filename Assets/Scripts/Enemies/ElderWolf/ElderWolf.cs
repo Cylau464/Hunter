@@ -31,14 +31,13 @@ public class ElderWolf : Enemy
         { "Swing Tail", new EnemySpell(5f, 8f, 2f, 1f, .5f, new Vector2(2f, 2f), new Vector2(5f, 2f), 1.5f, 10) },
         { "Ice Spikes", new EnemySpell(11f, 15f, 2f, 1f, 2f, new Vector2(2f, 5f), new Vector2(4f, 2f), 2f, 15) },
         { "Howl",       new EnemySpell(15f, 15f, 3f, 1.5f, 3f, new Vector2(0f, 0f), new Vector2(2f, 0f), .5f, 0, .5f) },
-        { "Knockback",  new EnemySpell(2.5f, 5f, .5f, .5f, 1f, new Vector2(6f, 2f), new Vector2(6f, 6f), 1.5f, 5) },
+        { "Knockback",  new EnemySpell(2.5f, new Vector2(0f, 5f), 1, 5f, .5f, .5f, 1f, new Vector2(6f, 2f), new Vector2(6f, 6f), 1.5f, 2, 5) },
     };
     bool isSpellCasted;
-    bool isPlayerCaught;      //Was the player caught?
 
     [SerializeField] Transform frontLegs = null;
     [SerializeField] Transform head = null;
-    BoxCollider2D frontLegsCol;
+    [SerializeField] Transform tail = null;
     BoxCollider2D tailCol;
     PolygonCollider2D iceBreathCol;
     Collider2D objectToDamage;
@@ -64,11 +63,9 @@ public class ElderWolf : Enemy
         }
     }
 
-    void Start()
+    private void OnGUI()
     {
-        //base.Start();
-
-        frontLegsCol = frontLegs.GetComponent<BoxCollider2D>();
+        GUI.TextField(new Rect(10, 300, 150, 200), "back: " + backJumpTiming.curCooldown + "\nLong: " + longJumpTiming.curCooldown + "\nBreath: " + iceBreathTiming.curCooldown + "\nSpikes: " + iceSpikesTiming.curCooldown + "\nTail: " + swingTailTiming.curCooldown + "\nHowl: " + howlTiming.curCooldown + "\nKnock: " + knockbackTiming.curCooldown);
     }
 
     new void Update() 
@@ -257,13 +254,15 @@ public class ElderWolf : Enemy
             case "Howl":
                 Howl();
                 break;
+            case "Knockback":
+                Knockback();
+                break;
         }
     }
 
     void SpellCasted()
     {
         objectToDamage = null;
-        isPlayerCaught = false;
         isSpellCasted = false;
         curAttackCD = mySpells[spell].globalCD + Time.time;
         spell = "None";
@@ -274,20 +273,21 @@ public class ElderWolf : Enemy
     {
         spellNumber = 1;
 
-        if (objectToDamage == null)
-            objectToDamage = Physics2D.OverlapBox(frontLegs.position, new Vector2(frontLegsCol.size.x, frontLegsCol.size.y), 0f, playerLayer);
-        //If player collided with front legs
-        else if (!isPlayerCaught && spellState == SpellStates.Cast)
-        {
-            objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].firstDamage, HurtType.Catch, frontLegs);
-            isPlayerCaught = true;
-        }
-
         if (isSpellCasted)
         {
             longJumpTiming.curCooldown = mySpells[spell].cooldown + Time.time;      //Переделать переменные кулдауна в один словарь с индексом спелла
             curGlobalSpellCD = (Random.Range(0, 2) == 0 ? mySpells[spell].globalCD : minGlobalCD) + Time.time;
             SpellCasted();
+            return;
+        }
+
+        if (!frontLegs.gameObject.activeSelf && spellState == SpellStates.Cast)
+        {
+            EWLongJump _longJump;
+            frontLegs.gameObject.SetActive(true);
+            _longJump = frontLegs.GetComponent<EWLongJump>();
+            _longJump.damageVector = mySpells[spell].damageRange;
+            _longJump.damage = mySpells[spell].firstDamage;
         }
     }
 
@@ -351,9 +351,24 @@ public class ElderWolf : Enemy
         }
     }
 
+    void Knockback()
+    {
+        spellNumber = 7;
+
+        if(isSpellCasted)
+        {
+            knockbackTiming.curCooldown = mySpells[spell].cooldown + Time.time;
+            curGlobalSpellCD = mySpells[spell].globalCD + Time.time;
+            SpellCasted();
+        }
+    }
+
     void StartJump()
     {
         rigidBody.AddForce(new Vector2(mySpells[spell].jumpDistance.x * mySpells[spell].jumpDirection * direction, mySpells[spell].jumpDistance.y), ForceMode2D.Impulse);
+
+        if (spell == "Knockback")
+            SpellOnceDamage();
     }
 
     new private void OnDrawGizmosSelected()
@@ -368,8 +383,9 @@ public class ElderWolf : Enemy
     void Landing()
     {
         rigidBody.velocity = Vector2.zero;
+        frontLegs.gameObject.SetActive(false);
 
-        objectToDamage = Physics2D.OverlapBox(frontLegs.position, new Vector2(frontLegsCol.size.x * 2f, frontLegsCol.size.y), 0f, playerLayer);
+        objectToDamage = Physics2D.OverlapBox(myTransform.position, mySpells[spell].damageRange, 0f, playerLayer);
 
         if (objectToDamage != null)
             objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].lastDamage, HurtType.Repulsion, new Vector2(mySpells[spell].repulseVector.x * direction, mySpells[spell].repulseVector.y), mySpells[spell].dazedTime);
@@ -379,26 +395,34 @@ public class ElderWolf : Enemy
 
     void SpellOnceDamage()
     {
-        if (spell == "Ice Spikes")
+        switch (spell)
         {
-            GameObject _spawner = Resources.Load<GameObject>("Enemies/Elder Wolf/Ice Spike Spawner");
-            GameObject _inst = Instantiate(_spawner, myTransform);
-            IceSpikesSpawner _iss = _inst.GetComponent<IceSpikesSpawner>();
-            _iss.spell = mySpells[spell];
-            _iss.player = playerMovement == null ? GameObject.Find("Player").GetComponent<PlayerMovement>() : playerMovement;
-        }
-        else if(spell == "Swing Tail")
-        {
-            objectToDamage = Physics2D.OverlapBox(tailCol.transform.position, new Vector2(tailCol.size.x, tailCol.size.y), 0, playerLayer);
+            case "Ice Spikes":
+                GameObject _spawner = Resources.Load<GameObject>("Enemies/Elder Wolf/Ice Spike Spawner");
+                GameObject _inst = Instantiate(_spawner, myTransform);
+                IceSpikesSpawner _iss = _inst.GetComponent<IceSpikesSpawner>();
+                _iss.spell = mySpells[spell];
+                _iss.player = playerMovement == null ? GameObject.Find("Player").GetComponent<PlayerMovement>() : playerMovement;
+                break;
+            case "Swing Tail":
+                objectToDamage = Physics2D.OverlapBox(tailCol.transform.position, new Vector2(tailCol.size.x, tailCol.size.y), 0, playerLayer);
 
-            if (objectToDamage != null)
-                objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].firstDamage, HurtType.Repulsion, new Vector2(mySpells[spell].repulseVector.x * -direction, mySpells[spell].repulseVector.y), mySpells[spell].dazedTime);
-        }
-        else if (spell == "Howl")
-        {
-            HowlCirclePulse _hcp = head.GetComponent<HowlCirclePulse>();
-            _hcp.spell = mySpells[spell];
-            _hcp.StartCoroutine(_hcp.CirclePulse());
+                if (objectToDamage != null)
+                    objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].firstDamage, HurtType.Repulsion, new Vector2(mySpells[spell].repulseVector.x * -direction, mySpells[spell].repulseVector.y), mySpells[spell].dazedTime);
+
+                break;
+            case "Howl":
+                HowlCirclePulse _hcp = head.GetComponent<HowlCirclePulse>();
+                _hcp.spell = mySpells[spell];
+                _hcp.StartCoroutine(_hcp.CirclePulse());
+                break;
+            case "Knockback":
+                objectToDamage = Physics2D.OverlapBox(myTransform.position, mySpells[spell].damageRange, 0, playerLayer);
+
+                if (objectToDamage != null)
+                    objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].firstDamage, HurtType.Repulsion, new Vector2(mySpells[spell].repulseVector.x * -direction, mySpells[spell].repulseVector.y), mySpells[spell].dazedTime / 3f);
+
+                break;
         }
     }
 
@@ -422,5 +446,11 @@ public class ElderWolf : Enemy
     void SpellEnded()
     {
         isSpellCasted = true;
+    }
+
+    override protected void FlipOtherTransforms()
+    {
+        tail.transform.localPosition = new Vector2(-tail.transform.localPosition.x, tail.transform.localPosition.y);
+        frontLegs.transform.localPosition = new Vector2(-frontLegs.transform.localPosition.x, frontLegs.transform.localPosition.y);
     }
 }

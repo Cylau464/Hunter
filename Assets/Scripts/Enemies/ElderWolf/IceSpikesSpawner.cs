@@ -8,7 +8,7 @@ public class IceSpikesSpawner : MonoBehaviour
     public EnemySpell spell;
     public PlayerMovement player;
     [SerializeField] int spikesCount = 4;
-    [SerializeField] float minDistantion = 2f;
+    [SerializeField] float minDistantion = 1f;
     [SerializeField] float maxDistantion = 8f;
     
     private void Start()
@@ -53,7 +53,7 @@ public class IceSpikesSpawner : MonoBehaviour
 
             _spike.Add(_inst = Instantiate(_spikeRes, new Vector3(_posX, transform.position.y, 0f), Quaternion.identity));
             _inst.GetComponent<IceSpike>().spell = spell;
-            _spikeCol ??= _spike[i].GetComponent<BoxCollider2D>();
+            _spikeCol = _spikeCol ?? _spike[i].GetComponent<BoxCollider2D>();
 
             yield return new WaitForSeconds(spell.periodicityDamage);
         }

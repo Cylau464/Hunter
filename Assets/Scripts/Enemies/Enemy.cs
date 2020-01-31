@@ -98,7 +98,7 @@ public class Enemy : MonoBehaviour
     Transform myHookTarget;
     protected PlayerMovement playerMovement;
     protected PlayerAtributes playerAtributes;
-    SpriteRenderer sprite;
+    protected SpriteRenderer sprite;
     Vector2 startPos;
 
     public int direction { get; protected set; } = 1;
@@ -183,9 +183,7 @@ public class Enemy : MonoBehaviour
     {
         if(currentState == State.Dead) return;
 
-        if(target == null)
-            CheckPlayer();
-
+        CheckPlayer();
         SwitchSpell();
 
         switch (currentState)
@@ -487,7 +485,14 @@ public class Enemy : MonoBehaviour
                 sprite.flipX = true;
             else if(sprite.flipX && direction == 1)
                 sprite.flipX = false;
+
+            FlipOtherTransforms();
         }
+    }
+
+    protected virtual void FlipOtherTransforms()
+    {
+
     }
 
     protected void CheckPlayer()

@@ -57,7 +57,7 @@ public class HowlCirclePulse : MonoBehaviour
                 damageDone = true;
             }
 
-            circleCol.radius += 1f * Time.deltaTime;
+            circleCol.radius += spell.castRange * 3f * Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
 

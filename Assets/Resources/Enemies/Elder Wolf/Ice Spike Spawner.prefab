@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3883715962008558967}
   - component: {fileID: 3360714143785175944}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Ice Spike Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
