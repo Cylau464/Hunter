@@ -74,7 +74,7 @@ public class IceSpike : MonoBehaviour
         if (player != null && !damageDone)
         {
             int _direction = PlayerDirection();
-            player.GetComponent<PlayerAtributes>().TakeDamage(spell.lastDamage, HurtType.Repulsion, new Vector2(spell.repulseVector.x * _direction, spell.repulseVector.y), spell.dazedTime);
+            player.GetComponent<PlayerAtributes>().TakeDamage(spell.firstDamage, HurtType.Repulsion, new Vector2(spell.repulseVector.x * _direction, spell.repulseVector.y), spell.dazedTime, spell.elementDamage);
             damageDone = true;
         }
     }

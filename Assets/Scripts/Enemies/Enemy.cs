@@ -22,7 +22,7 @@ public class Enemy : MonoBehaviour
         { Elements.Fire, 0 },
         { Elements.Earth, 0 },
         { Elements.Wind, 0 },
-        { Elements.Water, 0 },
+        { Elements.Ice, 0 },
         { Elements.Lightning, 0 },
         { Elements.Primal, 0 }
     };
@@ -44,7 +44,7 @@ public class Enemy : MonoBehaviour
         { Elements.Fire, 0 },
         { Elements.Earth, 0 },
         { Elements.Wind, 0 },
-        { Elements.Water, 0 },
+        { Elements.Ice, 0 },
         { Elements.Lightning, 0 },
         { Elements.Primal, 0 }
     };
@@ -470,7 +470,7 @@ public class Enemy : MonoBehaviour
 
         if (_objectToDamage != null)
         {
-            _objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(curCombo.damage[curAttackNumber], HurtType.Repulsion, new Vector2(curCombo.repulseDistantion[curAttackNumber].x * direction, curCombo.repulseDistantion[curAttackNumber].y), curCombo.dazedTime[curAttackNumber]);
+            _objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(curCombo.damage[curAttackNumber], HurtType.Repulsion, new Vector2(curCombo.repulseDistantion[curAttackNumber].x * direction, curCombo.repulseDistantion[curAttackNumber].y), curCombo.dazedTime[curAttackNumber], curCombo.element);
             isHitPlayer = true;
         }
     }

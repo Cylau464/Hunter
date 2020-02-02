@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Structures;
 
 public class PlayerAtributes : MonoBehaviour 
 {
@@ -28,11 +29,11 @@ public class PlayerAtributes : MonoBehaviour
     /// <summary>
     /// Just damage
     /// </summary>
-    public void TakeDamage(int damage, HurtType hurtType)
+    public void TakeDamage(int damage, HurtType hurtType, Element element)
     {
         if (movement.isEvading) return;
 
-        health -= damage;
+        health -= damage + element.value;
         timeOfLastTakenDamage = Time.time;
         healthBar.HealthChange(health);
 
@@ -43,13 +44,13 @@ public class PlayerAtributes : MonoBehaviour
             return;
         }
 
-        DamageText(damage);
+        DamageText(damage, element);
     }
 
     /// <summary>
     /// Damage with catching
     /// </summary>
-    public void TakeDamage(int damage, HurtType hurtType, Transform anchorPoint)
+    public void TakeDamage(int damage, HurtType hurtType, Transform anchorPoint, Element element)
     {
         if (movement.isEvading) return;
 
@@ -66,13 +67,13 @@ public class PlayerAtributes : MonoBehaviour
         else
             movement.GetCaught(hurtType, anchorPoint);
 
-        DamageText(damage);
+        DamageText(damage, element);
     }
 
     /// <summary>
     /// Damage with repulse
     /// </summary>
-    public void TakeDamage(int damage, HurtType hurtType, Vector2 repulseDistantion, float dazedTime)
+    public void TakeDamage(int damage, HurtType hurtType, Vector2 repulseDistantion, float dazedTime, Element element)
     {
         if (movement.isEvading) return;
 
@@ -88,13 +89,13 @@ public class PlayerAtributes : MonoBehaviour
             return;
         }
 
-        DamageText(damage);
+        DamageText(damage, element);
     }
 
     /// <summary>
     /// Damage with stun
     /// </summary>
-    public void TakeDamage(int damage, HurtType hurtType, float dazedTime)
+    public void TakeDamage(int damage, HurtType hurtType, float dazedTime, Element element)
     {
         if (movement.isEvading) return;
 
@@ -110,14 +111,15 @@ public class PlayerAtributes : MonoBehaviour
         }
 
         movement.Stunned(dazedTime);
-        DamageText(damage);
+        DamageText(damage, element);
     }
 
-    void DamageText(int damage)
+    void DamageText(int damage, Element element)
     {
         GameObject damageText = Resources.Load<GameObject>("DamageNumber");
         damageText = Instantiate(damageText, transform);
         damageText.GetComponent<DamageNumber>().damage = damage;
+        damageText.GetComponent<DamageNumber>().element = element;
         damageText.GetComponent<DamageNumber>().target = movement.transform;
     }
 }

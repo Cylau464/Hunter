@@ -19,9 +19,9 @@ public class ElderWolf : Enemy
     {
         { "Long Jump",  new EnemySpell(10f, new Vector2(10f, 5f), 1, 10f, 3f, 1.5f, .75f, new Vector2(2f, 2f), new Vector2(5f, 5f), 1.5f, 5, 7) },
         { "Back Jump",  new EnemySpell(3f, new Vector2(7f, 4f), -1, 12f, 3f, .5f, .5f, new Vector2(2f, 2f), new Vector2(3f, 0f), 1f, 2, 5) },
-        { "Ice Breath", new EnemySpell(7f, 8f, 2f, 1f, .5f, new Vector2(10f, 5f), new Vector2(2f, 0f), .3f, 2, .5f) },
+        { "Ice Breath", new EnemySpell(7f, 8f, 2f, 1f, .5f, new Vector2(10f, 5f), new Vector2(2f, 0f), .3f, 2, .5f, new Element("Ice", Elements.Ice, 1) ) },
         { "Swing Tail", new EnemySpell(5f, 8f, 2f, 1f, .5f, new Vector2(2f, 2f), new Vector2(5f, 2f), 1.5f, 10) },
-        { "Ice Spikes", new EnemySpell(11f, 15f, 2f, 1f, 2f, new Vector2(2f, 5f), new Vector2(4f, 2f), 2f, 15) },
+        { "Ice Spikes", new EnemySpell(11f, 15f, 2f, 1f, 2f, new Vector2(2f, 5f), new Vector2(4f, 2f), 2f, 15, new Element("Ice", Elements.Ice, 10) ) },
         { "Howl",       new EnemySpell(15f, 15f, 3f, 1.5f, 3f, new Vector2(0f, 0f), new Vector2(2f, 0f), .5f, 0, .5f) },
         { "Knockback",  new EnemySpell(2.5f, new Vector2(0f, 5f), 1, 5f, .5f, .5f, 1f, new Vector2(6f, 2f), new Vector2(6f, 6f), 1.5f, 2, 5) },
     };
@@ -282,11 +282,8 @@ public class ElderWolf : Enemy
         }
         else if (!frontLegs.gameObject.activeSelf && spellState == SpellStates.Cast)
         {
-            EWLongJump _longJump;
             frontLegs.gameObject.SetActive(true);
-            _longJump = frontLegs.GetComponent<EWLongJump>();
-            _longJump.damageVector = mySpells[spell].damageRange;
-            _longJump.damage = mySpells[spell].firstDamage;
+            frontLegs.GetComponent<EWLongJump>().spell = mySpells[spell];
         }
     }
 
@@ -381,7 +378,7 @@ public class ElderWolf : Enemy
         objectToDamage = Physics2D.OverlapBox(myTransform.position, mySpells[spell].damageRange, 0f, playerLayer);
 
         if (objectToDamage != null)
-            objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].lastDamage, HurtType.Repulsion, new Vector2(mySpells[spell].repulseVector.x * direction, mySpells[spell].repulseVector.y), mySpells[spell].dazedTime);
+            objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].lastDamage, HurtType.Repulsion, new Vector2(mySpells[spell].repulseVector.x * direction, mySpells[spell].repulseVector.y), mySpells[spell].dazedTime, mySpells[spell].elementDamage);
 
         isSpellCasted = true;
     }
@@ -401,7 +398,7 @@ public class ElderWolf : Enemy
                 objectToDamage = Physics2D.OverlapBox(tailCol.transform.position, new Vector2(tailCol.size.x, tailCol.size.y), 0, playerLayer);
 
                 if (objectToDamage != null)
-                    objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].firstDamage, HurtType.Repulsion, new Vector2(mySpells[spell].repulseVector.x * -direction, mySpells[spell].repulseVector.y), mySpells[spell].dazedTime);
+                    objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].firstDamage, HurtType.Repulsion, new Vector2(mySpells[spell].repulseVector.x * -direction, mySpells[spell].repulseVector.y), mySpells[spell].dazedTime, mySpells[spell].elementDamage);
 
                 break;
             case "Howl":
@@ -414,8 +411,10 @@ public class ElderWolf : Enemy
                 objectToDamage = Physics2D.OverlapBox(myTransform.position, mySpells[spell].damageRange, 0, playerLayer);
 
                 if (objectToDamage != null)
-                    objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].firstDamage, HurtType.Repulsion, new Vector2(mySpells[spell].repulseVector.x * direction, mySpells[spell].repulseVector.y), mySpells[spell].dazedTime / 3f);
-
+                {
+                    int _repulseDirection = IsPlayerBehind() ? -1 : 1;
+                    objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].firstDamage, HurtType.Repulsion, new Vector2(mySpells[spell].repulseVector.x * _repulseDirection, mySpells[spell].repulseVector.y), mySpells[spell].dazedTime / 3f, mySpells[spell].elementDamage);
+                }
                 break;
             case "Ice Breath":
                 if (iceBreath.gameObject.activeSelf)

@@ -27,6 +27,7 @@ namespace Structures
 
         public int firstDamage;
         public int lastDamage;
+        public Element elementDamage;
 
         [Header("Spells with jumps")]
         public Vector2 jumpDistance;
@@ -37,7 +38,7 @@ namespace Structures
         /// <summary>
         /// For spells with jumps
         /// </summary>
-        public EnemySpell(float castRange, Vector2 jumpDistance, int jumpDirection, float cooldown, float globalCD, float prepareTime, float castTime, Vector2 damageRange, Vector2 repulseVector, float dazedTime, int firstDamage, int lastDamage)
+        public EnemySpell(float castRange, Vector2 jumpDistance, int jumpDirection, float cooldown, float globalCD, float prepareTime, float castTime, Vector2 damageRange, Vector2 repulseVector, float dazedTime, int firstDamage, int lastDamage, Element elementDamage = new Element())
         {
             this.castRange          = castRange;
             this.jumpDistance       = jumpDistance;
@@ -52,6 +53,7 @@ namespace Structures
             this.dazedTime          = dazedTime;
             this.firstDamage        = firstDamage;
             this.lastDamage         = lastDamage;
+            this.elementDamage      = elementDamage;
 
             //Not used
             periodicityDamage = 0f;
@@ -60,7 +62,7 @@ namespace Structures
         /// <summary>
         /// For spells with once damage
         /// </summary>
-        public EnemySpell(float castRange, float cooldown, float globalCD, float prepareTime, float castTime, Vector2 damageRange, Vector2 repulseVector, float dazedTime, int damage)
+        public EnemySpell(float castRange, float cooldown, float globalCD, float prepareTime, float castTime, Vector2 damageRange, Vector2 repulseVector, float dazedTime, int damage, Element elementDamage = new Element())
         {
             this.castRange          = castRange;
             this.cooldown           = cooldown;
@@ -71,6 +73,7 @@ namespace Structures
             this.repulseVector      = repulseVector;
             this.dazedTime          = dazedTime;
             firstDamage             = damage;
+            this.elementDamage      = elementDamage;
 
             //Not used
             lastDamage = 0;
@@ -82,7 +85,7 @@ namespace Structures
         /// <summary>
         /// For spells with periodic damage
         /// </summary>
-        public EnemySpell(float castRange, float cooldown, float globalCD, float prepareTime, float castTime, Vector2 damageRange, Vector2 repulseVector, float dazedTime, int damage, float periodicityDamage)
+        public EnemySpell(float castRange, float cooldown, float globalCD, float prepareTime, float castTime, Vector2 damageRange, Vector2 repulseVector, float dazedTime, int damage, float periodicityDamage, Element elementDamage = new Element())
         {
             this.castRange          = castRange;
             this.cooldown           = cooldown;
@@ -93,6 +96,7 @@ namespace Structures
             this.repulseVector      = repulseVector;
             this.dazedTime          = dazedTime;
             firstDamage             = damage;
+            this.elementDamage      = elementDamage;
             this.periodicityDamage  = periodicityDamage;
 
             //Not used
@@ -117,11 +121,12 @@ namespace Structures
         public float attackRange;
         public Vector2[] repulseDistantion;
         public WeaponAttackType attackType;
+        public Element element;
 
         /// <summary>
         /// For melee attacks. In arrays indicate values in order
         /// </summary>
-        public EnemyCombo(int attackCount, WeaponAttackType attackType, int chance, int[] damage, float[] timeBtwAttack, float[] dazedTime, float attackCD, Vector2[] repulseDistantion)
+        public EnemyCombo(int attackCount, WeaponAttackType attackType, int chance, int[] damage, float[] timeBtwAttack, float[] dazedTime, float attackCD, Vector2[] repulseDistantion, Element element = new Element())
         {
             this.attackCount = attackCount;
             this.attackType = attackType;
@@ -131,6 +136,7 @@ namespace Structures
             this.dazedTime = dazedTime;
             this.attackCD = attackCD;
             this.repulseDistantion = repulseDistantion;
+            this.element = element;
 
             attackRange = 0f;
         }
@@ -138,7 +144,7 @@ namespace Structures
         /// <summary>
         /// For range attacks. In arrays indicate values in order
         /// </summary>
-        public EnemyCombo(int attackCount, WeaponAttackType attackType, int chance, int[] damage, float[] timeBtwAttack, float[] dazedTime, float attackCD, float attackRange, Vector2[] repulseDistantion)
+        public EnemyCombo(int attackCount, WeaponAttackType attackType, int chance, int[] damage, float[] timeBtwAttack, float[] dazedTime, float attackCD, float attackRange, Vector2[] repulseDistantion, Element element = new Element())
         {
             this.attackCount = attackCount;
             this.attackType = attackType;
@@ -149,6 +155,7 @@ namespace Structures
             this.attackCD = attackCD;
             this.repulseDistantion = repulseDistantion;
             this.attackRange = attackRange;
+            this.element = element;
         }
     }
 
@@ -173,12 +180,38 @@ namespace Structures
         [HideInInspector] public string title;
         public Elements element;
         public int value;
+        public Color color;
 
         public Element(string title, Elements element, int value)
         {
             this.title = title;
             this.element = element;
             this.value = value;
+
+            switch (element)
+            {
+                case Elements.Fire:
+                    color = Color.cyan;
+                    break;
+                case Elements.Earth:
+                    color = new Color(.71f, .33f, .1f);
+                    break;
+                case Elements.Ice:
+                    color = new Color(.36f, .56f, .7f);
+                    break;
+                case Elements.Lightning:
+                    color = Color.blue;
+                    break;
+                case Elements.Primal:
+                    color = Color.magenta;
+                    break;
+                case Elements.Wind:
+                    color = Color.green;
+                    break;
+                default:
+                    color = Color.black;
+                    break;
+            }
         }
     }
 }

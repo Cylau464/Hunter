@@ -1475,8 +1475,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c5bab35122975a4cb47f8f9fb4d1b79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageVector: {x: 0, y: 0}
-  damage: 0
+  spell:
+    cooldown: 0
+    globalCD: 0
+    prepareTime: 0
+    castTime: 0
+    castRange: 0
+    periodicityDamage: 0
+    dazedTime: 0
+    repulseVector: {x: 0, y: 0}
+    damageRange: {x: 0, y: 0}
+    firstDamage: 0
+    lastDamage: 0
+    elementDamage:
+      title: 
+      element: 0
+      value: 0
+      color: {r: 0, g: 0, b: 0, a: 0}
+    jumpDistance: {x: 0, y: 0}
+    jumpDirection: 0
 --- !u!1 &484301478
 GameObject:
   m_ObjectHideFlags: 3
@@ -1791,6 +1808,11 @@ MonoBehaviour:
     damageRange: {x: 0, y: 0}
     firstDamage: 0
     lastDamage: 0
+    elementDamage:
+      title: 
+      element: 0
+      value: 0
+      color: {r: 0, g: 0, b: 0, a: 0}
     jumpDistance: {x: 0, y: 0}
     jumpDirection: 0
 --- !u!212 &674716101
@@ -2271,6 +2293,11 @@ MonoBehaviour:
       repulseDistantion:
       - {x: 5, y: 0}
       attackType: 0
+      element:
+        title: 
+        element: 1
+        value: 2
+        color: {r: 0, g: 0, b: 0, a: 0}
     - attackCount: 2
       chance: 25
       damage: 0200000002000000
@@ -2286,6 +2313,11 @@ MonoBehaviour:
       - {x: 3, y: 0}
       - {x: 3, y: 0}
       attackType: 0
+      element:
+        title: 
+        element: 0
+        value: 0
+        color: {r: 0, g: 0, b: 0, a: 0}
     - attackCount: 2
       chance: 25
       damage: 0300000003000000
@@ -2301,6 +2333,11 @@ MonoBehaviour:
       - {x: 3, y: 0}
       - {x: 5, y: 0}
       attackType: 0
+      element:
+        title: 
+        element: 0
+        value: 0
+        color: {r: 0, g: 0, b: 0, a: 0}
     - attackCount: 3
       chance: 20
       damage: 020000000200000004000000
@@ -2319,6 +2356,11 @@ MonoBehaviour:
       - {x: 3, y: 0}
       - {x: 7, y: 0}
       attackType: 0
+      element:
+        title: 
+        element: 1
+        value: 2
+        color: {r: 0, g: 0, b: 0, a: 0}
   elementDamage:
     reorderableList:
       canAdd: 1
@@ -2424,7 +2466,7 @@ MonoBehaviour:
       draggable: 1
       expandable: 1
       multipleSelection: 1
-      isExpanded: 1
+      isExpanded: 0
       label:
         m_Text: Keys
         m_Image: {fileID: 0}
@@ -2439,7 +2481,7 @@ MonoBehaviour:
       elementNameOverride: 
       elementIcon: {fileID: 0}
     reqReferences: {fileID: 0}
-    isExpanded: 1
+    isExpanded: 0
     _keyValues:
     - Long Jump
     - Back Jump
@@ -2468,6 +2510,11 @@ MonoBehaviour:
       damageRange: {x: 8, y: 2}
       firstDamage: 10
       lastDamage: 12
+      elementDamage:
+        title: 
+        element: 0
+        value: 0
+        color: {r: 0, g: 0, b: 0, a: 0}
       jumpDistance: {x: 17, y: 20}
       jumpDirection: 1
     - cooldown: 12
@@ -2481,6 +2528,11 @@ MonoBehaviour:
       damageRange: {x: 2, y: 2}
       firstDamage: 2
       lastDamage: 5
+      elementDamage:
+        title: 
+        element: 0
+        value: 0
+        color: {r: 0, g: 0, b: 0, a: 0}
       jumpDistance: {x: 10, y: 15}
       jumpDirection: -1
     - cooldown: 10
@@ -2492,13 +2544,18 @@ MonoBehaviour:
       dazedTime: 0.3
       repulseVector: {x: 4, y: 0}
       damageRange: {x: 15, y: 5}
-      firstDamage: 2
+      firstDamage: 1
       lastDamage: 8
+      elementDamage:
+        title: Ice
+        element: 1
+        value: 1
+        color: {r: 0.36, g: 0.56, b: 0.7, a: 1}
       jumpDistance: {x: 0, y: 0}
       jumpDirection: 0
     - cooldown: 8
       globalCD: 0.5
-      prepareTime: 1
+      prepareTime: 0.5
       castTime: 0.35
       castRange: 5
       periodicityDamage: 0
@@ -2507,6 +2564,11 @@ MonoBehaviour:
       damageRange: {x: 2, y: 2}
       firstDamage: 10
       lastDamage: 0
+      elementDamage:
+        title: 
+        element: 0
+        value: 0
+        color: {r: 0, g: 0, b: 0, a: 0}
       jumpDistance: {x: 0, y: 0}
       jumpDirection: 0
     - cooldown: 15
@@ -2518,8 +2580,13 @@ MonoBehaviour:
       dazedTime: 2
       repulseVector: {x: 5, y: 25}
       damageRange: {x: 2, y: 5}
-      firstDamage: 20
+      firstDamage: 10
       lastDamage: 3
+      elementDamage:
+        title: Ice
+        element: 1
+        value: 10
+        color: {r: 0.36, g: 0.56, b: 0.7, a: 1}
       jumpDistance: {x: 0, y: 0}
       jumpDirection: 0
     - cooldown: 15
@@ -2533,6 +2600,11 @@ MonoBehaviour:
       damageRange: {x: 0, y: 0}
       firstDamage: 1
       lastDamage: 0
+      elementDamage:
+        title: 
+        element: 0
+        value: 0
+        color: {r: 0, g: 0, b: 0, a: 0}
       jumpDistance: {x: 0, y: 0}
       jumpDirection: 0
     - cooldown: 5
@@ -2546,6 +2618,11 @@ MonoBehaviour:
       damageRange: {x: 10, y: 2}
       firstDamage: 7
       lastDamage: 5
+      elementDamage:
+        title: 
+        element: 0
+        value: 0
+        color: {r: 0, g: 0, b: 0, a: 0}
       jumpDistance: {x: 0, y: 13}
       jumpDirection: 1
   frontLegs: {fileID: 452924007}
@@ -2718,6 +2795,11 @@ MonoBehaviour:
     damageRange: {x: 0, y: 0}
     firstDamage: 0
     lastDamage: 0
+    elementDamage:
+      title: 
+      element: 0
+      value: 0
+      color: {r: 0, g: 0, b: 0, a: 0}
     jumpDistance: {x: 0, y: 0}
     jumpDirection: 0
   yOffsetCollider: 1.5

@@ -1,12 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Structures;
 
 public class EWLongJump : MonoBehaviour
 {
     bool isPlayerCaught;      //Was the player caught?
-    [HideInInspector] public Vector2 damageVector;
-    [HideInInspector] public int damage;
+    [HideInInspector] public EnemySpell spell;
     float startLocalPosY = 1.5f;
     Collider2D objectToDamage;
     BoxCollider2D myCollider;
@@ -40,7 +40,7 @@ public class EWLongJump : MonoBehaviour
         //If player collided with front legs
         else if (!isPlayerCaught)
         {
-            objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(damage, HurtType.Catch, myTransform);
+            objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(spell.firstDamage, HurtType.Catch, myTransform, spell.elementDamage);
             isPlayerCaught = true;
         }
     }

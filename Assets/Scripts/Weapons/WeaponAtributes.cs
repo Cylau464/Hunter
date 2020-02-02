@@ -58,7 +58,7 @@ public class WeaponAtributes : MonoBehaviour
 //Physics types of damage
 public enum DamageTypes { Slash, Chop, Thrust, Blunt }
 
-public enum Elements { Fire, Water, Wind, Earth, Lightning, Primal }
+public enum Elements { Fire, Ice, Wind, Earth, Lightning, Primal }
 
 public enum WeaponAttackType { Melee, Range }
 
