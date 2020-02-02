@@ -1,0 +1,670 @@
+fileFormatVersion: 2
+guid: 3ba8110f2521f1c488c1ed1c3b5d7871
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1785566152923858692
+    second: IceBreath_0
+  - first:
+      213: 1732631702039544858
+    second: IceBreath_1
+  - first:
+      213: -1510861485258913600
+    second: IceBreath_2
+  - first:
+      213: 6612046586645935260
+    second: IceBreath_3
+  - first:
+      213: 9158982757601068147
+    second: IceBreath_4
+  - first:
+      213: 8017096687549492221
+    second: IceBreath_5
+  - first:
+      213: -8812250713839864476
+    second: IceBreath_6
+  - first:
+      213: -647026077658862216
+    second: IceBreath_7
+  - first:
+      213: -5772874757222164955
+    second: IceBreath_8
+  - first:
+      213: 1528528498158135386
+    second: IceBreath_9
+  - first:
+      213: -760866687558749528
+    second: IceBreath_10
+  - first:
+      213: -6722544753406276221
+    second: IceBreath_11
+  - first:
+      213: 5430407624369364642
+    second: IceBreath_12
+  - first:
+      213: 4292056773921305082
+    second: IceBreath_13
+  - first:
+      213: 2971260787087476987
+    second: IceBreath_14
+  - first:
+      213: -3070857833267754789
+    second: IceBreath_15
+  - first:
+      213: -6592095322826393707
+    second: IceBreath_16
+  - first:
+      213: 8212529482777151416
+    second: IceBreath_17
+  - first:
+      213: 2796896316099192530
+    second: IceBreath_18
+  - first:
+      213: -3801277158166336335
+    second: IceBreath_19
+  - first:
+      213: 2523756079099954135
+    second: IceBreath_20
+  - first:
+      213: -8563555197269195510
+    second: IceBreath_0
+  - first:
+      213: 5112198019982138179
+    second: IceBreath_1
+  - first:
+      213: -243738420024422007
+    second: IceBreath_2
+  - first:
+      213: 8857668192063307522
+    second: IceBreath_3
+  - first:
+      213: -1071493711351787074
+    second: IceBreath_4
+  - first:
+      213: -915648238051477525
+    second: IceBreath_5
+  - first:
+      213: -6069552300206038433
+    second: IceBreath_6
+  - first:
+      213: -3478246289766715009
+    second: IceBreath_7
+  - first:
+      213: -3995471882723903612
+    second: IceBreath_8
+  - first:
+      213: 4122014518789958457
+    second: IceBreath_9
+  - first:
+      213: 4868281000347734164
+    second: IceBreath_10
+  - first:
+      213: 4907791457545844388
+    second: IceBreath_11
+  - first:
+      213: 3548394892549372267
+    second: IceBreath_12
+  - first:
+      213: -7730565183922274722
+    second: IceBreath_13
+  - first:
+      213: 785156929897193567
+    second: IceBreath_14
+  - first:
+      213: 7891730949753879842
+    second: IceBreath_15
+  - first:
+      213: -8196897023369924726
+    second: IceBreath_16
+  - first:
+      213: 1068185112232407495
+    second: IceBreath_17
+  - first:
+      213: 7173720441527519779
+    second: IceBreath_18
+  - first:
+      213: 5559885650086421911
+    second: IceBreath_19
+  - first:
+      213: 1194253846858036354
+    second: IceBreath_20
+  externalObjects: {}
+  serializedVersion: 10
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 15
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: IceBreath_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1200
+        width: 313
+        height: 300
+      alignment: 9
+      pivot: {x: 0.25, y: 0.49}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a05c1547be3282980800000000000000
+      internalID: -8563555197269195510
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceBreath_1
+      rect:
+        serializedVersion: 2
+        x: 313
+        y: 1200
+        width: 313
+        height: 300
+      alignment: 9
+      pivot: {x: 0.25, y: 0.49}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34b9d7a730d22f640800000000000000
+      internalID: 5112198019982138179
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceBreath_2
+      rect:
+        serializedVersion: 2
+        x: 626
+        y: 1200
+        width: 313
+        height: 300
+      alignment: 9
+      pivot: {x: 0.25, y: 0.49}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9815458c2311e9cf0800000000000000
+      internalID: -243738420024422007
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceBreath_3
+      rect:
+        serializedVersion: 2
+        x: 939
+        y: 1200
+        width: 313
+        height: 300
+      alignment: 9
+      pivot: {x: 0.25, y: 0.49}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 20fb53e6a42ccea70800000000000000
+      internalID: 8857668192063307522
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceBreath_4
+      rect:
+        serializedVersion: 2
+        x: 1252
+        y: 1200
+        width: 313
+        height: 300
+      alignment: 9
+      pivot: {x: 0.25, y: 0.49}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb1dfc3852a4121f0800000000000000
+      internalID: -1071493711351787074
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceBreath_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 900
+        width: 313
+        height: 300
+      alignment: 9
+      pivot: {x: 0.25, y: 0.49}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be7babf57c6fa43f0800000000000000
+      internalID: -915648238051477525
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceBreath_6
+      rect:
+        serializedVersion: 2
+        x: 313
+        y: 900
+        width: 313
+        height: 300
+      alignment: 9
+      pivot: {x: 0.25, y: 0.49}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f526090475e94cba0800000000000000
+      internalID: -6069552300206038433
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceBreath_7
+      rect:
+        serializedVersion: 2
+        x: 626
+        y: 900
+        width: 313
+        height: 300
+      alignment: 9
+      pivot: {x: 0.25, y: 0.49}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f7172219d69cabfc0800000000000000
+      internalID: -3478246289766715009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceBreath_8
+      rect:
+        serializedVersion: 2
+        x: 939
+        y: 900
+        width: 313
+        height: 300
+      alignment: 9
+      pivot: {x: 0.25, y: 0.49}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4873e28dd7b3d88c0800000000000000
+      internalID: -3995471882723903612
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceBreath_9
+      rect:
+        serializedVersion: 2
+        x: 1252
+        y: 900
+        width: 313
+        height: 300
+      alignment: 9
+      pivot: {x: 0.25, y: 0.49}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 93b6a7f8d56543930800000000000000
+      internalID: 4122014518789958457
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceBreath_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 600
+        width: 313
+        height: 300
+      alignment: 9
+      pivot: {x: 0.25, y: 0.49}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 490928cc6cb9f8340800000000000000
+      internalID: 4868281000347734164
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceBreath_11
+      rect:
+        serializedVersion: 2
+        x: 313
+        y: 600
+        width: 313
+        height: 300
+      alignment: 9
+      pivot: {x: 0.25, y: 0.49}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a677baf35afb1440800000000000000
+      internalID: 4907791457545844388
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceBreath_12
+      rect:
+        serializedVersion: 2
+        x: 626
+        y: 600
+        width: 313
+        height: 300
+      alignment: 9
+      pivot: {x: 0.25, y: 0.49}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b693735ca5e6e3130800000000000000
+      internalID: 3548394892549372267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceBreath_13
+      rect:
+        serializedVersion: 2
+        x: 939
+        y: 600
+        width: 313
+        height: 300
+      alignment: 9
+      pivot: {x: 0.25, y: 0.49}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e5e7f4b6ce387b490800000000000000
+      internalID: -7730565183922274722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceBreath_14
+      rect:
+        serializedVersion: 2
+        x: 1252
+        y: 600
+        width: 313
+        height: 300
+      alignment: 9
+      pivot: {x: 0.25, y: 0.49}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f50657b511075ea00800000000000000
+      internalID: 785156929897193567
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceBreath_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 300
+        width: 313
+        height: 300
+      alignment: 9
+      pivot: {x: 0.25, y: 0.49}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 22d39039c7f058d60800000000000000
+      internalID: 7891730949753879842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceBreath_16
+      rect:
+        serializedVersion: 2
+        x: 313
+        y: 300
+        width: 313
+        height: 300
+      alignment: 9
+      pivot: {x: 0.25, y: 0.49}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a8f24951695ce3e80800000000000000
+      internalID: -8196897023369924726
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceBreath_17
+      rect:
+        serializedVersion: 2
+        x: 626
+        y: 300
+        width: 313
+        height: 300
+      alignment: 9
+      pivot: {x: 0.25, y: 0.49}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c139f833b4f2de00800000000000000
+      internalID: 1068185112232407495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceBreath_18
+      rect:
+        serializedVersion: 2
+        x: 939
+        y: 300
+        width: 313
+        height: 300
+      alignment: 9
+      pivot: {x: 0.25, y: 0.49}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 32ac43bcbbc2e8360800000000000000
+      internalID: 7173720441527519779
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceBreath_19
+      rect:
+        serializedVersion: 2
+        x: 1252
+        y: 300
+        width: 313
+        height: 300
+      alignment: 9
+      pivot: {x: 0.25, y: 0.49}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 795613d8a8ea82d40800000000000000
+      internalID: 5559885650086421911
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IceBreath_20
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 313
+        height: 300
+      alignment: 9
+      pivot: {x: 0.25, y: 0.49}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 284fd99db87d29010800000000000000
+      internalID: 1194253846858036354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

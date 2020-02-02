@@ -6,6 +6,8 @@ public class PlayerAtributes : MonoBehaviour
 {
     [SerializeField] int maxHealth = 10;
     [SerializeField] int health;
+    [SerializeField] Transform hpBarTransform = null;
+    HealthBar healthBar;
 
     public float timeOfLastTakenDamage;
 
@@ -15,6 +17,9 @@ public class PlayerAtributes : MonoBehaviour
     {
         health = maxHealth;
         movement = GetComponent<PlayerMovement>();
+        healthBar = hpBarTransform.GetComponent<HealthBar>();
+        healthBar.maxHealth = maxHealth;
+        healthBar.HealthChange(health);
     }
     void Update()
     {
@@ -25,13 +30,17 @@ public class PlayerAtributes : MonoBehaviour
     /// </summary>
     public void TakeDamage(int damage, HurtType hurtType)
     {
+        if (movement.isEvading) return;
+
         health -= damage;
         timeOfLastTakenDamage = Time.time;
-        
-        if(health <= 0)
+        healthBar.HealthChange(health);
+
+        if (health <= 0)
         {
             movement.isDead = true;
             movement.bodyCollider.sharedMaterial = null;        //Delete collider material for turn on friction
+            return;
         }
 
         DamageText(damage);
@@ -42,13 +51,17 @@ public class PlayerAtributes : MonoBehaviour
     /// </summary>
     public void TakeDamage(int damage, HurtType hurtType, Transform anchorPoint)
     {
+        if (movement.isEvading) return;
+
         health -= damage;
         timeOfLastTakenDamage = Time.time;
+        healthBar.HealthChange(health);
 
         if (health <= 0)
         {
             movement.isDead = true;
             movement.bodyCollider.sharedMaterial = null;
+            return;
         }
         else
             movement.GetCaught(hurtType, anchorPoint);
@@ -61,15 +74,18 @@ public class PlayerAtributes : MonoBehaviour
     /// </summary>
     public void TakeDamage(int damage, HurtType hurtType, Vector2 repulseDistantion, float dazedTime)
     {
+        if (movement.isEvading) return;
+
         health -= damage;
         timeOfLastTakenDamage = Time.time;
-
+        healthBar.HealthChange(health);
         movement.Repulse(repulseDistantion, dazedTime);
 
         if (health <= 0)
         {
             movement.isDead = true;
             movement.bodyCollider.sharedMaterial = null;
+            return;
         }
 
         DamageText(damage);
@@ -80,17 +96,20 @@ public class PlayerAtributes : MonoBehaviour
     /// </summary>
     public void TakeDamage(int damage, HurtType hurtType, float dazedTime)
     {
+        if (movement.isEvading) return;
+
         health -= damage;
         timeOfLastTakenDamage = Time.time;
-
-        movement.Stunned(dazedTime);
+        healthBar.HealthChange(health);
 
         if (health <= 0)
         {
             movement.isDead = true;
             movement.bodyCollider.sharedMaterial = null;
+            return;
         }
 
+        movement.Stunned(dazedTime);
         DamageText(damage);
     }
 

@@ -8,79 +8,67 @@ public class HowlCirclePulse : MonoBehaviour
     public EnemySpell spell;
     bool damageDone;
     int isCastParamID;
-    int direction;
+    int playerLayer = 10;
     CircleCollider2D circleCol;
     Animator anim;
-    SpriteRenderer sprite;
     Transform player;
-    Enemy enemy;
 
-    void Start()
+    void Awake()
     {
-        enemy = transform.parent.GetComponent<Enemy>();
-        direction = enemy.direction;
-        sprite = transform.GetComponent<SpriteRenderer>();
         anim = transform.GetComponent<Animator>();
         circleCol = transform.GetComponent<CircleCollider2D>();
         circleCol.radius = .2f;
-        sprite.enabled = false;
         isCastParamID = Animator.StringToHash("isCast");
-    }
-
-    private void Update()
-    {
-        if (direction != enemy.direction)
-            FlipObject();
     }
 
     //Started from ElderWolf script
     public IEnumerator CirclePulse()
     {
-        sprite.enabled = true;
         anim.SetBool(isCastParamID, true);
         circleCol.radius = .2f;
         float _castTime = Time.time + spell.castTime;
         float _howlCircleMaxRadius = spell.castRange;
+        float _curDelay = 0f;
 
         while (_castTime > Time.time)
         {
-            //Circle reached max radius -> reset radius to min
-            if (circleCol.radius >= _howlCircleMaxRadius)
-            {
-                circleCol.radius = .2f;
+            ////Circle reached max radius -> reset radius to min
+            //if (circleCol.radius >= _howlCircleMaxRadius)
+            //{
+            //    circleCol.radius = .2f;
+            //    damageDone = false;
+            //}
+
+            if (_curDelay <= Time.time)
                 damageDone = false;
-            }
 
             if (player != null && !damageDone)
             {
-                player.GetComponent<PlayerAtributes>().TakeDamage(spell.firstDamage, HurtType.Repulsion, spell.dazedTime);
+                Vector2 _direction = new Vector2(Mathf.Sign(player.transform.position.x - transform.position.x), Mathf.Sign(player.transform.position.y - transform.position.y));
+                player.GetComponent<PlayerAtributes>().TakeDamage(spell.firstDamage, HurtType.Repulsion, new Vector2(spell.repulseVector.x * _direction.x, spell.repulseVector.y * _direction.y), spell.dazedTime);
                 damageDone = true;
+                _curDelay = spell.periodicityDamage + Time.time;
             }
 
-            circleCol.radius += spell.castRange * 3f * Time.deltaTime;
+            if(circleCol.radius < spell.castRange)
+                circleCol.radius += spell.castRange * 3f * Time.deltaTime;
+
             yield return new WaitForEndOfFrame();
         }
 
         anim.SetBool(isCastParamID, false);
-        sprite.enabled = false;
+        gameObject.SetActive(false);
     }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.transform.tag == "Player")
+        if (collision.gameObject.layer == playerLayer)
             player = collision.transform;
     }
 
     void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.transform.tag == "Player")
+        if (collision.gameObject.layer == playerLayer)
             player = null;
-    }
-
-    void FlipObject()
-    {
-        transform.localPosition = new Vector2(-transform.localPosition.x, transform.localPosition.y);
-        direction = enemy.direction;
-
     }
 }

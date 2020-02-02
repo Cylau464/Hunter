@@ -130,6 +130,10 @@ public class Enemy : MonoBehaviour
 
     public SpellStates spellState = SpellStates.None;
 
+    //UI
+    [SerializeField] Transform hpBarTransform = null;
+    HealthBar healthBar;
+
     protected void Awake()
     {
         health              = maxHealth;
@@ -141,7 +145,11 @@ public class Enemy : MonoBehaviour
         startPos            = myTransform.position;
         playerAtributes     = GameObject.FindWithTag("Player").GetComponent<PlayerAtributes>();
 
-        foreach(Transform t in transform)
+        healthBar = hpBarTransform.GetComponent<HealthBar>();
+        healthBar.maxHealth = maxHealth;
+        healthBar.HealthChange(health);
+
+        foreach (Transform t in transform)
         {
             if(t.tag == "Hook Target")
                 myHookTarget = t;
@@ -411,6 +419,7 @@ public class Enemy : MonoBehaviour
         //Debug.Log("POST damage " + damage + " element " + element.value);
         /*if(crit)
             currentState = State.Hurt;*/
+        healthBar.HealthChange(health);
         DamageText(damage + element.value);
     }
 

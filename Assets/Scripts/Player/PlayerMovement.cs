@@ -117,7 +117,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnGUI()
     {
-        GUI.TextField(new Rect(10, 10, 150, 200), rigidBody.velocity.ToString() + "\n" + playerTransform.position + "\nAngle " + (Vector2.Angle(transform.right, Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position)) * Mathf.Sign(Vector3.Dot(transform.forward, Vector3.Cross(transform.right, Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position))))) + "\ninputs " + System.String.Join("", new List<InputsEnum>(input.lastInputs).ConvertAll(i => i.ToString()).ToArray()));
+       // GUI.TextField(new Rect(10, 10, 150, 200), rigidBody.velocity.ToString() + "\n" + playerTransform.position + "\nAngle " + (Vector2.Angle(transform.right, Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position)) * Mathf.Sign(Vector3.Dot(transform.forward, Vector3.Cross(transform.right, Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position))))) + "\ninputs " + System.String.Join("", new List<InputsEnum>(input.lastInputs).ConvertAll(i => i.ToString()).ToArray()));
     }
 
     void Update()
@@ -530,7 +530,6 @@ public class PlayerMovement : MonoBehaviour
 
     public void Repulse(Vector2 repulseDistantion, float dazedTime)
     {
-        Debug.Log("REPULSE");
         rigidBody.bodyType = RigidbodyType2D.Dynamic;
         rigidBody.velocity = Vector2.zero;
         isHurt = true;

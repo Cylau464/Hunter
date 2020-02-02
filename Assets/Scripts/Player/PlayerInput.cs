@@ -34,10 +34,18 @@ public class PlayerInput : MonoBehaviour
         attack = GetComponent<PlayerAttack>();
     }
 
+    private void FixedUpdate()
+    {
+        readyToClear = true;
+    }
+
     void Update()
     {
-        if(restart)
+        if (restart)
+        {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            restart = false;
+        }
 
         ClearInput();
 
@@ -50,8 +58,6 @@ public class PlayerInput : MonoBehaviour
             horizontal = 0f;
         else
             horizontal = Mathf.Clamp(horizontal, -1f, 1f);
-
-        readyToClear = true;
     }
 
     void ClearInput()

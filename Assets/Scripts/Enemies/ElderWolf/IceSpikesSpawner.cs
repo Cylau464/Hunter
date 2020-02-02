@@ -21,7 +21,6 @@ public class IceSpikesSpawner : MonoBehaviour
         GameObject _inst;
         GameObject _spikeRes = Resources.Load<GameObject>("Enemies/Elder Wolf/Ice Spike");
         List<GameObject> _spike = new List<GameObject>(spikesCount);
-        Debug.Log(_spike.Count);
         BoxCollider2D _spikeCol = null;
         float _posX = 0f;
         bool _rerandom = false;

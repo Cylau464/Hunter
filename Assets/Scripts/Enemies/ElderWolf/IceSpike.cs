@@ -23,7 +23,7 @@ public class IceSpike : MonoBehaviour
     SpellStates state = SpellStates.Prepare;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         anim = transform.GetComponent<Animator>();
         myCollider = transform.GetComponent<BoxCollider2D>();
@@ -66,10 +66,10 @@ public class IceSpike : MonoBehaviour
     void Cast()
     {
         if (myCollider.size.y < maxColSizeY)
-            myCollider.size = new Vector2(myCollider.size.x, myCollider.size.y + .3f * Time.deltaTime);
+            myCollider.size = new Vector2(myCollider.size.x, myCollider.size.y + maxColSizeY / .25f * Time.deltaTime); //.25f - cast animation duration
 
         if (myCollider.offset.y < maxColOffsetY)
-            myCollider.offset = new Vector2(myCollider.offset.x, myCollider.offset.y + .3f * Time.deltaTime);
+            myCollider.offset = new Vector2(myCollider.offset.x, myCollider.offset.y + maxColOffsetY / .25f * Time.deltaTime);
 
         if (player != null && !damageDone)
         {

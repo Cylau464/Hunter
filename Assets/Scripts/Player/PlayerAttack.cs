@@ -41,6 +41,7 @@ public class PlayerAttack : MonoBehaviour
     WeaponAnimation weaponAnimation;
     GameObject shellPrefab;
     GameObject shellObj;
+    [SerializeField] GameObject damageBox = null;
     Shell shell;
 
     float attackRangeX;
@@ -173,7 +174,6 @@ public class PlayerAttack : MonoBehaviour
         if (!movement.isAttacking)
             return;
 
-        Enemy _enemy;
         attackState = AttackState.Damage;
         movement.canFlip = false;
         curDelayResetCombo = Time.time + delayResetCombo;
@@ -189,23 +189,14 @@ public class PlayerAttack : MonoBehaviour
         {
             rigidBody.AddForce(Vector2.right * movement.direction * attackForceDistance, ForceMode2D.Impulse);
 
-            Collider2D[] enemiesToDamage = Physics2D.OverlapBoxAll(weapon.position, new Vector2(attackRangeX, attackRangeY), 0, whatIsEnemies[0]);
-            LayerMask mask = 1 << 9 | 1 << 12;      //9 - platforms, 12 - enemy
-            RaycastHit2D hit;
-
-            //Raycast to player from enemy
-            hit = Physics2D.Raycast(movement.transform.position, Vector2.right * movement.direction, 1.2f, mask);
-            Debug.Log(hit + "\n" + hit.transform);
-            Debug.DrawRay(movement.transform.position, Vector2.right * movement.direction * 1.2f, Color.cyan, 2f);
-
-            for (int i = 0; i < enemiesToDamage.Length; i++)
-            {
-                //camShake.Shake(.2f, 1f, 2f);
-                damage = RandomDamage(damage);
-                
-                if (_enemy = enemiesToDamage[i].GetComponent<Enemy>())
-                    _enemy.TakeDamage(damage, weaponDamageType, weaponElement);
-            }
+            GameObject _inst = Instantiate(damageBox, transform);
+            DamageBox _damageBoxInst = _inst.GetComponent<DamageBox>();
+            _damageBoxInst.position = weapon.position;
+            _damageBoxInst.damage = damage;
+            _damageBoxInst.damageType = weaponDamageType;
+            _damageBoxInst.element = weaponElement;
+            _damageBoxInst.lifeTime = attackDuration;
+            _damageBoxInst.colliderSize = new Vector2(attackRangeX, attackRangeY);
         }
     }
 
@@ -379,8 +370,8 @@ public class PlayerAttack : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        if(weapon != null)
-            Gizmos.DrawWireCube(weapon.position, new Vector3(attackRangeX, attackRangeY, 0f));
+        if (weapon != null)
+            Gizmos.DrawWireCube(weapon.position, new Vector2(attackRangeX, attackRangeY));
         Vector3 ray = Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position);
         //Gizmos.DrawLine(transform.position, ray);
     }
