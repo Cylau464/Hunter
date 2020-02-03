@@ -54,7 +54,7 @@ public class PlayerAtributes : MonoBehaviour
     {
         if (movement.isEvading) return;
 
-        health -= damage;
+        health -= damage + element.value;
         timeOfLastTakenDamage = Time.time;
         healthBar.HealthChange(health);
 
@@ -77,7 +77,7 @@ public class PlayerAtributes : MonoBehaviour
     {
         if (movement.isEvading) return;
 
-        health -= damage;
+        health -= damage + element.value;
         timeOfLastTakenDamage = Time.time;
         healthBar.HealthChange(health);
         movement.Repulse(repulseDistantion, dazedTime);
@@ -99,7 +99,7 @@ public class PlayerAtributes : MonoBehaviour
     {
         if (movement.isEvading) return;
 
-        health -= damage;
+        health -= damage + element.value;
         timeOfLastTakenDamage = Time.time;
         healthBar.HealthChange(health);
 

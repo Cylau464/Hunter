@@ -22,8 +22,14 @@ public class DamageNumber : MonoBehaviour
     void Start()
     {
         curLifeTime = Time.time + lifeTime;
-        physicDamage.color = target.tag == "Player" ? Color.white : Color.red;
-        physicDamage.text = damage.ToString();
+
+        if (damage != 0)
+        {
+            physicDamage.color = target.tag == "Player" ? Color.white : Color.red;
+            physicDamage.text = damage.ToString();
+        }
+        else
+            physicDamage.text = "";
 
         if (element.value != 0)
         {

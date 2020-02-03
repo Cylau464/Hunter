@@ -200,7 +200,8 @@ public class ElderWolf : Enemy
                     if (!spellSelected && spellsCurCooldown["Howl"] <= Time.time)
                     {
                         if ((lastSpell == "Back Jump" && damageTakenDPS >= maxHealth / 100 * 3 && Random.Range(0, 100) > 50) ||
-                           (playerAtributes.timeOfLastTakenDamage + maxDurationWithoutDamage <= Time.time && DistanceToPlayer().x <= mySpells["Howl"].castRange))
+                           (playerAtributes.timeOfLastTakenDamage + maxDurationWithoutDamage <= Time.time && DistanceToPlayer().x <= mySpells["Howl"].castRange) ||
+                           (damageTakenDPS >= maxHealth / 100 * 3 && Random.Range(0, 100) > 50))
                         {
                             spell = "Howl";
                             spellSelected = true;
