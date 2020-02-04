@@ -36,6 +36,7 @@ public class PlayerAttack : MonoBehaviour
     PlayerMovement movement;
     PlayerInput input;
     Transform weapon;
+    PlayerAtributes atributes;
     Rigidbody2D rigidBody;
     WeaponAtributes weaponAtributes;
     WeaponAnimation weaponAnimation;
@@ -55,6 +56,7 @@ public class PlayerAttack : MonoBehaviour
     float rotZ;
 
     int damage;
+    int staminaCosts;
 
     public WeaponAttackType weaponAttackType;
     DamageTypes weaponDamageType;
@@ -75,8 +77,8 @@ public class PlayerAttack : MonoBehaviour
         attackRangeX        = weaponAtributes.attackRangeX;
         attackRangeY        = weaponAtributes.attackRangeY;
         weaponAttackType    = weaponAtributes.weaponAttackType;
-        //anim = parent.GetComponent<Animator>();
         movement            = GetComponent<PlayerMovement>();
+        atributes           = GetComponent<PlayerAtributes>();
         rigidBody           = GetComponent<Rigidbody2D>();
         sprite              = GetComponent<SpriteRenderer>();
         input               = GetComponent<PlayerInput>();
@@ -177,25 +179,26 @@ public class PlayerAttack : MonoBehaviour
         attackState = AttackState.Damage;
         movement.canFlip = false;
         curDelayResetCombo = Time.time + delayResetCombo;
+        atributes.Stamina -= staminaCosts;
 
         if (weaponAttackType != WeaponAttackType.Melee)
         {
-            shellObj = Instantiate(shellPrefab, transform.position, Quaternion.Euler(0f, 0f, rotZ));
-            shell = shellObj.GetComponent<Shell>();
-            shell.damage = damage;
-            shell.speed = shellSpeed;
+            shellObj                    = Instantiate(shellPrefab, transform.position, Quaternion.Euler(0f, 0f, rotZ));
+            shell                       = shellObj.GetComponent<Shell>();
+            shell.damage                = damage;
+            shell.speed                 = shellSpeed;
         }
         else
         {
             rigidBody.AddForce(Vector2.right * movement.direction * attackForceDistance, ForceMode2D.Impulse);
 
-            GameObject _inst = Instantiate(damageBox, transform);
-            DamageBox _damageBoxInst = _inst.GetComponent<DamageBox>();
-            _damageBoxInst.position = weapon.position;
-            _damageBoxInst.damage = damage;
-            _damageBoxInst.damageType = weaponDamageType;
-            _damageBoxInst.element = weaponElement;
-            _damageBoxInst.lifeTime = attackDuration;
+            GameObject _inst            = Instantiate(damageBox, transform);
+            DamageBox _damageBoxInst    = _inst.GetComponent<DamageBox>();
+            _damageBoxInst.position     = weapon.position;
+            _damageBoxInst.damage       = damage;
+            _damageBoxInst.damageType   = weaponDamageType;
+            _damageBoxInst.element      = weaponElement;
+            _damageBoxInst.lifeTime     = attackDuration;
             _damageBoxInst.colliderSize = new Vector2(attackRangeX, attackRangeY);
         }
     }
@@ -223,8 +226,6 @@ public class PlayerAttack : MonoBehaviour
         //Pause attack state for give little time for next attack
         if (attackDuration <= Time.time)
         {
-            //input.lightAttack = false;
-            //input.strongAttack = false;
             movement.isAttacking = false;
             attackType = default;
             movement.speedDivisor = 1f;
@@ -236,49 +237,46 @@ public class PlayerAttack : MonoBehaviour
         switch(type)
         {
             case AttackTypes.Light:
-            {
-                    if (movement.isOnGround)
-                    {
-                        airLightCombo = airStrongCombo = 0; //nullify air combo
+                if (movement.isOnGround)
+                {
+                    airLightCombo = airStrongCombo = 0; //nullify air combo
 
-                        if (strongCombo == 0)
-                        {
-                            if (lightCombo < lightComboCount)
-                                lightCombo++;
-                            else
-                                lightCombo = 1;
-                        }
+                    if (strongCombo == 0)
+                    {
+                        if (lightCombo < lightComboCount)
+                            lightCombo++;
                         else
-                        {
-                            if (lightCombo + strongCombo < strongComboCount)
-                                lightCombo++;
-                            else
-                            {
-                                lightCombo = 1;
-                                strongCombo = 0;
-                            }
-                        }
-                        break;
+                            lightCombo = 1;
                     }
                     else
                     {
-                        lightCombo = strongCombo = 0; //nullify ground combo
-
-                        if (airStrongCombo == 0)
-                        {
-                            if (++airLightCombo >= airLightComboCount)
-                                canAttack = false;
-                        }
+                        if (lightCombo + strongCombo < strongComboCount)
+                            lightCombo++;
                         else
                         {
-                            if (++airLightCombo + airStrongCombo >= airStrongComboCount)
-                                canAttack = false;
+                            lightCombo = 1;
+                            strongCombo = 0;
                         }
-                        break;
                     }
+                    break;
+                }
+                else
+                {
+                    lightCombo = strongCombo = 0; //nullify ground combo
+
+                    if (airStrongCombo == 0)
+                    {
+                        if (++airLightCombo >= airLightComboCount)
+                            canAttack = false;
+                    }
+                    else
+                    {
+                        if (++airLightCombo + airStrongCombo >= airStrongComboCount)
+                            canAttack = false;
+                    }
+                    break;
                 }
             case AttackTypes.Strong:
-            {
                 if (movement.isOnGround)
                 {
                     airLightCombo = airStrongCombo = 0;
@@ -299,9 +297,7 @@ public class PlayerAttack : MonoBehaviour
                         canAttack = false;
                     break;
                 }
-            }
             case AttackTypes.Joint:
-            {
                 lightCombo = strongCombo = airLightCombo = airStrongCombo = 0; //nullify all other combo
 
                 if (movement.isOnGround)
@@ -321,7 +317,6 @@ public class PlayerAttack : MonoBehaviour
                         canAttack = false;
                     break;
                 }
-            }
         }
     }
 
@@ -335,35 +330,35 @@ public class PlayerAttack : MonoBehaviour
         switch (type)
         {
             case AttackTypes.Light:
-            {
-                damage = weaponAtributes.lightAttackDamage;
-                weaponElement = weaponAtributes.element;
-                weaponDamageType = weaponAtributes.damageTypesOfAttacks[AttackTypes.Light]; //fix it
+                damage              = weaponAtributes.lightAttackDamage;
+                staminaCosts        = weaponAtributes.lightAttackStaminaCosts;
+                weaponElement       = weaponAtributes.element;
+                weaponDamageType    = weaponAtributes.damageTypesOfAttacks[AttackTypes.Light]; //fix it
                 attackForceDistance = weaponAtributes.lightAttackForce;
-                timeBtwAttacks = Time.time + weaponAtributes.lightAttackSpeed;
-                attackDuration = Time.time + weaponAtributes.lightAttackSpeed * 1.5f;
+                //If the stamina enough to attack - multiply = 1 else = 2
+                timeBtwAttacks      = (atributes.Stamina >= staminaCosts ? 1f : 2f) * (Time.time + weaponAtributes.lightAttackSpeed);
+                attackDuration      = (atributes.Stamina >= staminaCosts ? 1f : 2f) * (Time.time + weaponAtributes.lightAttackSpeed * 1.5f);
                 break;
-            }
             case AttackTypes.Strong:
-            {
-                damage = weaponAtributes.strongAttackDamage;
-                weaponElement = weaponAtributes.element;
-                weaponDamageType = weaponAtributes.damageTypesOfAttacks[AttackTypes.Strong]; //fix it
+                damage              = weaponAtributes.strongAttackDamage;
+                staminaCosts        = weaponAtributes.strongAttackStaminaCosts;
+                weaponElement       = weaponAtributes.element;
+                weaponDamageType    = weaponAtributes.damageTypesOfAttacks[AttackTypes.Strong]; //fix it
                 attackForceDistance = weaponAtributes.strongAttackForce;
-                timeBtwAttacks = Time.time + weaponAtributes.strongAttackSpeed;
-                attackDuration = Time.time + weaponAtributes.strongAttackSpeed * 1.5f;
+                //If the stamina enough to attack - multiply = 1 else = 2
+                timeBtwAttacks      = (atributes.Stamina >= staminaCosts ? 1f : 2f) * (Time.time + weaponAtributes.strongAttackSpeed);
+                attackDuration      = (atributes.Stamina >= staminaCosts ? 1f : 2f) * (Time.time + weaponAtributes.strongAttackSpeed * 1.5f);
                 break;
-            }
             case AttackTypes.Joint:
-            {
-                damage = weaponAtributes.jointAttackDamage;
-                weaponElement = weaponAtributes.elementJA;
-                weaponDamageType = weaponAtributes.damageTypesOfAttacks[AttackTypes.Joint]; //fix it
+                damage              = weaponAtributes.jointAttackDamage;
+                staminaCosts        = weaponAtributes.jointAttackStaminaCosts;
+                weaponElement       = weaponAtributes.elementJA;
+                weaponDamageType    = weaponAtributes.damageTypesOfAttacks[AttackTypes.Joint]; //fix it
                 attackForceDistance = weaponAtributes.jointAttackForce;
-                timeBtwAttacks = Time.time + weaponAtributes.jointAttackSpeed;
-                attackDuration = Time.time + weaponAtributes.jointAttackSpeed * 1.5f;
+                //If the stamina enough to attack - multiply = 1 else = 2
+                timeBtwAttacks      = (atributes.Stamina >= staminaCosts ? 1f : 2f) * (Time.time + weaponAtributes.jointAttackSpeed);
+                attackDuration      = (atributes.Stamina >= staminaCosts ? 1f : 2f) * (Time.time + weaponAtributes.jointAttackSpeed * 1.5f);
                 break;
-            }
         }
     }
 

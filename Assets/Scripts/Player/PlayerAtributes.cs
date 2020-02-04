@@ -7,8 +7,25 @@ public class PlayerAtributes : MonoBehaviour
 {
     [SerializeField] int maxHealth = 10;
     [SerializeField] int health;
-    [SerializeField] Transform hpBarTransform = null;
-    HealthBar healthBar;
+    [SerializeField] int maxStamina = 100;
+    [SerializeField] int stamina;
+    public int Stamina
+    { 
+        set
+        {
+            //value > current stamina = stamina recovering
+            curRestoreStaminaDelay = (value > stamina ? restoreStaminaDelay : restoreStaminaPause) + Time.time;
+            stamina = value;
+            statusBar.StaminaChange(stamina);
+        } 
+        get { return stamina; } 
+    }
+
+    [SerializeField] float restoreStaminaPause = 2f;            //Pasue after last stamina reduction
+    [SerializeField] float restoreStaminaDelay = .1f;           //Delay between stamina recovery
+    float curRestoreStaminaDelay;
+    [SerializeField] Transform statusBarTransform = null;
+    StatusBar statusBar;
 
     public float timeOfLastTakenDamage;
 
@@ -17,15 +34,21 @@ public class PlayerAtributes : MonoBehaviour
     void Start()
     {
         health = maxHealth;
+        stamina = maxStamina;
         movement = GetComponent<PlayerMovement>();
-        healthBar = hpBarTransform.GetComponent<HealthBar>();
-        healthBar.maxHealth = maxHealth;
-        healthBar.HealthChange(health);
+        statusBar = statusBarTransform.GetComponent<StatusBar>();
+        statusBar.maxHealth = maxHealth;
+        statusBar.HealthChange(health);
+        statusBar.maxStamina = maxStamina;
+        statusBar.StaminaChange(stamina);
     }
+
     void Update()
     {
-
+        if (curRestoreStaminaDelay <= Time.time && stamina < maxStamina)
+            Stamina++;
     }
+
     /// <summary>
     /// Just damage
     /// </summary>
@@ -35,7 +58,7 @@ public class PlayerAtributes : MonoBehaviour
 
         health -= damage + element.value;
         timeOfLastTakenDamage = Time.time;
-        healthBar.HealthChange(health);
+        statusBar.HealthChange(health);
 
         if (health <= 0)
         {
@@ -56,7 +79,7 @@ public class PlayerAtributes : MonoBehaviour
 
         health -= damage + element.value;
         timeOfLastTakenDamage = Time.time;
-        healthBar.HealthChange(health);
+        statusBar.HealthChange(health);
 
         if (health <= 0)
         {
@@ -79,7 +102,7 @@ public class PlayerAtributes : MonoBehaviour
 
         health -= damage + element.value;
         timeOfLastTakenDamage = Time.time;
-        healthBar.HealthChange(health);
+        statusBar.HealthChange(health);
         movement.Repulse(repulseDistantion, dazedTime);
 
         if (health <= 0)
@@ -101,7 +124,7 @@ public class PlayerAtributes : MonoBehaviour
 
         health -= damage + element.value;
         timeOfLastTakenDamage = Time.time;
-        healthBar.HealthChange(health);
+        statusBar.HealthChange(health);
 
         if (health <= 0)
         {

@@ -131,8 +131,8 @@ public class Enemy : MonoBehaviour
     public SpellStates spellState = SpellStates.None;
 
     //UI
-    [SerializeField] Transform hpBarTransform = null;
-    HealthBar healthBar;
+    [SerializeField] Transform statusBarTransform = null;
+    StatusBar statusBar;
 
     protected void Awake()
     {
@@ -145,9 +145,9 @@ public class Enemy : MonoBehaviour
         startPos            = myTransform.position;
         playerAtributes     = GameObject.FindWithTag("Player").GetComponent<PlayerAtributes>();
 
-        healthBar = hpBarTransform.GetComponent<HealthBar>();
-        healthBar.maxHealth = maxHealth;
-        healthBar.HealthChange(health);
+        statusBar = statusBarTransform.GetComponent<StatusBar>();
+        statusBar.maxHealth = maxHealth;
+        statusBar.HealthChange(health);
 
         foreach (Transform t in transform)
         {
@@ -419,7 +419,7 @@ public class Enemy : MonoBehaviour
         //Debug.Log("POST damage " + damage + " element " + element.value);
         /*if(crit)
             currentState = State.Hurt;*/
-        healthBar.HealthChange(health);
+        statusBar.HealthChange(health);
         DamageText(damage + element.value);
     }
 
@@ -443,15 +443,13 @@ public class Enemy : MonoBehaviour
             sprite.color = Color.white;
             return;
         }
+
         //Timer of blinking tact
         blinkingPeriod += Time.deltaTime;
+
         if(blinkingPeriod >= spriteBlinkingPeriod)
         {
-            blinkingPeriod = 0f;/*
-            if(sprite.color == Color.white)
-                sprite.color = Color.red;
-            else
-                sprite.color = Color.white;*/
+            blinkingPeriod = 0f;
             sprite.color = sprite.color == Color.white ? Color.red : Color.white;
         }
     }

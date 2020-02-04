@@ -10,6 +10,9 @@ public class WeaponAtributes : MonoBehaviour
     public int lightAttackDamage = 1;
     public int strongAttackDamage = 2;
     public int jointAttackDamage = 3;
+    public int lightAttackStaminaCosts = 10;
+    public int strongAttackStaminaCosts = 15;
+    public int jointAttackStaminaCosts = 20;
     public float lightAttackSpeed = .4f;
     public float strongAttackSpeed = .6f;
     public float jointAttackSpeed = .7f;
@@ -42,17 +45,6 @@ public class WeaponAtributes : MonoBehaviour
     [Header("Elements")]
     public Element element = new Element("Fire", Elements.Fire, 0);
     public Element elementJA = new Element("Wind", Elements.Wind, 0);
-
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-        //public string title { get; private set; } = "Weapon";
-        //public int damage { get; private set; } = 5;
-    }
 }
 
 //Physics types of damage

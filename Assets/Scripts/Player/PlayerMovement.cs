@@ -62,8 +62,9 @@ public class PlayerMovement : MonoBehaviour
     PlayerInput input;
     Rigidbody2D rigidBody;
     [HideInInspector] public BoxCollider2D bodyCollider;
-    SpriteRenderer sprite;                  //Maybe create property for public get?
+    SpriteRenderer sprite;                         //Maybe create property for public get?
     PlayerAttack attack;
+    PlayerAtributes atributes;
     Transform playerTransform;
     WeaponAtributes weapon;
     Hook hook;
@@ -97,6 +98,7 @@ public class PlayerMovement : MonoBehaviour
         bodyCollider            = GetComponent<BoxCollider2D>();
         sprite                  = GetComponent<SpriteRenderer>();
         attack                  = GetComponent<PlayerAttack>();
+        atributes               = GetComponent<PlayerAtributes>();
         playerTransform         = GetComponent<Transform>();
         weapon                  = GetComponentInChildren<WeaponAtributes>();
         hook                    = GetComponentInChildren<Hook>();
@@ -169,7 +171,7 @@ public class PlayerMovement : MonoBehaviour
             }
 
             input.horizontalAccess = false;
-            Invoke("HorizontalAcces", .2f);
+            Invoke("HorizontalAccess", .2f);
         }
     }
 
@@ -248,7 +250,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //Evading
-        if (/*input.evade*/input.lastInputs.Contains(InputsEnum.Evade) && attack.attackState != AttackState.Damage && !isEvading && curEvadingCooldown <= Time.time)
+        if (atributes.Stamina >= 10 && input.lastInputs.Contains(InputsEnum.Evade) && attack.attackState != AttackState.Damage && !isEvading && curEvadingCooldown <= Time.time)
         {
             //If use evade in hanging state
             if (rigidBody.bodyType == RigidbodyType2D.Static)
@@ -262,12 +264,13 @@ public class PlayerMovement : MonoBehaviour
             isEvading = true;
             isClimbing = false;
             isHanging = false;
-            CancelInvoke("HorizontalAcces");
+            CancelInvoke("HorizontalAccess");
             input.horizontalAccess = false;
             canFlip = false;
             curEvadingDuration = Time.time + evadingDuration;
             Crouch();
             rigidBody.velocity = Vector2.zero;
+            atributes.Stamina -= 10;
 
             if (input.horizontal != 0)
                 rigidBody.AddForce(new Vector2(evadingDistance * 1.5f * Mathf.Sign(input.horizontal), 0f), ForceMode2D.Impulse); //input horizontal instead direction for evade after attack
@@ -306,7 +309,7 @@ public class PlayerMovement : MonoBehaviour
                     isClimbing = false;
                     rigidBody.velocity = Vector2.zero;
                     rigidBody.AddForce(new Vector2(5f * direction, 0f), ForceMode2D.Impulse);
-                    Invoke("HorizontalAcces", 0.05f);
+                    Invoke("HorizontalAccess", 0.05f);
                 }
             }
         }
@@ -471,7 +474,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
     
-    void HorizontalAcces()
+    void HorizontalAccess()
     {
         input.horizontalAccess = true;
     }

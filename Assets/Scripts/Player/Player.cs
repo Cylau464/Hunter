@@ -417,13 +417,13 @@ public class Player : MonoBehaviour
             rigidBody.velocity = Vector2.zero;
             float horizontalPushPower = 5;
             rigidBody.AddForce(new Vector2(horizontalPushPower * direction, 0), ForceMode2D.Impulse);
-            Invoke("HorizontalAcces", 0.05f);
+            Invoke("HorizontalAccess", 0.05f);
 
             SwitchState(PlayerState.Idle);
         }
     }
 
-    void HorizontalAcces()
+    void HorizontalAccess()
     {
         input.horizontalAccess = true;
     }

@@ -27,18 +27,11 @@ public class HowlCirclePulse : MonoBehaviour
         anim.SetBool(isCastParamID, true);
         circleCol.radius = .2f;
         float _castTime = Time.time + spell.castTime;
-        float _howlCircleMaxRadius = spell.castRange;
+        float _сircleMaxRadius = spell.castRange;
         float _curDelay = 0f;
 
         while (_castTime > Time.time)
         {
-            ////Circle reached max radius -> reset radius to min
-            //if (circleCol.radius >= _howlCircleMaxRadius)
-            //{
-            //    circleCol.radius = .2f;
-            //    damageDone = false;
-            //}
-
             if (_curDelay <= Time.time)
                 damageDone = false;
 
@@ -50,7 +43,7 @@ public class HowlCirclePulse : MonoBehaviour
                 _curDelay = spell.periodicityDamage + Time.time;
             }
 
-            if(circleCol.radius < spell.castRange)
+            if(circleCol.radius < _сircleMaxRadius)
                 circleCol.radius += spell.castRange * 3f * Time.deltaTime;
 
             yield return new WaitForEndOfFrame();
