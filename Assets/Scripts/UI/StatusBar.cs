@@ -7,17 +7,17 @@ public class StatusBar : MonoBehaviour
 {
     [SerializeField] Text healthText = null;
     [SerializeField] Image healthBar = null;
-    public int maxHealth;
+    [HideInInspector] public int maxHealth;
     [SerializeField] Text staminaText = null;
     [SerializeField] Image staminaBar = null;
-    public int maxStamina;
+    [HideInInspector] public int maxStamina;
 
     public void HealthChange(int health)
     {
         if (health < 0)
             health = 0;
 
-        healthText.text = health + " / " + maxHealth;
+        healthText.text = health.ToString();
         healthBar.fillAmount = (float) health / maxHealth;
     }
 
@@ -26,7 +26,7 @@ public class StatusBar : MonoBehaviour
         if (stamina < 0)
             stamina = 0;
 
-        staminaText.text = stamina + " / " + maxStamina;
+        staminaText.text = stamina.ToString();
         staminaBar.fillAmount = (float) stamina / maxStamina;
     }
 }

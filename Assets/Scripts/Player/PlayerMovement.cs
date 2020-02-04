@@ -438,7 +438,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isHeadBlocked)
             return;
-
+        
         isCrouching = false;
         input.horizontalAccess = true;
         bodyCollider.size = colliderStandSize;

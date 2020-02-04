@@ -13,9 +13,20 @@ public class PlayerAtributes : MonoBehaviour
     { 
         set
         {
+            Debug.Log(staminaRestoreValue);
             //value > current stamina = stamina recovering
-            curRestoreStaminaDelay = (value > stamina ? restoreStaminaDelay : restoreStaminaPause) + Time.time;
-            stamina = value;
+            if (value > stamina)
+            {
+                curRestoreStaminaDelay = restoreStaminaDelay + Time.time;
+                staminaRestoreValue += staminaRestoreValue < maxStaminaRestoreValue ? .1f : 0f;
+            }
+            else
+            {
+                curRestoreStaminaDelay = restoreStaminaPause + Time.time;
+                staminaRestoreValue = 1f;
+            }
+            
+            stamina = value > maxStamina ? maxStamina : value <= 0 ? 0 : value;
             statusBar.StaminaChange(stamina);
         } 
         get { return stamina; } 
@@ -24,6 +35,8 @@ public class PlayerAtributes : MonoBehaviour
     [SerializeField] float restoreStaminaPause = 2f;            //Pasue after last stamina reduction
     [SerializeField] float restoreStaminaDelay = .1f;           //Delay between stamina recovery
     float curRestoreStaminaDelay;
+    float staminaRestoreValue = 1f;
+    float maxStaminaRestoreValue = 4f;
     [SerializeField] Transform statusBarTransform = null;
     StatusBar statusBar;
 
@@ -46,7 +59,7 @@ public class PlayerAtributes : MonoBehaviour
     void Update()
     {
         if (curRestoreStaminaDelay <= Time.time && stamina < maxStamina)
-            Stamina++;
+            Stamina += Mathf.RoundToInt(staminaRestoreValue);
     }
 
     /// <summary>

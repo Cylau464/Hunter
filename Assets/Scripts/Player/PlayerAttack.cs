@@ -37,6 +37,7 @@ public class PlayerAttack : MonoBehaviour
     PlayerInput input;
     Transform weapon;
     PlayerAtributes atributes;
+    Animator anim;
     Rigidbody2D rigidBody;
     WeaponAtributes weaponAtributes;
     WeaponAnimation weaponAnimation;
@@ -81,6 +82,7 @@ public class PlayerAttack : MonoBehaviour
         atributes           = GetComponent<PlayerAtributes>();
         rigidBody           = GetComponent<Rigidbody2D>();
         sprite              = GetComponent<SpriteRenderer>();
+        anim                = GetComponent<Animator>();
         input               = GetComponent<PlayerInput>();
     }
     
@@ -214,6 +216,7 @@ public class PlayerAttack : MonoBehaviour
             movement.canFlip = true;
             attackState = AttackState.End;
             rigidBody.velocity = Vector2.zero;
+            anim.speed = 1f;
 
             //Switch animation from air attack to grounded
             if (airLightCombo + airStrongCombo + airJointCombo > 0 && movement.isOnGround)
@@ -336,8 +339,9 @@ public class PlayerAttack : MonoBehaviour
                 weaponDamageType    = weaponAtributes.damageTypesOfAttacks[AttackTypes.Light]; //fix it
                 attackForceDistance = weaponAtributes.lightAttackForce;
                 //If the stamina enough to attack - multiply = 1 else = 2
-                timeBtwAttacks      = (atributes.Stamina >= staminaCosts ? 1f : 2f) * (Time.time + weaponAtributes.lightAttackSpeed);
-                attackDuration      = (atributes.Stamina >= staminaCosts ? 1f : 2f) * (Time.time + weaponAtributes.lightAttackSpeed * 1.5f);
+                anim.speed = atributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
+                timeBtwAttacks      = weaponAtributes.lightAttackSpeed + Time.time;
+                attackDuration      = weaponAtributes.lightAttackSpeed * 1.5f + Time.time;
                 break;
             case AttackTypes.Strong:
                 damage              = weaponAtributes.strongAttackDamage;
@@ -346,8 +350,9 @@ public class PlayerAttack : MonoBehaviour
                 weaponDamageType    = weaponAtributes.damageTypesOfAttacks[AttackTypes.Strong]; //fix it
                 attackForceDistance = weaponAtributes.strongAttackForce;
                 //If the stamina enough to attack - multiply = 1 else = 2
-                timeBtwAttacks      = (atributes.Stamina >= staminaCosts ? 1f : 2f) * (Time.time + weaponAtributes.strongAttackSpeed);
-                attackDuration      = (atributes.Stamina >= staminaCosts ? 1f : 2f) * (Time.time + weaponAtributes.strongAttackSpeed * 1.5f);
+                anim.speed = atributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
+                timeBtwAttacks      = weaponAtributes.strongAttackSpeed + Time.time;
+                attackDuration      = weaponAtributes.strongAttackSpeed * 1.5f + Time.time;
                 break;
             case AttackTypes.Joint:
                 damage              = weaponAtributes.jointAttackDamage;
@@ -356,8 +361,9 @@ public class PlayerAttack : MonoBehaviour
                 weaponDamageType    = weaponAtributes.damageTypesOfAttacks[AttackTypes.Joint]; //fix it
                 attackForceDistance = weaponAtributes.jointAttackForce;
                 //If the stamina enough to attack - multiply = 1 else = 2
-                timeBtwAttacks      = (atributes.Stamina >= staminaCosts ? 1f : 2f) * (Time.time + weaponAtributes.jointAttackSpeed);
-                attackDuration      = (atributes.Stamina >= staminaCosts ? 1f : 2f) * (Time.time + weaponAtributes.jointAttackSpeed * 1.5f);
+                anim.speed = atributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
+                timeBtwAttacks      = weaponAtributes.jointAttackSpeed + Time.time;
+                attackDuration      = weaponAtributes.jointAttackSpeed * 1.5f + Time.time;
                 break;
         }
     }

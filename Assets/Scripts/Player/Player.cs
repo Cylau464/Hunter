@@ -6,7 +6,7 @@ public enum PlayerState { Idle, Move, Jump, Crouch, Attack, Climb, Evade, Hang, 
 //public enum HurtType { None, Repulsion, Grab };
 
 public class Player : MonoBehaviour
-{
+{/*
     [SerializeField] bool drawDebugRaycast = true;
 
     [Header("Movement Properties")]
@@ -168,7 +168,7 @@ public class Player : MonoBehaviour
             GroundMovement();
             AirMovement();
         }*/
-
+        /*
         //Turn off gravity in air attacks 
         if (isAttacking && !isOnGround && attack.attackState != AttackState.End)
         {
@@ -210,7 +210,7 @@ public class Player : MonoBehaviour
             case PlayerState.Dead:
             Dead();
             break;
-        }*/
+        }*//*
     }
 
     void SwitchState(PlayerState newState)
@@ -310,7 +310,7 @@ public class Player : MonoBehaviour
             if (input.crouchHeld && isOnGround)
                 Crouch();
         }*/
-
+        /*
         //Climbing
         if (!isEvading)
         {
@@ -348,7 +348,7 @@ public class Player : MonoBehaviour
 
         if (input.horizontalAccess && !isAttacking || attack.weaponAttackType == WeaponAttackType.Range)
         {
-            xVelocity = speed * speedDivisor/*/ weapon.weaponMass*/ * input.horizontal;
+            xVelocity = speed * speedDivisor/* weapon.weaponMass*/ /** input.horizontal;
             rigidBody.velocity = new Vector2(xVelocity, rigidBody.velocity.y);
             //Flip caharcter if his direction != input horizontal
             if (xVelocity * direction < 0f)
@@ -390,7 +390,7 @@ public class Player : MonoBehaviour
     {
         isEvading = true;
 
-        if /*(isEvading && */(curEvadingDuration <= Time.time || (input.jumpPressed && extraJumpsCount > 0))
+        if /*(isEvading && *//*(curEvadingDuration <= Time.time || (input.jumpPressed && extraJumpsCount > 0))
         {
             input.horizontalAccess = true;
             canFlip = true;
@@ -458,5 +458,5 @@ public class Player : MonoBehaviour
         }
 
         return hit;
-    }
+    }*/
 }
