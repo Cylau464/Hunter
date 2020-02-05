@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using Structures;
-
-public enum AttackTypes { NotAttacking, Light, Strong, Joint }
-public enum AttackState { Free, Start, Damage, End }
+using Enums;
 
 public class PlayerAttack : MonoBehaviour
 {
@@ -25,22 +23,19 @@ public class PlayerAttack : MonoBehaviour
     public bool canAttack;
     public bool switchAttack;
 
-    //[HideInInspector]
     public AttackState attackState;
     public AttackTypes attackType;
 
     public LayerMask[] whatIsEnemies;
 
     SpriteRenderer sprite;
-    SpriteRenderer weaponSprite;
     PlayerMovement movement;
     PlayerInput input;
-    Transform weapon;
+    public Transform weapon;
     PlayerAtributes atributes;
     Animator anim;
     Rigidbody2D rigidBody;
     WeaponAtributes weaponAtributes;
-    WeaponAnimation weaponAnimation;
     GameObject shellPrefab;
     GameObject shellObj;
     [SerializeField] GameObject damageBox = null;
@@ -71,13 +66,7 @@ public class PlayerAttack : MonoBehaviour
     void Start()
     {
         weapon              = GameObject.FindWithTag("Main Weapon").transform;
-        posX                = weapon.localPosition.x;
-        weaponSprite        = weapon.GetComponent<SpriteRenderer>();
-        weaponAtributes     = weapon.GetComponent<WeaponAtributes>();
-        weaponAnimation     = weapon.GetComponent<WeaponAnimation>();
-        attackRangeX        = weaponAtributes.attackRangeX;
-        attackRangeY        = weaponAtributes.attackRangeY;
-        weaponAttackType    = weaponAtributes.weaponAttackType;
+        GetWeapon();
         movement            = GetComponent<PlayerMovement>();
         atributes           = GetComponent<PlayerAtributes>();
         rigidBody           = GetComponent<Rigidbody2D>();
@@ -91,27 +80,31 @@ public class PlayerAttack : MonoBehaviour
         if (!movement.isDead)
         {
             if (!movement.isEvading && !movement.isClimbing && !movement.isHanging && canAttack &&
-                input.lastInputs.Count != 0 && (input.lastInputs[0] == InputsEnum.StrongAttack || input.lastInputs[0] == InputsEnum.LightAttack || input.lastInputs[0] == InputsEnum.JointAttack) && timeBtwAttacks + Time.deltaTime <= Time.time)
+                input.lastInputs.Count != 0 && (input.lastInputs[0] == InputsEnum.StrongAttack || input.lastInputs[0] == InputsEnum.LightAttack ||
+                input.lastInputs[0] == InputsEnum.JointAttack || input.lastInputs[0] == InputsEnum.TopDownAttack) && timeBtwAttacks + Time.deltaTime <= Time.time)
             {
                 if (!movement.isOnGround && lightCombo + strongCombo + jointCombo > 0)
                     switchAttack = true;
                 
                 attackState = AttackState.Start;
-                attackType = input.lastInputs[0] == InputsEnum.JointAttack ? AttackTypes.Joint : input.lastInputs[0] == InputsEnum.StrongAttack ? AttackTypes.Strong : AttackTypes.Light;
+
+                switch(input.lastInputs[0])
+                {
+                    case InputsEnum.LightAttack:
+                        attackType = AttackTypes.Light;
+                        break;
+                    case InputsEnum.StrongAttack:
+                        attackType = AttackTypes.Strong;
+                        break;
+                    case InputsEnum.JointAttack:
+                        attackType = AttackTypes.Joint;
+                        break;
+                    case InputsEnum.TopDownAttack:
+                        attackType = AttackTypes.TopDown;
+                        break;
+                }
+                //attackType = input.lastInputs[0] == InputsEnum.JointAttack ? AttackTypes.Joint : input.lastInputs[0] == InputsEnum.StrongAttack ? AttackTypes.Strong : AttackTypes.Light;
                 input.lastInputs.RemoveAt(0);
-                /*//if list have both attack input...
-                if (input.lastInputs.Contains(InputsEnum.LightAttack) && input.lastInputs.Contains(InputsEnum.StrongAttack))
-                {
-                    attackType = AttackTypes.Joint;
-                    input.lastInputs.Clear();          //...remove all list element
-                }
-                //if only one of they...
-                else
-                {
-                    attackType = input.lastInputs[0] == InputsEnum.LightAttack ? AttackTypes.Light : AttackTypes.Strong;
-                    input.lastInputs.RemoveAt(0);      //...remove first list element
-                }
-                */
                 MeleeAttack(attackType);
                 Debug.Log(attackType);
             }
@@ -136,6 +129,28 @@ public class PlayerAttack : MonoBehaviour
         }
     }
 
+    public void GetWeapon()
+    {
+        posX = weapon.localPosition.x;
+        weaponAtributes = weapon.GetComponent<WeaponAtributes>();
+        attackRangeX = weaponAtributes.attackRangeX;
+        attackRangeY = weaponAtributes.attackRangeY;
+        weaponAttackType = weaponAtributes.weaponAttackType;
+
+        switch (weaponAtributes.weaponUltimate.type)
+        {
+            case WeaponUltimate.Passive:
+                movement.bonusAtributes = weaponAtributes.weaponUltimate.atributes;
+                break;
+            case WeaponUltimate.Buff:
+                break;
+            case WeaponUltimate.Charging:
+                break;
+            case WeaponUltimate.Spell:
+                break;
+        }
+    }
+
     void MeleeAttack(AttackTypes attackType)
     {
         //Only one air combo in a jump
@@ -149,6 +164,7 @@ public class PlayerAttack : MonoBehaviour
         input.lightAttack = false;
         input.strongAttack = false;
         input.jointAttack = false;
+        input.topDownAttack = false;
 
         GetWeaponAtributes(attackType);
         SetCombo(attackType);
@@ -192,7 +208,10 @@ public class PlayerAttack : MonoBehaviour
         }
         else
         {
-            rigidBody.AddForce(Vector2.right * movement.direction * attackForceDistance, ForceMode2D.Impulse);
+            if (attackType == AttackTypes.TopDown)
+                rigidBody.AddForce(Vector2.up * -attackForceDistance, ForceMode2D.Impulse);
+            else
+                rigidBody.AddForce(Vector2.right * movement.direction * attackForceDistance, ForceMode2D.Impulse);
 
             GameObject _inst            = Instantiate(damageBox, transform);
             DamageBox _damageBoxInst    = _inst.GetComponent<DamageBox>();
@@ -320,6 +339,10 @@ public class PlayerAttack : MonoBehaviour
                         canAttack = false;
                     break;
                 }
+            case AttackTypes.TopDown:
+                lightCombo = strongCombo = airLightCombo = airStrongCombo = airJointCombo = jointCombo = 0; //nullify all other combo
+
+                break;
         }
     }
 
@@ -328,6 +351,7 @@ public class PlayerAttack : MonoBehaviour
         weaponAttackType = weaponAtributes.weaponAttackType;
         shellPrefab = weaponAtributes.shellPrefab;
         shellSpeed = weaponAtributes.shellSpeed;
+        //Only for range attacks
         movement.speedDivisor = type == AttackTypes.Light ? weaponAtributes.speedDivisorL : type == AttackTypes.Strong ? weaponAtributes.speedDivisorS : weaponAtributes.speedDivisorJ;
 
         switch (type)
@@ -335,8 +359,8 @@ public class PlayerAttack : MonoBehaviour
             case AttackTypes.Light:
                 damage              = weaponAtributes.lightAttackDamage;
                 staminaCosts        = weaponAtributes.lightAttackStaminaCosts;
-                weaponElement       = weaponAtributes.element;
-                weaponDamageType    = weaponAtributes.damageTypesOfAttacks[AttackTypes.Light]; //fix it
+                weaponElement       = weaponAtributes.elements[type];
+                weaponDamageType    = weaponAtributes.damageTypesOfAttacks[type]; //fix it
                 attackForceDistance = weaponAtributes.lightAttackForce;
                 //If the stamina enough to attack - multiply = 1 else = 2
                 anim.speed = atributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
@@ -346,8 +370,8 @@ public class PlayerAttack : MonoBehaviour
             case AttackTypes.Strong:
                 damage              = weaponAtributes.strongAttackDamage;
                 staminaCosts        = weaponAtributes.strongAttackStaminaCosts;
-                weaponElement       = weaponAtributes.element;
-                weaponDamageType    = weaponAtributes.damageTypesOfAttacks[AttackTypes.Strong]; //fix it
+                weaponElement       = weaponAtributes.elements[type];
+                weaponDamageType    = weaponAtributes.damageTypesOfAttacks[type]; //fix it
                 attackForceDistance = weaponAtributes.strongAttackForce;
                 //If the stamina enough to attack - multiply = 1 else = 2
                 anim.speed = atributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
@@ -357,13 +381,24 @@ public class PlayerAttack : MonoBehaviour
             case AttackTypes.Joint:
                 damage              = weaponAtributes.jointAttackDamage;
                 staminaCosts        = weaponAtributes.jointAttackStaminaCosts;
-                weaponElement       = weaponAtributes.elementJA;
-                weaponDamageType    = weaponAtributes.damageTypesOfAttacks[AttackTypes.Joint]; //fix it
+                weaponElement       = weaponAtributes.elements[type];
+                weaponDamageType    = weaponAtributes.damageTypesOfAttacks[type]; //fix it
                 attackForceDistance = weaponAtributes.jointAttackForce;
                 //If the stamina enough to attack - multiply = 1 else = 2
                 anim.speed = atributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
                 timeBtwAttacks      = weaponAtributes.jointAttackSpeed + Time.time;
                 attackDuration      = weaponAtributes.jointAttackSpeed * 1.5f + Time.time;
+                break;
+            case AttackTypes.TopDown:
+                damage = weaponAtributes.topDownAttackDamage;
+                staminaCosts = weaponAtributes.topDownAttackStaminaCosts;
+                weaponElement = weaponAtributes.elements[type];
+                weaponDamageType = weaponAtributes.damageTypesOfAttacks[type]; //fix it
+                attackForceDistance = weaponAtributes.topDownAttackForce;
+                //If the stamina enough to attack - multiply = 1 else = 2
+                anim.speed = atributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
+                timeBtwAttacks = weaponAtributes.topDownAttackSpeed + Time.time;
+                attackDuration = weaponAtributes.topDownAttackSpeed * 1.5f + Time.time;
                 break;
         }
     }

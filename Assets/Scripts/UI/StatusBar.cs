@@ -11,6 +11,8 @@ public class StatusBar : MonoBehaviour
     [SerializeField] Text staminaText = null;
     [SerializeField] Image staminaBar = null;
     [HideInInspector] public int maxStamina;
+    [SerializeField] Image mainWeaponIcon = null;
+    [SerializeField] Image secondWeaponIcon = null;
 
     public void HealthChange(int health)
     {
@@ -28,5 +30,23 @@ public class StatusBar : MonoBehaviour
 
         staminaText.text = stamina.ToString();
         staminaBar.fillAmount = (float) stamina / maxStamina;
+    }
+
+    public void WeaponIconSet(Sprite icon, string tag)
+    {
+        if (tag == "Main Weapon")
+            mainWeaponIcon.sprite = icon;
+        else if (tag == "Second Weapon")
+            secondWeaponIcon.sprite = icon;
+        else
+            Debug.LogError("Incorrect tag");
+    }
+
+    public void WeaponIconChange()
+    {
+        Image _mainIcon = mainWeaponIcon;
+        Image _secondIcon = secondWeaponIcon;
+        _mainIcon.sprite = secondWeaponIcon.sprite;
+        _secondIcon.sprite = mainWeaponIcon.sprite;
     }
 }

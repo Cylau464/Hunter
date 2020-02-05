@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using RotaryHeart.Lib.SerializableDictionary;
+using Enums;
 
 [System.Serializable]
 public class ElementDictionary : SerializableDictionaryBase<Elements, int> { }

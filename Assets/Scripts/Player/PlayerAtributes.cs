@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Structures;
+using Enums;
 
 public class PlayerAtributes : MonoBehaviour 
 {
@@ -39,10 +40,9 @@ public class PlayerAtributes : MonoBehaviour
     float maxStaminaRestoreValue = 4f;
     [SerializeField] Transform statusBarTransform = null;
     StatusBar statusBar;
+    PlayerMovement movement;
 
     public float timeOfLastTakenDamage;
-
-    PlayerMovement movement;
 
     void Start()
     {

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Enums;
 
 namespace Structures
 {
@@ -212,6 +213,28 @@ namespace Structures
                     color = Color.black;
                     break;
             }
+        }
+    }
+
+    [Serializable]
+    public struct Ultimate
+    {
+        [HideInInspector] public string title;
+        
+        [Header("General Properties")]
+        public WeaponUltimate type;
+
+        [Header("Passive Ultimate")]
+        public AtributesDictionary atributes;
+
+        /// <summary>
+        /// Passive ultimates
+        /// </summary>
+        public Ultimate(string title, WeaponUltimate type, AtributesDictionary atributes)
+        {
+            this.title = title;
+            this.type = type;
+            this.atributes = atributes;
         }
     }
 }

@@ -1,13 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Enums;
 
-public enum MovementType { Grounding, Flying };
-public enum DefenseTypes { Slash, Chop, Thrust, Blunt };
-enum EnemyState { Patroling, Chasing, Attacking, Hurt, Dead };
+
+//public enum DefenseTypes { Slash, Chop, Thrust, Blunt };
+
 
 public class EnemyCUCOLD : MonoBehaviour
 {
+    enum MovementType { Grounding, Flying };
+    enum EnemyState { Patroling, Chasing, Attacking, Hurt, Dead };
     [Header("Movement Properties")]
     public float patrolSpeed = 2f;
     public float chaseSpeed = 4f;
@@ -16,7 +19,7 @@ public class EnemyCUCOLD : MonoBehaviour
     public int maxHealth = 5;
     public int health;
     public int patrolDistance = 20;
-    public MovementType movementType;
+    MovementType movementType;
     /*
     public ValueOfDefense[] defense = {
         new ValueOfDefense("Slash", DefenseTypes.Slash, 0),

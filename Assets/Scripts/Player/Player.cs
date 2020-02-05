@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PlayerState { Idle, Move, Jump, Crouch, Attack, Climb, Evade, Hang, Hooked, Hurt, Dead };
+//public enum PlayerState { Idle, Move, Jump, Crouch, Attack, Climb, Evade, Hang, Hooked, Hurt, Dead };
 //public enum HurtType { None, Repulsion, Grab };
 
 public class Player : MonoBehaviour

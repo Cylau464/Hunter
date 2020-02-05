@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
-public enum InputsEnum { Evade, StrongAttack, LightAttack, JointAttack }
+using Enums;
 
 [DefaultExecutionOrder(-100)]
 
@@ -17,21 +16,25 @@ public class PlayerInput : MonoBehaviour
     [HideInInspector] public bool lightAttack;
     [HideInInspector] public bool strongAttack;
     [HideInInspector] public bool jointAttack;
+    [HideInInspector] public bool topDownAttack;
     [HideInInspector] public bool evade;
     [HideInInspector] public bool hook;
     [HideInInspector] public bool horizontalAccess = true;
+    [HideInInspector] public bool switchWeapon;
     [HideInInspector] public static bool restart;
     public List<InputsEnum> lastInputs = new List<InputsEnum>(2);           //Create new list for 2 elements for writting 2 last inputs
 
     bool readyToClear;
 
     PlayerAttack attack;
+    PlayerMovement movement;
 
     Coroutine lastInputsCoroutine;
 
     private void Start()
     {
         attack = GetComponent<PlayerAttack>();
+        movement = GetComponent<PlayerMovement>();
     }
 
     private void FixedUpdate()
@@ -72,6 +75,7 @@ public class PlayerInput : MonoBehaviour
         crouchPressed = false;
         evade = false;
         restart = false;
+        switchWeapon = false;
         hook = false;
 
         readyToClear = false;
@@ -90,6 +94,7 @@ public class PlayerInput : MonoBehaviour
         crouchPressed = crouchPressed || Input.GetButtonDown("Crouch");
         crouchHeld = crouchHeld || Input.GetButton("Crouch");
 
+        switchWeapon = switchWeapon || Input.GetButtonDown("Switch Weapon");
         hook = hook || Input.GetButtonDown("Hook");
 
         //evade = evade || Input.GetButtonDown("Evade");
@@ -108,34 +113,62 @@ public class PlayerInput : MonoBehaviour
 
         if (Input.GetButtonDown("LightAttack"))
         {
-            if (strongAttack)
+            //Top-down attack
+            if (crouchHeld && !movement.isOnGround)
             {
                 strongAttack = false;
-                jointAttack = true;
+                lightAttack = false;
+                jointAttack = false;
+                topDownAttack = true;
+                lastInputs.Clear();
                 StopCoroutine(lastInputsCoroutine);
-                lastInputsCoroutine = StartCoroutine(SetLastInputs(InputsEnum.JointAttack, .07f));
+                lastInputs.Add(InputsEnum.TopDownAttack);
             }
             else
             {
-                lightAttack = true;
-                //StopCoroutine(lastInputsCoroutine);
-                lastInputsCoroutine = StartCoroutine(SetLastInputs(InputsEnum.LightAttack, .07f));
+                if (strongAttack)
+                {
+                    strongAttack = false;
+                    jointAttack = true;
+                    StopCoroutine(lastInputsCoroutine);
+                    lastInputsCoroutine = StartCoroutine(SetLastInputs(InputsEnum.JointAttack, .07f));
+                }
+                else
+                {
+                    lightAttack = true;
+                    //StopCoroutine(lastInputsCoroutine);
+                    lastInputsCoroutine = StartCoroutine(SetLastInputs(InputsEnum.LightAttack, .07f));
+                }
             }
         }
         if (Input.GetButtonDown("StrongAttack"))
         {
-            if (lightAttack)
+            //Top-down attack
+            if (crouchHeld && !movement.isOnGround)
             {
+                strongAttack = false;
                 lightAttack = false;
-                jointAttack = true;
+                jointAttack = false;
+                topDownAttack = true;
+                lastInputs.Clear();
                 StopCoroutine(lastInputsCoroutine);
-                lastInputsCoroutine = StartCoroutine(SetLastInputs(InputsEnum.JointAttack, .07f));
+                lastInputs.Add(InputsEnum.TopDownAttack);
             }
             else
             {
-                strongAttack = true;
-                //StopCoroutine(lastInputsCoroutine);
-                lastInputsCoroutine = StartCoroutine(SetLastInputs(InputsEnum.StrongAttack, .07f));
+                if (lightAttack)
+                {
+                    lightAttack = false;
+                    jointAttack = true;
+                    StopCoroutine(lastInputsCoroutine);
+                    lastInputsCoroutine = StartCoroutine(SetLastInputs(InputsEnum.JointAttack, .07f));
+                }
+                else
+                {
+                    strongAttack = true;
+                    //StopCoroutine(lastInputsCoroutine);
+                    lastInputsCoroutine = StartCoroutine(SetLastInputs(InputsEnum.StrongAttack, .07f));
+                }
             }
         }
 

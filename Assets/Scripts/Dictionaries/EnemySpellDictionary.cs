@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using RotaryHeart.Lib.SerializableDictionary;
 using Structures;
+using Enums;
 
 [System.Serializable]
 public class EnemySpellDictionary : SerializableDictionaryBase<string, EnemySpell> { }

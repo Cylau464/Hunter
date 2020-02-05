@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public enum HurtType { None, Repulsion, Catch };
+using Structures;
+using Enums;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -32,8 +32,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float evadingDuration          = .35f;         //Duration of evade state
     [SerializeField] float evadingDistance          = 8f;           //Distance of evade
     [SerializeField] float evadingCooldown          = 1f;           //Evade cooldown in sec
+    [SerializeField] int evadingStaminaCosts        = 10;           //Spent stamina for using evade
     public int direction { get; private set; }      = 1;            //Character direction
     [SerializeField] LayerMask groundLayer          = 1 << 9;       //9 - Platforms layer
+
+    [Header("Atributes Bonus")]
+    public AtributesDictionary bonusAtributes;
 
     [Header("Hurt Properties")]
     float curDazedTime = 0f;
@@ -100,7 +104,7 @@ public class PlayerMovement : MonoBehaviour
         attack                  = GetComponent<PlayerAttack>();
         atributes               = GetComponent<PlayerAtributes>();
         playerTransform         = GetComponent<Transform>();
-        weapon                  = GetComponentInChildren<WeaponAtributes>();
+        weapon                  = GameObject.FindGameObjectWithTag("Main Weapon").GetComponent<WeaponAtributes>();
         hook                    = GetComponentInChildren<Hook>();
         weaponAttackType        = weapon.weaponAttackType;
         physicMaterial          = bodyCollider.sharedMaterial;
@@ -141,7 +145,7 @@ public class PlayerMovement : MonoBehaviour
         if (isOnGround)
         {
             curCoyoteTime = Time.time + coyoteDuration;
-            extraJumpsCount = extraJumps;
+            extraJumpsCount = extraJumps + (int) bonusAtributes[BonusAtributes.JumpCount];
         }
 
         //aimDirection = Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position);
@@ -149,9 +153,10 @@ public class PlayerMovement : MonoBehaviour
         //if (Mathf.Sign(aimDirection.x) != direction)
         //    FlipCharacterDirection();
     }
-
+    /*
     void OnTriggerStay2D(Collider2D col)
     {
+        //Волк излучает холод вокруг себя, который периодически наносит урон.
         //If interacting with the enemy (14 - enemy body layer)
         if (col.gameObject.layer == 14 && !isHurt && !isDead && !isEvading && !isAttacking && isOnGround && input.horizontalAccess)
         {
@@ -173,7 +178,7 @@ public class PlayerMovement : MonoBehaviour
             input.horizontalAccess = false;
             Invoke("HorizontalAccess", .2f);
         }
-    }
+    }*/
 
     void FixedUpdate()
     {
@@ -250,7 +255,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //Evading
-        if (atributes.Stamina >= 10 && input.lastInputs.Contains(InputsEnum.Evade) && attack.attackState != AttackState.Damage && !isEvading && curEvadingCooldown <= Time.time)
+        if (atributes.Stamina >= evadingStaminaCosts - bonusAtributes[BonusAtributes.EvadeCosts] && input.lastInputs.Contains(InputsEnum.Evade) && attack.attackState != AttackState.Damage && !isEvading && curEvadingCooldown <= Time.time)
         {
             //If use evade in hanging state
             if (rigidBody.bodyType == RigidbodyType2D.Static)
@@ -270,12 +275,12 @@ public class PlayerMovement : MonoBehaviour
             curEvadingDuration = Time.time + evadingDuration;
             Crouch();
             rigidBody.velocity = Vector2.zero;
-            atributes.Stamina -= 10;
+            atributes.Stamina -= evadingStaminaCosts - (int) bonusAtributes[BonusAtributes.EvadeCosts];
 
             if (input.horizontal != 0)
-                rigidBody.AddForce(new Vector2(evadingDistance * 1.5f * Mathf.Sign(input.horizontal), 0f), ForceMode2D.Impulse); //input horizontal instead direction for evade after attack
+                rigidBody.AddForce(new Vector2((evadingDistance * 1.5f + bonusAtributes[BonusAtributes.EvadeDistance]) * Mathf.Sign(input.horizontal), 0f), ForceMode2D.Impulse); //input horizontal instead direction for evade after attack
             else
-                rigidBody.AddForce(new Vector2(evadingDistance * direction, 0f), ForceMode2D.Impulse);
+                rigidBody.AddForce(new Vector2((evadingDistance + bonusAtributes[BonusAtributes.EvadeDistance]) * direction, 0f), ForceMode2D.Impulse);
 
         }
         else if (isEvading && (curEvadingDuration <= Time.time || (input.jumpPressed && extraJumpsCount > 0)))
@@ -289,8 +294,8 @@ public class PlayerMovement : MonoBehaviour
             if (input.crouchHeld && isOnGround)
                 Crouch();
         }
-        //Clear up all evade inputs from the inputs list if CD has not yet passed
-        if (curEvadingCooldown > Time.time)
+        //Clear up all evade inputs from the inputs list if CD has not yet passed or not enough stamina
+        if (curEvadingCooldown > Time.time || atributes.Stamina < evadingStaminaCosts)
             input.lastInputs.RemoveAll(x => x == InputsEnum.Evade);
 
         //Climbing
@@ -332,7 +337,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (input.horizontalAccess && !isAttacking || attack.weaponAttackType == WeaponAttackType.Range)
         {
-            xVelocity = speed * speedDivisor/*/ weapon.weaponMass*/ * input.horizontal;
+            xVelocity = (speed * speedDivisor + bonusAtributes[BonusAtributes.Speed]/*/ weapon.weaponMass*/) * input.horizontal;
             rigidBody.velocity = new Vector2(xVelocity, rigidBody.velocity.y);
             //Flip caharcter if his direction != input horizontal
             if (xVelocity * direction < 0f)

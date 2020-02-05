@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum DragType { None, Draggable, NotDraggable };
-
 public class Hook : MonoBehaviour
 {
     public float maxLength = 5f;

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using RotaryHeart.Lib.SerializableDictionary;
-using Structures;
 using Enums;
+using Structures;
 
 [System.Serializable]
-public class EnemyComboDictionary : SerializableDictionaryBase<string, EnemyCombo> { }
+public class ElementsOfAttacksDictionary : SerializableDictionaryBase<AttackTypes, Element> { }

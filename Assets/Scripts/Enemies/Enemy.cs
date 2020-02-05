@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using UnityEngine;
 using Structures;
+using Enums;
 using System.Linq;
-
-public enum SpellStates { None, Prepare, Cast, End }
 
 public class Enemy : MonoBehaviour
 {
