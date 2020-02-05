@@ -35,18 +35,32 @@ public class StatusBar : MonoBehaviour
     public void WeaponIconSet(Sprite icon, string tag)
     {
         if (tag == "Main Weapon")
+        {
             mainWeaponIcon.sprite = icon;
+            SetImageScale(icon, mainWeaponIcon);
+        }
         else if (tag == "Second Weapon")
+        {
             secondWeaponIcon.sprite = icon;
+            SetImageScale(icon, secondWeaponIcon);
+        }
         else
             Debug.LogError("Incorrect tag");
     }
 
     public void WeaponIconChange()
     {
-        Image _mainIcon = mainWeaponIcon;
-        Image _secondIcon = secondWeaponIcon;
-        _mainIcon.sprite = secondWeaponIcon.sprite;
-        _secondIcon.sprite = mainWeaponIcon.sprite;
+        Sprite _mainSprite = mainWeaponIcon.sprite;
+        Sprite _secondSprite = secondWeaponIcon.sprite;
+        mainWeaponIcon.sprite = _secondSprite;
+        secondWeaponIcon.sprite = _mainSprite;
+        SetImageScale(mainWeaponIcon.sprite, mainWeaponIcon);
+        SetImageScale(secondWeaponIcon.sprite, secondWeaponIcon);
+    }
+
+    void SetImageScale(Sprite sprite, Image image)
+    {
+        Vector2 _newScale = new Vector2(sprite.rect.size.x / sprite.pixelsPerUnit, sprite.rect.size.y / sprite.pixelsPerUnit);
+        image.rectTransform.localScale = _newScale;
     }
 }

@@ -190,7 +190,9 @@ public class Enemy : MonoBehaviour
     {
         if(currentState == State.Dead) return;
 
-        CheckPlayer();
+        if(currentState == State.Patrol)
+            CheckPlayer();
+
         SwitchSpell();
 
         switch (currentState)

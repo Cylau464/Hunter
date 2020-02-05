@@ -121,7 +121,10 @@ public class PlayerInput : MonoBehaviour
                 jointAttack = false;
                 topDownAttack = true;
                 lastInputs.Clear();
-                StopCoroutine(lastInputsCoroutine);
+
+                if (lastInputsCoroutine != null)
+                    StopCoroutine(lastInputsCoroutine);
+
                 lastInputs.Add(InputsEnum.TopDownAttack);
             }
             else
@@ -151,7 +154,10 @@ public class PlayerInput : MonoBehaviour
                 jointAttack = false;
                 topDownAttack = true;
                 lastInputs.Clear();
-                StopCoroutine(lastInputsCoroutine);
+
+                if (lastInputsCoroutine != null)
+                    StopCoroutine(lastInputsCoroutine);
+
                 lastInputs.Add(InputsEnum.TopDownAttack);
             }
             else

@@ -37,7 +37,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] LayerMask groundLayer          = 1 << 9;       //9 - Platforms layer
 
     [Header("Atributes Bonus")]
-    public AtributesDictionary bonusAtributes;
+    public AtributesDictionary bonusAtributes = new AtributesDictionary();
 
     [Header("Hurt Properties")]
     float curDazedTime = 0f;
@@ -145,7 +145,7 @@ public class PlayerMovement : MonoBehaviour
         if (isOnGround)
         {
             curCoyoteTime = Time.time + coyoteDuration;
-            extraJumpsCount = extraJumps + (int) bonusAtributes[BonusAtributes.JumpCount];
+            extraJumpsCount = extraJumps + (bonusAtributes.ContainsKey(BonusAtributes.JumpCount) ? (int) bonusAtributes[BonusAtributes.JumpCount] : 0);
         }
 
         //aimDirection = Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position);
@@ -195,7 +195,7 @@ public class PlayerMovement : MonoBehaviour
             AirMovement();
         }
 
-        if (isAttacking && !isOnGround && attack.attackState != AttackState.End)
+        if (isAttacking && !isOnGround && attack.attackState != AttackState.End && attack.attackType != AttackTypes.TopDown)
         {
             rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0f);
 
@@ -255,7 +255,8 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //Evading
-        if (atributes.Stamina >= evadingStaminaCosts - bonusAtributes[BonusAtributes.EvadeCosts] && input.lastInputs.Contains(InputsEnum.Evade) && attack.attackState != AttackState.Damage && !isEvading && curEvadingCooldown <= Time.time)
+        if (atributes.Stamina >= evadingStaminaCosts - (bonusAtributes.ContainsKey(BonusAtributes.EvadeCosts) ? bonusAtributes[BonusAtributes.EvadeCosts] : 0) && 
+            input.lastInputs.Contains(InputsEnum.Evade) && attack.attackState != AttackState.Damage && !isEvading && curEvadingCooldown <= Time.time)
         {
             //If use evade in hanging state
             if (rigidBody.bodyType == RigidbodyType2D.Static)
@@ -337,7 +338,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (input.horizontalAccess && !isAttacking || attack.weaponAttackType == WeaponAttackType.Range)
         {
-            xVelocity = (speed * speedDivisor + bonusAtributes[BonusAtributes.Speed]/*/ weapon.weaponMass*/) * input.horizontal;
+            xVelocity = (speed * speedDivisor + (bonusAtributes.ContainsKey(BonusAtributes.Speed) ? bonusAtributes[BonusAtributes.Speed] : 0)/*/ weapon.weaponMass*/) * input.horizontal;
             rigidBody.velocity = new Vector2(xVelocity, rigidBody.velocity.y);
             //Flip caharcter if his direction != input horizontal
             if (xVelocity * direction < 0f)

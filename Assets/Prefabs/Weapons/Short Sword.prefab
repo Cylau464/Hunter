@@ -48,6 +48,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -70,7 +71,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -747433451
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 7eaeafd29a3c4644f9200eee8c255484, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -115,42 +116,133 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   title: Weapon
-  lightAttackDamage: 42
-  strongAttackDamage: 60
-  jointAttackDamage: 80
+  lightAttackDamage: 30
+  strongAttackDamage: 50
+  jointAttackDamage: 75
+  topDownAttackDamage: 100
+  lightAttackStaminaCosts: 8
+  strongAttackStaminaCosts: 13
+  jointAttackStaminaCosts: 18
+  topDownAttackStaminaCosts: 20
   lightAttackSpeed: 0.4
   strongAttackSpeed: 0.6
   jointAttackSpeed: 0.7
+  topDownAttackSpeed: 0.8
   attackRangeX: 1.2
   attackRangeY: 1
   lightAttackForce: 2
-  strongAttackForce: 3
-  jointAttackForce: 4
+  strongAttackForce: 4
+  jointAttackForce: 7
+  topDownAttackForce: 10
   shellSpeed: 0
   weaponMass: 1
   speedDivisorL: 1
   speedDivisorS: 1
   speedDivisorJ: 1
+  speedDivisorTD: 1
   damageTypesOfAttacks:
-    _pairs:
-    - _key: 1
-      _value: 0
-    - _key: 2
-      _value: 0
-    - _key: 3
-      _value: 2
-  damageType: 0000000002000000
+    reorderableList:
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
+      isExpanded: 1
+      label:
+        m_Text: Keys
+        m_Image: {fileID: 0}
+        m_Tooltip: 
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
+      elementDisplayType: 0
+      elementNameProperty: 
+      elementNameOverride: 
+      elementIcon: {fileID: 0}
+    reqReferences: {fileID: 0}
+    isExpanded: 1
+    _keyValues: 01000000020000000300000004000000
+    _keys: 01000000020000000300000004000000
+    _values: 00000000000000000200000000000000
   weaponAttackType: 0
   weaponType: 0
+  weaponUltimate:
+    title: Evade Bonus
+    type: 3
+    atributes:
+      reorderableList:
+        canAdd: 1
+        canRemove: 1
+        draggable: 1
+        expandable: 1
+        multipleSelection: 1
+        isExpanded: 0
+        label:
+          m_Text: Keys
+          m_Image: {fileID: 0}
+          m_Tooltip: 
+        headerHeight: 18
+        footerHeight: 13
+        slideEasing: 0.15
+        verticalSpacing: 2
+        showDefaultBackground: 1
+        elementDisplayType: 0
+        elementNameProperty: 
+        elementNameOverride: 
+        elementIcon: {fileID: 0}
+      reqReferences: {fileID: 0}
+      isExpanded: 0
+      _keyValues: 0100000002000000
+      _keys: 0100000002000000
+      _values:
+      - 3
+      - 3
   shellPrefab: {fileID: 0}
-  element:
-    title: Fire
-    element: 0
-    value: 0
-  elementJA:
-    title: Wind
-    element: 2
-    value: 0
+  elements:
+    reorderableList:
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
+      isExpanded: 1
+      label:
+        m_Text: Keys
+        m_Image: {fileID: 0}
+        m_Tooltip: 
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
+      elementDisplayType: 0
+      elementNameProperty: 
+      elementNameOverride: 
+      elementIcon: {fileID: 0}
+    reqReferences: {fileID: 0}
+    isExpanded: 1
+    _keyValues: 01000000020000000300000004000000
+    _keys: 01000000020000000300000004000000
+    _values:
+    - title: Fire
+      element: 0
+      value: 0
+      color: {r: 0, g: 1, b: 1, a: 1}
+    - title: Fire
+      element: 0
+      value: 0
+      color: {r: 0, g: 1, b: 1, a: 1}
+    - title: Fire
+      element: 0
+      value: 0
+      color: {r: 0, g: 1, b: 1, a: 1}
+    - title: Wind
+      element: 2
+      value: 0
+      color: {r: 0, g: 1, b: 0, a: 1}
+  icon: {fileID: 21300000, guid: 7eaeafd29a3c4644f9200eee8c255484, type: 3}
 --- !u!114 &-502866172652505088
 MonoBehaviour:
   m_ObjectHideFlags: 0

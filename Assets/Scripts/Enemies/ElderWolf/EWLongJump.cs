@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Structures;
+using Enums;
 
 public class EWLongJump : MonoBehaviour
 {

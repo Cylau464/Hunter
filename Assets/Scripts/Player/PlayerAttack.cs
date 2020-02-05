@@ -7,19 +7,20 @@ using Enums;
 
 public class PlayerAttack : MonoBehaviour
 {
-    public int lightComboCount = 4;         //count of combo
-    public int strongComboCount = 3;        //count of combo
-    public int jointComboCount = 2;         //count of combo
-    public int lightCombo;                  //current number of light combo
-    public int strongCombo;                 //current number of strong combo
-    public int jointCombo;                  //current number of joint combo
-    public int airLightComboCount = 3;      //count of combo
-    public int airStrongComboCount = 2;     //count of combo
-    public int airJointComboCount = 1;      //count of combo
-    public int airLightCombo;               //current number of air light combo
-    public int airStrongCombo;              //current number of air strong combo
-    public int airJointCombo;               //current number of air joint combo
-    public float delayResetCombo = 1.5f;
+    [SerializeField] int lightComboCount = 4;         //count of combo
+    [SerializeField] int strongComboCount = 3;        //count of combo
+    [SerializeField] int jointComboCount = 2;         //count of combo
+    public int lightCombo;                            //current number of light combo
+    public int strongCombo;                           //current number of strong combo
+    public int jointCombo;                            //current number of joint combo
+    [SerializeField] int airLightComboCount = 3;      //count of combo
+    [SerializeField] int airStrongComboCount = 2;     //count of combo
+    [SerializeField] int airJointComboCount = 1;      //count of combo
+    public int airLightCombo;                         //current number of air light combo
+    public int airStrongCombo;                        //current number of air strong combo
+    public int airJointCombo;                         //current number of air joint combo
+    [SerializeField] float delayResetCombo = 1.5f;
+    [SerializeField] float forceDuration = .2f;
     public bool canAttack;
     public bool switchAttack;
 
@@ -48,6 +49,7 @@ public class PlayerAttack : MonoBehaviour
     float shellSpeed;
     float timeBtwAttacks;
     float curDelayResetCombo;
+    float curForceDurtaion;
     float posX;
     float rotZ;
 
@@ -65,9 +67,9 @@ public class PlayerAttack : MonoBehaviour
 
     void Start()
     {
+        movement = GetComponent<PlayerMovement>();
         weapon              = GameObject.FindWithTag("Main Weapon").transform;
         GetWeapon();
-        movement            = GetComponent<PlayerMovement>();
         atributes           = GetComponent<PlayerAtributes>();
         rigidBody           = GetComponent<Rigidbody2D>();
         sprite              = GetComponent<SpriteRenderer>();
@@ -197,6 +199,7 @@ public class PlayerAttack : MonoBehaviour
         attackState = AttackState.Damage;
         movement.canFlip = false;
         curDelayResetCombo = Time.time + delayResetCombo;
+        curForceDurtaion = Time.time + forceDuration;
         atributes.Stamina -= staminaCosts;
 
         if (weaponAttackType != WeaponAttackType.Melee)
@@ -228,9 +231,14 @@ public class PlayerAttack : MonoBehaviour
     {
         if (!movement.isAttacking)
             return;
+        
+        if(curForceDurtaion <= Time.time && attackType != AttackTypes.TopDown)
+        {
+            rigidBody.velocity = Vector2.zero;
+        }
 
         //End of attack and pause anim
-        if (timeBtwAttacks <= Time.time)
+        if (timeBtwAttacks <= Time.time || (attackType == AttackTypes.TopDown && movement.isOnGround))
         {
             movement.canFlip = true;
             attackState = AttackState.End;
@@ -246,7 +254,7 @@ public class PlayerAttack : MonoBehaviour
         }
 
         //Pause attack state for give little time for next attack
-        if (attackDuration <= Time.time)
+        if (attackDuration <= Time.time || (attackType == AttackTypes.TopDown && movement.isOnGround))
         {
             movement.isAttacking = false;
             attackType = default;

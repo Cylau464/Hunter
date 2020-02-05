@@ -14,7 +14,6 @@ public class PlayerAtributes : MonoBehaviour
     { 
         set
         {
-            Debug.Log(staminaRestoreValue);
             //value > current stamina = stamina recovering
             if (value > stamina)
             {

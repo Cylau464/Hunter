@@ -8,7 +8,8 @@ public class IceAura : MonoBehaviour
 {
     [SerializeField] int minDamage = 1;
     [SerializeField] int maxDamage = 5;
-    Element element = new Element("Ice", Elements.Ice, 0);
+    float damage;
+    [SerializeField] Element element = new Element("Ice", Elements.Ice, 0);
     [SerializeField] float delay = 1.5f;
     float curDelay;
     [SerializeField] float damagePeriodicity = .5f;
@@ -37,7 +38,8 @@ public class IceAura : MonoBehaviour
                 if (element.value < maxDamage)
                 {
                     playerAtributes.TakeDamage(0, HurtType.None, element);
-                    element.value = Mathf.RoundToInt(element.value + .4f);
+                    damage += .4f;
+                    element.value = Mathf.RoundToInt(element.value + damage);
                 }
                 else
                     playerAtributes.TakeDamage(0, HurtType.Repulsion, dazedTime, element);
@@ -50,6 +52,11 @@ public class IceAura : MonoBehaviour
     void OnTriggerExit2D(Collider2D col)
     {
         if (col.TryGetComponent(out PlayerAtributes _atributes))
+        {
+            Debug.Log("ADSD");
             playerAtributes = null;
+            element.value = 0;
+            damage = 0f;
+        }
     }
 }

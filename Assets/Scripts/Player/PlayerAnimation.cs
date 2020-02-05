@@ -31,6 +31,7 @@ public class PlayerAnimation : MonoBehaviour
     int lightAttackParamID;
     int strongAttackParamID;
     int jointAttackParamID;
+    int topDownAttackParamID;
     int switchAttackParamID;
 
     // Start is called before the first frame update
@@ -58,6 +59,7 @@ public class PlayerAnimation : MonoBehaviour
         lightAttackParamID     = Animator.StringToHash("lightAttack");
         strongAttackParamID    = Animator.StringToHash("strongAttack");
         jointAttackParamID     = Animator.StringToHash("jointAttack");
+        topDownAttackParamID   = Animator.StringToHash("topDownAttack");
         switchAttackParamID    = Animator.StringToHash("switchAttack");
 
         //Get references to the needed components
@@ -93,6 +95,7 @@ public class PlayerAnimation : MonoBehaviour
         anim.SetBool(lightAttackParamID, attack.attackType == AttackTypes.Light ? true : false);
         anim.SetBool(strongAttackParamID, attack.attackType == AttackTypes.Strong ? true : false);
         anim.SetBool(jointAttackParamID, attack.attackType == AttackTypes.Joint ? true : false);
+        anim.SetBool(topDownAttackParamID, attack.attackType == AttackTypes.TopDown ? true : false);
 
         anim.SetInteger(lightComboParamID, attack.lightCombo);
         anim.SetInteger(strongComboParamID, attack.strongCombo);

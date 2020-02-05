@@ -65,9 +65,16 @@ public class WeaponAtributes : MonoBehaviour
     public Sprite icon;
     StatusBar statusBar;
 
-    void Awake()
+    void Start()
     {
-        statusBar = GameObject.FindGameObjectWithTag("UI").GetComponent<StatusBar>();
+        GameObject[] _go = GameObject.FindGameObjectsWithTag("UI");
+
+        foreach (GameObject go in _go)
+        {
+            if (go.TryGetComponent(out StatusBar _sb) && statusBar == null)
+                statusBar = _sb;
+        }
+
         statusBar.WeaponIconSet(icon, gameObject.tag);
 
         if (gameObject.tag == "Second Weapon")
