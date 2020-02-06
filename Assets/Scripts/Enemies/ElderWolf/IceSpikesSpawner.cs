@@ -8,8 +8,8 @@ public class IceSpikesSpawner : MonoBehaviour
     public EnemySpell spell;
     public PlayerMovement player;
     [SerializeField] int spikesCount = 4;
-    [SerializeField] float minDistantion = 1f;
-    [SerializeField] float maxDistantion = 8f;
+    [SerializeField] float minDistantion = 2f;
+    [SerializeField] float maxDistantion = 11f;
     
     private void Start()
     {
@@ -20,39 +20,29 @@ public class IceSpikesSpawner : MonoBehaviour
     {
         GameObject _inst;
         GameObject _spikeRes = Resources.Load<GameObject>("Enemies/Elder Wolf/Ice Spike");
-        List<GameObject> _spike = new List<GameObject>(spikesCount);
+        List<GameObject> _spikes = new List<GameObject>(spikesCount);
         BoxCollider2D _spikeCol = null;
-        float _posX = 0f;
-        bool _rerandom = false;
+        Collider2D[] _neighbours;
+        float _xPos;
 
         for (int i = 0; i < spikesCount; i++)
         {
-            if (_spike.Count == 0)
-                _posX = player.transform.position.x;
+            if (_spikes.Count == 0)
+                _xPos = player.transform.position.x;
             else
             {
                 do
                 {
-                    _posX = Random.Range(_spike[0].transform.position.x - maxDistantion - _spikeCol.size.x / 2f, _spike[0].transform.position.x + maxDistantion + _spikeCol.size.x / 2f);
+                    _xPos = Random.Range(_spikes[0].transform.position.x - maxDistantion - _spikeCol.size.x / 2f, _spikes[0].transform.position.x + maxDistantion + _spikeCol.size.x / 2f);
 
-                    foreach (GameObject spike in _spike)
-                    {
-                        //Randomed posX in contact with one of the existing Ice Spikes
-                        if (Mathf.Abs(_posX - spike.transform.position.x) < minDistantion)
-                        {
-                            _rerandom = true;
-                            break;
-                        }
-                        else
-                            _rerandom = false;
-                    }
+                    _neighbours = Physics2D.OverlapCircleAll(new Vector2(_xPos, _spikes[0].transform.position.y), minDistantion + _spikeCol.size.x / 2f, 1 << 15); //15 layer with ice spikes
                 }
-                while (_rerandom);
+                while (_neighbours.Length > 0);
             }
 
-            _spike.Add(_inst = Instantiate(_spikeRes, new Vector3(_posX, transform.position.y, 0f), Quaternion.identity));
+            _spikes.Add(_inst = Instantiate(_spikeRes, new Vector3(_xPos, transform.position.y, 0f), Quaternion.identity));
             _inst.GetComponent<IceSpike>().spell = spell;
-            _spikeCol = _spikeCol ?? _spike[i].GetComponent<BoxCollider2D>();
+            _spikeCol = _spikeCol ?? _spikes[i].GetComponent<BoxCollider2D>();
 
             yield return new WaitForSeconds(spell.periodicityDamage);
         }

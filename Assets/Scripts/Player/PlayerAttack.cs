@@ -242,7 +242,7 @@ public class PlayerAttack : MonoBehaviour
         {
             movement.canFlip = true;
             attackState = AttackState.End;
-            rigidBody.velocity = Vector2.zero;
+            //rigidBody.velocity = Vector2.zero;
             anim.speed = 1f;
 
             //Switch animation from air attack to grounded
@@ -359,54 +359,56 @@ public class PlayerAttack : MonoBehaviour
         weaponAttackType = weaponAtributes.weaponAttackType;
         shellPrefab = weaponAtributes.shellPrefab;
         shellSpeed = weaponAtributes.shellSpeed;
-        //Only for range attacks
-        movement.speedDivisor = type == AttackTypes.Light ? weaponAtributes.speedDivisorL : type == AttackTypes.Strong ? weaponAtributes.speedDivisorS : weaponAtributes.speedDivisorJ;
 
         switch (type)
         {
             case AttackTypes.Light:
-                damage              = weaponAtributes.lightAttackDamage;
-                staminaCosts        = weaponAtributes.lightAttackStaminaCosts;
-                weaponElement       = weaponAtributes.elements[type];
-                weaponDamageType    = weaponAtributes.damageTypesOfAttacks[type]; //fix it
-                attackForceDistance = weaponAtributes.lightAttackForce;
+                damage                  = weaponAtributes.lightAttackDamage;
+                staminaCosts            = weaponAtributes.lightAttackStaminaCosts;
+                weaponElement           = weaponAtributes.elements[type];
+                weaponDamageType        = weaponAtributes.damageTypesOfAttacks[type]; //fix it
+                attackForceDistance     = weaponAtributes.lightAttackForce;
                 //If the stamina enough to attack - multiply = 1 else = 2
-                anim.speed = atributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
-                timeBtwAttacks      = weaponAtributes.lightAttackSpeed + Time.time;
-                attackDuration      = weaponAtributes.lightAttackSpeed * 1.5f + Time.time;
+                anim.speed              = atributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
+                timeBtwAttacks          = weaponAtributes.lightAttackSpeed + Time.time;
+                attackDuration          = weaponAtributes.lightAttackSpeed * 1.5f + Time.time;
+                movement.speedDivisor   = weaponAtributes.speedDivisorL;
                 break;
             case AttackTypes.Strong:
-                damage              = weaponAtributes.strongAttackDamage;
-                staminaCosts        = weaponAtributes.strongAttackStaminaCosts;
-                weaponElement       = weaponAtributes.elements[type];
-                weaponDamageType    = weaponAtributes.damageTypesOfAttacks[type]; //fix it
-                attackForceDistance = weaponAtributes.strongAttackForce;
+                damage                  = weaponAtributes.strongAttackDamage;
+                staminaCosts            = weaponAtributes.strongAttackStaminaCosts;
+                weaponElement           = weaponAtributes.elements[type];
+                weaponDamageType        = weaponAtributes.damageTypesOfAttacks[type]; //fix it
+                attackForceDistance     = weaponAtributes.strongAttackForce;
                 //If the stamina enough to attack - multiply = 1 else = 2
-                anim.speed = atributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
-                timeBtwAttacks      = weaponAtributes.strongAttackSpeed + Time.time;
-                attackDuration      = weaponAtributes.strongAttackSpeed * 1.5f + Time.time;
+                anim.speed              = atributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
+                timeBtwAttacks          = weaponAtributes.strongAttackSpeed + Time.time;
+                attackDuration          = weaponAtributes.strongAttackSpeed * 1.5f + Time.time;
+                movement.speedDivisor   = weaponAtributes.speedDivisorS;
                 break;
             case AttackTypes.Joint:
-                damage              = weaponAtributes.jointAttackDamage;
-                staminaCosts        = weaponAtributes.jointAttackStaminaCosts;
-                weaponElement       = weaponAtributes.elements[type];
-                weaponDamageType    = weaponAtributes.damageTypesOfAttacks[type]; //fix it
-                attackForceDistance = weaponAtributes.jointAttackForce;
+                damage                  = weaponAtributes.jointAttackDamage;
+                staminaCosts            = weaponAtributes.jointAttackStaminaCosts;
+                weaponElement           = weaponAtributes.elements[type];
+                weaponDamageType        = weaponAtributes.damageTypesOfAttacks[type]; //fix it
+                attackForceDistance     = weaponAtributes.jointAttackForce;
                 //If the stamina enough to attack - multiply = 1 else = 2
-                anim.speed = atributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
-                timeBtwAttacks      = weaponAtributes.jointAttackSpeed + Time.time;
-                attackDuration      = weaponAtributes.jointAttackSpeed * 1.5f + Time.time;
+                anim.speed              = atributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
+                timeBtwAttacks          = weaponAtributes.jointAttackSpeed + Time.time;
+                attackDuration          = weaponAtributes.jointAttackSpeed * 1.5f + Time.time;
+                movement.speedDivisor   = weaponAtributes.speedDivisorJ;
                 break;
             case AttackTypes.TopDown:
-                damage = weaponAtributes.topDownAttackDamage;
-                staminaCosts = weaponAtributes.topDownAttackStaminaCosts;
-                weaponElement = weaponAtributes.elements[type];
-                weaponDamageType = weaponAtributes.damageTypesOfAttacks[type]; //fix it
-                attackForceDistance = weaponAtributes.topDownAttackForce;
+                damage                  = weaponAtributes.topDownAttackDamage;
+                staminaCosts            = weaponAtributes.topDownAttackStaminaCosts;
+                weaponElement           = weaponAtributes.elements[type];
+                weaponDamageType        = weaponAtributes.damageTypesOfAttacks[type]; //fix it
+                attackForceDistance     = weaponAtributes.topDownAttackForce;
                 //If the stamina enough to attack - multiply = 1 else = 2
-                anim.speed = atributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
-                timeBtwAttacks = weaponAtributes.topDownAttackSpeed + Time.time;
-                attackDuration = weaponAtributes.topDownAttackSpeed * 1.5f + Time.time;
+                anim.speed              = atributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
+                timeBtwAttacks          = weaponAtributes.topDownAttackSpeed + Time.time;
+                attackDuration          = weaponAtributes.topDownAttackSpeed * 1.5f + Time.time;
+                movement.speedDivisor   = weaponAtributes.speedDivisorTD;
                 break;
         }
     }

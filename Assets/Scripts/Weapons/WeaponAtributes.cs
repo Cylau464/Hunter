@@ -29,7 +29,7 @@ public class WeaponAtributes : MonoBehaviour
     public float jointAttackForce           = 2.5f;
     public float topDownAttackForce         = 10f;
     public float shellSpeed                 = 0f;
-    public float weaponMass                 = 1f;                    //It multiplier character move speed and jump height. 1 = 100% speed and height
+    public float mass                       = 1f;                    //It multiplier character move speed and jump height. 1 = 100% speed and height
     public float speedDivisorL              = 1f;                    //Movespeed divisor light attack
     public float speedDivisorS              = 1f;                    //Movespeed divisor strong attack
     public float speedDivisorJ              = 1f;                    //Movespeed divisor joint attack
@@ -44,7 +44,7 @@ public class WeaponAtributes : MonoBehaviour
         { AttackTypes.TopDown, DamageTypes.Slash }
     };
     public WeaponAttackType weaponAttackType = WeaponAttackType.Melee;
-    public WeaponType weaponType = WeaponType.Sword;
+    public WeaponType type = WeaponType.Sword;
     public Ultimate weaponUltimate = new Ultimate("Evade Bonus", WeaponUltimate.Passive, new AtributesDictionary() {
         { BonusAtributes.EvadeCosts, 3 },
         { BonusAtributes.EvadeDistance, 3 }
