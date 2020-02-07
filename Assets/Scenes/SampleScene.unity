@@ -1467,276 +1467,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1602877360}
     m_Modifications:
-    - target: {fileID: 5488921127673635810, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: m_FlipX
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5488921127673635810, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: m_FlipY
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5488921127673635810, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5995488681494528942, guid: 8deea7c2a0f999d42aa47e72708c86d8,
         type: 3}
       propertyPath: m_Name
       value: Lance
-      objectReference: {fileID: 0}
-    - target: {fileID: 5995488681494528942, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5995488681494528942, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5995488681494528942, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: m_TagString
-      value: Second Weapon
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: damageType.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: damageTypesOfAttacks._keyValues.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: damageTypesOfAttacks._keys.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: damageTypesOfAttacks._values.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: weaponType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: damageType.Array.data[0]
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: damageTypesOfAttacks.reorderableList.canAdd
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: damageTypesOfAttacks.reorderableList.canRemove
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: damageTypesOfAttacks.reorderableList.draggable
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: damageTypesOfAttacks.reorderableList.expandable
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: damageTypesOfAttacks.reorderableList.multipleSelection
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: damageTypesOfAttacks.reorderableList.label.m_Text
-      value: Keys
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: damageTypesOfAttacks.reorderableList.headerHeight
-      value: 18
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: damageTypesOfAttacks.reorderableList.footerHeight
-      value: 13
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: damageTypesOfAttacks.reorderableList.slideEasing
-      value: 0.15
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: damageTypesOfAttacks.reorderableList.verticalSpacing
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: damageTypesOfAttacks.reorderableList.showDefaultBackground
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: weaponUltimate.atributes.reorderableList.canAdd
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: weaponUltimate.atributes.reorderableList.canRemove
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: weaponUltimate.atributes.reorderableList.draggable
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: weaponUltimate.atributes.reorderableList.expandable
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: weaponUltimate.atributes.reorderableList.multipleSelection
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: weaponUltimate.atributes.reorderableList.label.m_Text
-      value: Keys
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: weaponUltimate.atributes.reorderableList.headerHeight
-      value: 18
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: weaponUltimate.atributes.reorderableList.footerHeight
-      value: 13
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: weaponUltimate.atributes.reorderableList.slideEasing
-      value: 0.15
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: weaponUltimate.atributes.reorderableList.verticalSpacing
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: weaponUltimate.atributes.reorderableList.showDefaultBackground
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: elements.reorderableList.canAdd
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: elements.reorderableList.canRemove
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: elements.reorderableList.draggable
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: elements.reorderableList.expandable
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: elements.reorderableList.multipleSelection
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: elements.reorderableList.label.m_Text
-      value: Keys
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: elements.reorderableList.headerHeight
-      value: 18
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: elements.reorderableList.footerHeight
-      value: 13
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: elements.reorderableList.slideEasing
-      value: 0.15
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: elements.reorderableList.verticalSpacing
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: elements.reorderableList.showDefaultBackground
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: icon
-      value: 
-      objectReference: {fileID: 21300000, guid: 768b437ba21212a4e88fbb3bc35b4e5d,
-        type: 3}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: weaponUltimate.atributes.isExpanded
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: weaponUltimate.atributes.reorderableList.isExpanded
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: damageTypesOfAttacks.isExpanded
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: damageTypesOfAttacks.reorderableList.isExpanded
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: damageTypesOfAttacks._values.Array.data[3]
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: damageTypesOfAttacks._keyValues.Array.data[3]
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 8050504631223437953, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: damageTypesOfAttacks._keys.Array.data[3]
-      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8836084032477501014, guid: 8deea7c2a0f999d42aa47e72708c86d8,
         type: 3}
@@ -1792,11 +1526,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -90
-      objectReference: {fileID: 0}
-    - target: {fileID: 8836084032477501014, guid: 8deea7c2a0f999d42aa47e72708c86d8,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8deea7c2a0f999d42aa47e72708c86d8, type: 3}
@@ -2854,10 +2583,10 @@ MonoBehaviour:
       globalCD: 1
       prepareTime: 1
       castTime: 3
-      castRange: 7
+      castRange: 18
       periodicityDamage: 0.3
       dazedTime: 0.3
-      repulseVector: {x: 4, y: 0}
+      repulseVector: {x: 4, y: 13}
       damageRange: {x: 15, y: 5}
       firstDamage: 0
       lastDamage: 8
@@ -2891,7 +2620,7 @@ MonoBehaviour:
       prepareTime: 1
       castTime: 2
       castRange: 11
-      periodicityDamage: 0.5
+      periodicityDamage: 0.3
       dazedTime: 2
       repulseVector: {x: 5, y: 25}
       damageRange: {x: 2, y: 5}

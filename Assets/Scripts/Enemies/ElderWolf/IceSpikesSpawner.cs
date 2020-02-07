@@ -9,7 +9,7 @@ public class IceSpikesSpawner : MonoBehaviour
     public PlayerMovement player;
     [SerializeField] int spikesCount = 4;
     [SerializeField] float minDistantion = 2f;
-    [SerializeField] float maxDistantion = 11f;
+    [SerializeField] float maxDistantion = 12f;
     
     private void Start()
     {
@@ -24,6 +24,7 @@ public class IceSpikesSpawner : MonoBehaviour
         BoxCollider2D _spikeCol = null;
         Collider2D[] _neighbours;
         float _xPos;
+        
 
         for (int i = 0; i < spikesCount; i++)
         {

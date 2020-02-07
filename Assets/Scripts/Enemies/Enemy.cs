@@ -305,8 +305,8 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            SwitchState(State.Patrol);
-            target = null;
+            //SwitchState(State.Patrol);
+            //target = null;
         }
     }
 

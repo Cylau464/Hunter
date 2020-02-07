@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -446821498990930878}
   m_Layer: 10
   m_Name: Lance
-  m_TagString: Main Weapon
+  m_TagString: Second Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -48,6 +48,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -70,7 +71,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -747433451
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 768b437ba21212a4e88fbb3bc35b4e5d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -115,33 +116,133 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   title: Lance
-  lightAttackDamage: 2
-  strongAttackDamage: 3
-  jointAttackDamage: 5
-  lightAttackSpeed: 0.5
-  strongAttackSpeed: 0.7
-  jointAttackSpeed: 0.8
+  lightAttackDamage: 20
+  strongAttackDamage: 35
+  jointAttackDamage: 50
+  topDownAttackDamage: 65
+  lightAttackStaminaCosts: 7
+  strongAttackStaminaCosts: 11
+  jointAttackStaminaCosts: 16
+  topDownAttackStaminaCosts: 20
+  lightAttackSpeed: 0.3
+  strongAttackSpeed: 0.5
+  jointAttackSpeed: 0.7
+  topDownAttackSpeed: 0.8
   attackRangeX: 1.5
   attackRangeY: 0.5
-  lightAttackForce: 1.5
-  strongAttackForce: 2
-  jointAttackForce: 3
-  weaponMass: 1
-  damageType: 2
-  weaponType: 0
+  lightAttackForce: 2
+  strongAttackForce: 3
+  jointAttackForce: 5
+  topDownAttackForce: 10
+  shellSpeed: 0
+  mass: 1
+  speedDivisorL: 1
+  speedDivisorS: 1
+  speedDivisorJ: 1
+  speedDivisorTD: 1
+  damageTypesOfAttacks:
+    reorderableList:
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
+      isExpanded: 0
+      label:
+        m_Text: Keys
+        m_Image: {fileID: 0}
+        m_Tooltip: 
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
+      elementDisplayType: 0
+      elementNameProperty: 
+      elementNameOverride: 
+      elementIcon: {fileID: 0}
+    reqReferences: {fileID: 0}
+    isExpanded: 0
+    _keyValues: 01000000020000000300000004000000
+    _keys: 01000000020000000300000004000000
+    _values: 02000000020000000000000002000000
+  weaponAttackType: 0
+  type: 1
+  weaponUltimate:
+    title: Evade Bonus
+    type: 3
+    atributes:
+      reorderableList:
+        canAdd: 1
+        canRemove: 1
+        draggable: 1
+        expandable: 1
+        multipleSelection: 1
+        isExpanded: 0
+        label:
+          m_Text: Keys
+          m_Image: {fileID: 0}
+          m_Tooltip: 
+        headerHeight: 18
+        footerHeight: 13
+        slideEasing: 0.15
+        verticalSpacing: 2
+        showDefaultBackground: 1
+        elementDisplayType: 0
+        elementNameProperty: 
+        elementNameOverride: 
+        elementIcon: {fileID: 0}
+      reqReferences: {fileID: 0}
+      isExpanded: 0
+      _keyValues: 0100000002000000
+      _keys: 0100000002000000
+      _values:
+      - 3
+      - 3
+  shellPrefab: {fileID: 0}
   elements:
-  - title: Fire
-    element: 0
-    value: 0
-  - title: Wind
-    element: 2
-    value: 0
-  - title: Earth
-    element: 3
-    value: 0
-  - title: Water
-    element: 1
-    value: 0
+    reorderableList:
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
+      isExpanded: 0
+      label:
+        m_Text: Keys
+        m_Image: {fileID: 0}
+        m_Tooltip: 
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
+      elementDisplayType: 0
+      elementNameProperty: 
+      elementNameOverride: 
+      elementIcon: {fileID: 0}
+    reqReferences: {fileID: 0}
+    isExpanded: 0
+    _keyValues: 01000000020000000300000004000000
+    _keys: 01000000020000000300000004000000
+    _values:
+    - title: Fire
+      element: 0
+      value: 0
+      color: {r: 0, g: 1, b: 1, a: 1}
+    - title: Fire
+      element: 0
+      value: 0
+      color: {r: 0, g: 1, b: 1, a: 1}
+    - title: Fire
+      element: 0
+      value: 0
+      color: {r: 0, g: 1, b: 1, a: 1}
+    - title: Wind
+      element: 2
+      value: 0
+      color: {r: 0, g: 1, b: 0, a: 1}
+  icon: {fileID: 21300000, guid: 768b437ba21212a4e88fbb3bc35b4e5d, type: 3}
 --- !u!114 &-446821498990930878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,3 +255,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e245c6c5d23de5e4781638163070d4f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultRot: {x: 0, y: 0, z: 0, w: 0}

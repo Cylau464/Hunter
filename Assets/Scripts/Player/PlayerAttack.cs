@@ -67,7 +67,7 @@ public class PlayerAttack : MonoBehaviour
 
     void Start()
     {
-        movement = GetComponent<PlayerMovement>();
+        movement            = GetComponent<PlayerMovement>();
         weapon              = GameObject.FindWithTag("Main Weapon").transform;
         GetWeapon();
         atributes           = GetComponent<PlayerAtributes>();

@@ -55,9 +55,14 @@ MonoBehaviour:
     damageRange: {x: 0, y: 0}
     firstDamage: 0
     lastDamage: 0
+    elementDamage:
+      title: 
+      element: 0
+      value: 0
+      color: {r: 0, g: 0, b: 0, a: 0}
     jumpDistance: {x: 0, y: 0}
     jumpDirection: 0
   player: {fileID: 0}
-  spikesCount: 3
-  minDistantion: 4
-  maxDistantion: 8
+  spikesCount: 4
+  minDistantion: 2
+  maxDistantion: 12

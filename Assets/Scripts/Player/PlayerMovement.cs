@@ -166,7 +166,7 @@ public class PlayerMovement : MonoBehaviour
                 float _forceDir = Mathf.Sign(playerTransform.position.x - col.transform.position.x);
 
                 //rigidBody.AddForce(new Vector2(speed / 2f * _forceDir, 0f), ForceMode2D.Impulse);
-                rigidBody.velocity = new Vector2(rigidBody.velocity.x + _forceDir * speed / 2f, rigidBody.velocity.y);
+                //rigidBody.velocity = new Vector2(rigidBody.velocity.x + _forceDir * speed / 2f, rigidBody.velocity.y);
             }
             //Moving - push player in the opposite direction to the movement
             else
