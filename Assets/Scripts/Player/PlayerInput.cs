@@ -22,7 +22,7 @@ public class PlayerInput : MonoBehaviour
     [HideInInspector] public bool horizontalAccess = true;
     [HideInInspector] public bool switchWeapon;
     [HideInInspector] public static bool restart;
-    public List<InputsEnum> lastInputs = new List<InputsEnum>(2);           //Create new list for 2 elements for writting 2 last inputs
+    public List<InputsEnum> lastInputs = new List<InputsEnum>(1);           //Create new list for 2 elements for writting 2 last inputs
 
     bool readyToClear;
 

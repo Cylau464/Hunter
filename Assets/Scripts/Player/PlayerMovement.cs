@@ -96,7 +96,7 @@ public class PlayerMovement : MonoBehaviour
     //Collision with enemy
     CollisionRepulse colRepulse;
     float halfColSizeX;
-    int repulseQuantity;
+    int repulseQuantity = 3;
 
     void Start()
     {
@@ -233,7 +233,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //Evading
-        if (atributes.Stamina >= evadingStaminaCosts - (bonusAtributes.ContainsKey(BonusAtributes.EvadeCosts) ? bonusAtributes[BonusAtributes.EvadeCosts] : 0) && 
+        if (/*atributes.Stamina >= evadingStaminaCosts - (bonusAtributes.ContainsKey(BonusAtributes.EvadeCosts) ? bonusAtributes[BonusAtributes.EvadeCosts] : 0) && */
             input.lastInputs.Contains(InputsEnum.Evade) && attack.attackState != AttackState.Damage && !isEvading && curEvadingCooldown <= Time.time)
         {
             //If use evade in hanging state
@@ -569,7 +569,7 @@ public class PlayerMovement : MonoBehaviour
                 //Moving - push player in the opposite direction to the movement
                 else
                 {
-                    if (Mathf.Abs(DistanceToEnemy()) >= halfColSizeX && repulseQuantity > 0)
+                    if (Mathf.Abs(DistanceToEnemy()) >= halfColSizeX && Mathf.Sign(DistanceToEnemy()) != Mathf.Sign(input.horizontal) && repulseQuantity > 0)
                     {
                         rigidBody.AddForce(new Vector2(speed * 1.3f * -Mathf.Sign(input.horizontal), 0f), ForceMode2D.Impulse);
                         //rigidBody.velocity = new Vector2(rigidBody.velocity.x + speed / DistanceToEnemy(), rigidBody.velocity.y);
