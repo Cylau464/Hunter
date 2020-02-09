@@ -399,7 +399,7 @@ public class PlayerAttack : MonoBehaviour
                 movement.speedDivisor   = weaponAtributes.speedDivisorJ;
                 break;
             case AttackTypes.TopDown:
-                damage                  = weaponAtributes.topDownAttackDamage;
+                damage                  = atributes.Stamina >= staminaCosts ? weaponAtributes.topDownAttackDamage : weaponAtributes.topDownAttackDamage / 10;
                 staminaCosts            = weaponAtributes.topDownAttackStaminaCosts;
                 weaponElement           = weaponAtributes.elements[type];
                 weaponDamageType        = weaponAtributes.damageTypesOfAttacks[type]; //fix it

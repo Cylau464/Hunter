@@ -457,6 +457,7 @@ public class Enemy : MonoBehaviour
 
     void GiveDamage()
     {
+        Debug.Log("ATTACK");
         if (curCombo.attackCount <= curAttackNumber + 1)
             curAttackCD = Time.time + curCombo.attackCD;                        //Cooldown of attack
         else

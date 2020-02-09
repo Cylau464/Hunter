@@ -58,7 +58,6 @@ public class PlayerMovement : MonoBehaviour
     public bool isDead;
     public bool canFlip = true;
     public bool moveInputPriority = true;          //What the hell is this?
-    bool isCollideWithEnemy;
 
     [HideInInspector] 
     public float speedDivisor = 1f;                //Used to decrease horizontal speed
@@ -93,6 +92,11 @@ public class PlayerMovement : MonoBehaviour
     //Vector2 aimDirection;
 
     const float smallAmount = .05f;               //A small amount used for hanging position and something else
+
+    //Collision with enemy
+    CollisionRepulse colRepulse;
+    float halfColSizeX;
+    int repulseQuantity;
 
     void Start()
     {
@@ -152,32 +156,6 @@ public class PlayerMovement : MonoBehaviour
 
         //if (Mathf.Sign(aimDirection.x) != direction)
         //    FlipCharacterDirection();
-    }
-    
-    void OnTriggerStay2D(Collider2D col)
-    {
-        //Волк излучает холод вокруг себя, который периодически наносит урон.
-        //If interacting with the enemy (14 - enemy body layer)
-        if (col.gameObject.layer == 14 && !isHurt && !isDead && !isEvading && !isAttacking && isOnGround && input.horizontalAccess)
-        {
-            //Not moving - push player from the enemy
-            if (input.horizontal == 0)
-            {
-                float _forceDir = Mathf.Sign(playerTransform.position.x - col.transform.position.x);
-
-                //rigidBody.AddForce(new Vector2(speed / 2f * _forceDir, 0f), ForceMode2D.Impulse);
-                //rigidBody.velocity = new Vector2(rigidBody.velocity.x + _forceDir * speed / 2f, rigidBody.velocity.y);
-            }
-            //Moving - push player in the opposite direction to the movement
-            else
-            {
-                //rigidBody.AddForce(new Vector2(speed / 2f * -Mathf.Sign(input.horizontal), 0f), ForceMode2D.Impulse);
-                rigidBody.velocity = new Vector2(rigidBody.velocity.x + speed / 2f * -Mathf.Sign(input.horizontal), rigidBody.velocity.y);
-            }
-
-            input.horizontalAccess = false;
-            Invoke("HorizontalAccess", .2f);
-        }
     }
 
     void FixedUpdate()
@@ -551,6 +529,65 @@ public class PlayerMovement : MonoBehaviour
     {
         isHurt = true;
         curDazedTime = dazedTime + Time.time;
+    }
+
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.TryGetComponent(out CollisionRepulse _colRepulse))
+        {
+            colRepulse = _colRepulse;
+            halfColSizeX = _colRepulse.maxRepulseDistance;
+            repulseQuantity = repulseQuantity <= -1 ? 3 : repulseQuantity;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D col)
+    {
+        colRepulse = col.gameObject.TryGetComponent(out CollisionRepulse _colRepulse) ? _colRepulse : colRepulse;
+    }
+
+    float DistanceToEnemy()
+    {
+        return playerTransform.position.x - colRepulse.transform.position.x;
+    }
+
+    void OnTriggerStay2D(Collider2D col)
+    {
+        //If interacting with the enemy (14 - enemy body layer)
+        if (col.gameObject.layer == 14)
+        {
+            if (!isHurt && !isDead && !isEvading && !isAttacking && isOnGround && input.horizontalAccess)
+            {
+                //Not moving - push player from the enemy
+                if (input.horizontal == 0)
+                {
+                    float _forceDir = Mathf.Sign(playerTransform.position.x - col.transform.position.x);
+
+                    rigidBody.AddForce(new Vector2(speed / halfColSizeX * _forceDir, 0f), ForceMode2D.Impulse);
+                    //rigidBody.velocity = new Vector2(rigidBody.velocity.x + _forceDir * speed / 2f, rigidBody.velocity.y);
+                }
+                //Moving - push player in the opposite direction to the movement
+                else
+                {
+                    if (Mathf.Abs(DistanceToEnemy()) >= halfColSizeX && repulseQuantity > 0)
+                    {
+                        rigidBody.AddForce(new Vector2(speed * 1.3f * -Mathf.Sign(input.horizontal), 0f), ForceMode2D.Impulse);
+                        //rigidBody.velocity = new Vector2(rigidBody.velocity.x + speed / DistanceToEnemy(), rigidBody.velocity.y);
+                        repulseQuantity--;
+                    }
+                    else
+                    {
+                        rigidBody.velocity = new Vector2(rigidBody.velocity.x + Mathf.Lerp(0f, speed / 2f, DistanceToEnemy() / halfColSizeX), rigidBody.velocity.y);
+                        repulseQuantity--;
+                    }
+                }
+
+                input.horizontalAccess = false;
+                Invoke("HorizontalAccess", .1f);
+            }
+        }
+        else
+            halfColSizeX = 1.2f;
     }
 
     RaycastHit2D Raycast(Vector2 offset, Vector2 rayDirection, float length)

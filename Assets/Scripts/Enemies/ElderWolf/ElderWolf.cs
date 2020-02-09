@@ -396,7 +396,10 @@ public class ElderWolf : Enemy
         objectToDamage = Physics2D.OverlapBox(myTransform.position, mySpells[spell].damageRange, 0f, playerLayer);
 
         if (objectToDamage != null)
-            objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].lastDamage, HurtType.Repulsion, new Vector2(mySpells[spell].repulseVector.x * direction, mySpells[spell].repulseVector.y), mySpells[spell].dazedTime, mySpells[spell].elementDamage);
+        {
+            int _repulseDirection = IsPlayerBehind() ? -1 : 1;
+            objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].lastDamage, HurtType.Repulsion, new Vector2(mySpells[spell].repulseVector.x * _repulseDirection, mySpells[spell].repulseVector.y), mySpells[spell].dazedTime, mySpells[spell].elementDamage);
+        }
 
         isSpellCasted = true;
     }
