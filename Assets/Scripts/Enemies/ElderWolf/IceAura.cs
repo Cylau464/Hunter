@@ -53,7 +53,6 @@ public class IceAura : MonoBehaviour
     {
         if (col.TryGetComponent(out PlayerAtributes _atributes))
         {
-            Debug.Log("ADSD");
             playerAtributes = null;
             element.value = 0;
             damage = 0f;

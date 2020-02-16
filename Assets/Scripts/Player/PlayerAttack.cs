@@ -258,7 +258,7 @@ public class PlayerAttack : MonoBehaviour
         {
             movement.isAttacking = false;
             attackType = default;
-            movement.speedDivisor = 1f;
+            atributes.speedDivisor = 1f;
         }
     }
 
@@ -372,7 +372,7 @@ public class PlayerAttack : MonoBehaviour
                 //anim.speed              = atributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
                 timeBtwAttacks          = weaponAtributes.lightAttackSpeed + Time.time;
                 attackDuration          = weaponAtributes.lightAttackSpeed * 1.5f + Time.time;
-                movement.speedDivisor   = weaponAtributes.speedDivisorL;
+                atributes.speedDivisor   = weaponAtributes.speedDivisorL;
                 break;
             case AttackTypes.Strong:
                 damage                  = weaponAtributes.strongAttackDamage;
@@ -384,7 +384,7 @@ public class PlayerAttack : MonoBehaviour
                 //anim.speed              = atributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
                 timeBtwAttacks          = weaponAtributes.strongAttackSpeed + Time.time;
                 attackDuration          = weaponAtributes.strongAttackSpeed * 1.5f + Time.time;
-                movement.speedDivisor   = weaponAtributes.speedDivisorS;
+                atributes.speedDivisor   = weaponAtributes.speedDivisorS;
                 break;
             case AttackTypes.Joint:
                 damage                  = weaponAtributes.jointAttackDamage;
@@ -396,7 +396,7 @@ public class PlayerAttack : MonoBehaviour
                 //anim.speed              = atributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
                 timeBtwAttacks          = weaponAtributes.jointAttackSpeed + Time.time;
                 attackDuration          = weaponAtributes.jointAttackSpeed * 1.5f + Time.time;
-                movement.speedDivisor   = weaponAtributes.speedDivisorJ;
+                atributes.speedDivisor   = weaponAtributes.speedDivisorJ;
                 break;
             case AttackTypes.TopDown:
                 damage                  = weaponAtributes.topDownAttackDamage;//atributes.Stamina >= staminaCosts ? weaponAtributes.topDownAttackDamage : weaponAtributes.topDownAttackDamage / 10;
@@ -408,7 +408,7 @@ public class PlayerAttack : MonoBehaviour
                 //anim.speed              = atributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
                 timeBtwAttacks          = weaponAtributes.topDownAttackSpeed + Time.time;
                 attackDuration          = weaponAtributes.topDownAttackSpeed * 1.5f + Time.time;
-                movement.speedDivisor   = weaponAtributes.speedDivisorTD;
+                atributes.speedDivisor   = weaponAtributes.speedDivisorTD;
                 break;
         }
     }

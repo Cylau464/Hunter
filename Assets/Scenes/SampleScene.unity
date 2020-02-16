@@ -348,7 +348,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &118039530
 Transform:
   m_ObjectHideFlags: 0
@@ -4142,7 +4142,6 @@ MonoBehaviour:
   isDead: 0
   canFlip: 1
   moveInputPriority: 1
-  speedDivisor: 1
   bodyCollider: {fileID: 0}
 --- !u!50 &1602877363
 Rigidbody2D:
@@ -4327,6 +4326,7 @@ MonoBehaviour:
   stamina: 0
   restoreStaminaPause: 2
   restoreStaminaDelay: 0.1
+  speedDivisor: 1
   statusBarTransform: {fileID: 58596679}
   timeOfLastTakenDamage: 0
 --- !u!114 &1602877370

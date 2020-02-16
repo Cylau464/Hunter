@@ -59,9 +59,6 @@ public class PlayerMovement : MonoBehaviour
     public bool canFlip = true;
     public bool moveInputPriority = true;          //What the hell is this?
 
-    [HideInInspector] 
-    public float speedDivisor = 1f;                //Used to decrease horizontal speed
-
     PlayerInput input;
     Rigidbody2D rigidBody;
     [HideInInspector] public BoxCollider2D bodyCollider;
@@ -316,7 +313,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (input.horizontalAccess && !isAttacking || attack.weaponAttackType == WeaponAttackType.Range)
         {
-            xVelocity = (speed * speedDivisor + (bonusAtributes.ContainsKey(BonusAtributes.Speed) ? bonusAtributes[BonusAtributes.Speed] : 0)/*/ weapon.weaponMass*/) * input.horizontal;
+            xVelocity = (speed * atributes.speedDivisor + (bonusAtributes.ContainsKey(BonusAtributes.Speed) ? bonusAtributes[BonusAtributes.Speed] : 0)/*/ weapon.weaponMass*/) * input.horizontal;
             rigidBody.velocity = new Vector2(xVelocity, rigidBody.velocity.y);
             //Flip caharcter if his direction != input horizontal
             if (xVelocity * direction < 0f)

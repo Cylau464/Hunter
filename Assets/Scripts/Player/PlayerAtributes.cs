@@ -37,9 +37,12 @@ public class PlayerAtributes : MonoBehaviour
     float curRestoreStaminaDelay;
     float staminaRestoreValue = 1f;
     float maxStaminaRestoreValue = 4f;
+    public float speedDivisor = 1f;                             //Used to decrease horizontal speed
+
     [SerializeField] Transform statusBarTransform = null;
     StatusBar statusBar;
     PlayerMovement movement;
+    PlayerEffectsController effectsController;
 
     public float timeOfLastTakenDamage;
 
@@ -48,6 +51,7 @@ public class PlayerAtributes : MonoBehaviour
         health = maxHealth;
         stamina = maxStamina;
         movement = GetComponent<PlayerMovement>();
+        effectsController = GetComponent<PlayerEffectsController>();
         statusBar = statusBarTransform.GetComponent<StatusBar>();
         statusBar.maxHealth = maxHealth;
         statusBar.HealthChange(health);
@@ -149,6 +153,11 @@ public class PlayerAtributes : MonoBehaviour
         DamageText(damage, element);
     }
 
+    public void TakeEffect(Element element)
+    {
+        //effectsController.
+    }
+
     void DamageText(int damage, Element element)
     {
         GameObject damageText = Resources.Load<GameObject>("DamageNumber");
@@ -156,5 +165,10 @@ public class PlayerAtributes : MonoBehaviour
         damageText.GetComponent<DamageNumber>().damage = damage;
         damageText.GetComponent<DamageNumber>().element = element;
         damageText.GetComponent<DamageNumber>().target = movement.transform;
+    }
+
+    void EffectText(Element element)
+    {
+
     }
 }
