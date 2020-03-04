@@ -29,6 +29,7 @@ namespace Structures
         public int firstDamage;
         public int lastDamage;
         public Element elementDamage;
+        public float effectValue;
 
         [Header("Spells with jumps")]
         public Vector2 jumpDistance;
@@ -235,6 +236,28 @@ namespace Structures
             this.title = title;
             this.type = type;
             this.atributes = atributes;
+        }
+    }
+
+    [Serializable]
+    public struct Effect
+    {
+        public int stackNumber;
+        public int maxStackNumber;
+        public float stackDuration;
+        public List<float> curStackDuration;
+        public float value;
+        
+        /// <summary>
+        /// Contain effect properties
+        /// </summary>
+        public Effect(int maxStackNumber, float stackDuration)
+        {
+            this.maxStackNumber = maxStackNumber;
+            this.stackDuration = stackDuration;
+            value = 0f;
+            stackNumber = 0;
+            curStackDuration = new List<float>(maxStackNumber);
         }
     }
 }
