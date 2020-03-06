@@ -37,19 +37,24 @@ public class PlayerAtributes : MonoBehaviour
     float curRestoreStaminaDelay;
     float staminaRestoreValue = 1f;
     float maxStaminaRestoreValue = 4f;
-    public float speedDivisor = 1f;                             //Used to decrease horizontal speed
+    public float defSpeedDivisor = 1f;
+    public float speedDivisor;                             //Used to decrease horizontal speed
+    public float attackSpeed;
 
     [SerializeField] Transform statusBarTransform = null;
     StatusBar statusBar;
     PlayerMovement movement;
+    Animator anim;
     PlayerEffectsController effectsController;
 
     public float timeOfLastTakenDamage;
 
     void Start()
     {
+        speedDivisor = defSpeedDivisor;
         health = maxHealth;
         stamina = maxStamina;
+        anim = GetComponent<Animator>();
         movement = GetComponent<PlayerMovement>();
         effectsController = GetComponent<PlayerEffectsController>();
         statusBar = statusBarTransform.GetComponent<StatusBar>();
@@ -84,6 +89,24 @@ public class PlayerAtributes : MonoBehaviour
         }
 
         DamageText(damage, element);
+    }
+
+    /// <summary>
+    /// Effect damage
+    /// </summary>
+    public void TakeDamage(int damage, HurtType hurtType, Effects effect)
+    {
+        health -= damage;
+        statusBar.HealthChange(health);
+
+        if (health <= 0)
+        {
+            movement.isDead = true;
+            movement.bodyCollider.sharedMaterial = null;        //Delete collider material for turn on friction
+            return;
+        }
+
+        DamageText(damage, effect);
     }
 
     /// <summary>
@@ -153,9 +176,9 @@ public class PlayerAtributes : MonoBehaviour
         DamageText(damage, element);
     }
 
-    public void TakeEffect(Element element)
+    public void TakeEffect(Element element, Effects effect)
     {
-        //effectsController.
+        effectsController.GetEffect(effect, 1, element.value);
     }
 
     void DamageText(int damage, Element element)
@@ -167,8 +190,25 @@ public class PlayerAtributes : MonoBehaviour
         damageText.GetComponent<DamageNumber>().target = movement.transform;
     }
 
+    /// <summary>
+    /// Damage from effect text
+    /// </summary>
+    void DamageText(int damage, Effects effect)
+    {
+        GameObject damageText = Resources.Load<GameObject>("DamageNumber");
+        damageText = Instantiate(damageText, transform);
+        damageText.GetComponent<DamageNumber>().damage = damage;
+        damageText.GetComponent<DamageNumber>().effect = effect;
+        damageText.GetComponent<DamageNumber>().target = movement.transform;
+    }
+
     void EffectText(Element element)
     {
 
+    }
+
+    public void SetAnimationSpeed(float speed)
+    {
+        anim.speed = speed;
     }
 }

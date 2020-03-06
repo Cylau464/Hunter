@@ -3,17 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Structures;
+using Enums;
 
 public class DamageNumber : MonoBehaviour
 {
     public int damage;
     public Element element;
+    public Effects effect = Effects.None;
     [SerializeField] float moveSpeed = 5f;
     [SerializeField] Text physicDamage = null;
     [SerializeField] Text elementDamage = null;
     [SerializeField] Image elementIcon = null;
     [SerializeField] float lifeTime = 2f;
     [SerializeField] ElementsIconsDictionary elementIcons = null;
+    [SerializeField] EffectsIconsDictionary effectIcons = null;
     float curLifeTime;
     public Transform target;
 
@@ -25,6 +28,12 @@ public class DamageNumber : MonoBehaviour
 
         if (damage != 0)
         {
+            if (effect != Effects.None)
+            {
+                elementDamage.color = element.color;
+                elementDamage.text = element.value.ToString();
+                elementIcon.sprite = effectIcons[element.element];
+            }
             physicDamage.color = target.tag == "Player" ? Color.white : Color.red;
             physicDamage.text = damage.ToString();
         }

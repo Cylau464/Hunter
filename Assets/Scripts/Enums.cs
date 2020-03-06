@@ -7,12 +7,12 @@ namespace Enums
     //------------ Weapon enums ------------
     //Physics types of damage
     public enum DamageTypes { Slash, Chop, Thrust, Blunt }
-    public enum Elements { Fire, Ice, Wind, Earth, Lightning, Primal }
+    public enum Elements { None, Fire, Ice, Wind, Earth, Lightning, Primal }
     public enum WeaponAttackType { Melee, Range }
     public enum WeaponType { Sword, Lance, Staff, Hammer, Bow, Scythe, Gloves }
     public enum WeaponUltimate { Spell, Charging, Buff, Passive }
     public enum BonusAtributes { JumpCount, EvadeCosts, EvadeDistance, Speed }
-    public enum Effects { Freeze, Burning, Poison, Bleeding, Root, Stun }
+    public enum Effects { None, Freeze, Burning, Poison, Bleeding, Root, Stun }
 
     //------------ Player enums ------------
     public enum HurtType { None, Repulsion, Catch };
