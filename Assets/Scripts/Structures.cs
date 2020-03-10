@@ -29,19 +29,16 @@ namespace Structures
         public int firstDamage;
         public int lastDamage;
         public Element elementDamage;
-        public Effects effect;
-        public float effectValue;
+        public Effect effect;
 
         [Header("Spells with jumps")]
         public Vector2 jumpDistance;
         public int jumpDirection;       //-1 = back, 1 = forward
 
-        //Сделать для всех полей свойства
-
         /// <summary>
         /// For spells with jumps
         /// </summary>
-        public EnemySpell(float castRange, Vector2 jumpDistance, int jumpDirection, float cooldown, float globalCD, float prepareTime, float castTime, Vector2 damageRange, Vector2 repulseVector, float dazedTime, int firstDamage, int lastDamage, Element elementDamage = new Element(), Effects effect = Effects.None, float effectValue = 0f)
+        public EnemySpell(float castRange, Vector2 jumpDistance, int jumpDirection, float cooldown, float globalCD, float prepareTime, float castTime, Vector2 damageRange, Vector2 repulseVector, float dazedTime, int firstDamage, int lastDamage, Element elementDamage = new Element(), Effect effect = new Effect())
         {
             this.castRange          = castRange;
             this.jumpDistance       = jumpDistance;
@@ -58,7 +55,6 @@ namespace Structures
             this.lastDamage         = lastDamage;
             this.elementDamage      = elementDamage;
             this.effect             = effect;
-            this.effectValue        = effectValue;
 
             //Not used
             periodicityDamage = 0f;
@@ -67,7 +63,7 @@ namespace Structures
         /// <summary>
         /// For spells with once damage
         /// </summary>
-        public EnemySpell(float castRange, float cooldown, float globalCD, float prepareTime, float castTime, Vector2 damageRange, Vector2 repulseVector, float dazedTime, int damage, Element elementDamage = new Element(), Effects effect = Effects.None, float effectValue = 0f)
+        public EnemySpell(float castRange, float cooldown, float globalCD, float prepareTime, float castTime, Vector2 damageRange, Vector2 repulseVector, float dazedTime, int damage, Element elementDamage = new Element(), Effect effect = new Effect())
         {
             this.castRange          = castRange;
             this.cooldown           = cooldown;
@@ -80,7 +76,6 @@ namespace Structures
             firstDamage             = damage;
             this.elementDamage      = elementDamage;
             this.effect             = effect;
-            this.effectValue        = effectValue;
 
             //Not used
             lastDamage = 0;
@@ -92,7 +87,7 @@ namespace Structures
         /// <summary>
         /// For spells with periodic damage
         /// </summary>
-        public EnemySpell(float castRange, float cooldown, float globalCD, float prepareTime, float castTime, Vector2 damageRange, Vector2 repulseVector, float dazedTime, int damage, float periodicityDamage, Element elementDamage = new Element(), Effects effect = Effects.None, float effectValue = 0f)
+        public EnemySpell(float castRange, float cooldown, float globalCD, float prepareTime, float castTime, Vector2 damageRange, Vector2 repulseVector, float dazedTime, int damage, float periodicityDamage, Element elementDamage = new Element(), Effect effect = new Effect())
         {
             this.castRange          = castRange;
             this.cooldown           = cooldown;
@@ -106,7 +101,6 @@ namespace Structures
             this.elementDamage      = elementDamage;
             this.periodicityDamage  = periodicityDamage;
             this.effect             = effect;
-            this.effectValue        = effectValue;
 
             //Not used
             lastDamage = 0;
@@ -249,22 +243,87 @@ namespace Structures
     [Serializable]
     public struct Effect
     {
-        public int maxStackCount;
+        public Effects effect;
+        public int stacksCount;
+        public int maxStacksCount;
         public float stackDuration;
         public List<float> curStackDuration;
         public float value;
         public float effectPeriod;
+        public Color color;
         
         /// <summary>
-        /// 2 parameters - continuous effect, 3 parameters - period effect
+        /// Common effect parameters. 2 parameters - continuous effect, 3 parameters - period effect
         /// </summary>
-        public Effect(int maxStackCount, float stackDuration, float effectPeriod = 0f)
+        public Effect(Effects effect, int maxStacksCount, float stackDuration, float effectPeriod = 0f)
         {
-            this.maxStackCount = maxStackCount;
-            this.stackDuration = stackDuration;
-            this.effectPeriod = effectPeriod;
-            value = 0f;
-            curStackDuration = new List<float>(maxStackCount);
+            this.maxStacksCount  = maxStacksCount;
+            this.stackDuration  = stackDuration;
+            this.effectPeriod   = effectPeriod;
+            this.effect         = effect;
+
+            stacksCount         = 0;
+            value               = 0f;
+            curStackDuration    = new List<float>(maxStacksCount);
+
+            switch (effect)
+            {
+                case Effects.Burning:
+                    color = new Color(.97f, .4f, .18f);
+                    break;
+                case Effects.Root:
+                    color = new Color(.71f, .33f, .1f);
+                    break;
+                case Effects.Freeze:
+                    color = new Color(.36f, .56f, .7f);
+                    break;
+                case Effects.Stun:
+                    color = Color.blue;
+                    break;
+                case Effects.Poison:
+                    color = Color.green;
+                    break;
+                default:
+                    color = Color.black;
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Used by enemies and environment
+        /// </summary>
+        public Effect(Effects effect, int stacksCount, float value)
+        {
+            this.effect = effect;
+            this.stacksCount = stacksCount;
+            this.value = value;
+
+            maxStacksCount = 0;
+            stackDuration = 0f;
+            effectPeriod = 0f;
+            curStackDuration = new List<float>();
+
+            switch (effect)
+            {
+                case Effects.Burning:
+                    color = new Color(.97f, .4f, .18f);
+                    break;
+                case Effects.Root:
+                    color = new Color(.71f, .33f, .1f);
+                    break;
+                case Effects.Freeze:
+                    color = new Color(.36f, .56f, .7f);
+                    break;
+                case Effects.Stun:
+                    color = Color.blue;
+                    break;
+                case Effects.Poison:
+                    color = Color.green;
+                    break;
+                default:
+                    color = Color.black;
+                    break;
+            }
         }
     }
 }

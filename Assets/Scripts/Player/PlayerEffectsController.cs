@@ -8,9 +8,9 @@ public class PlayerEffectsController : MonoBehaviour
 {
     [SerializeField] private EffectsDictionary effects = new EffectsDictionary()
     {
-        { Effects.Freeze, new Effect(5, 1f) },
-        { Effects.Burning, new Effect(5, 2f) },
-        { Effects.Bleeding, new Effect(5, 3f) },
+        { Effects.Freeze, new Effect(Effects.Freeze, 5, 1f) },
+        { Effects.Burning, new Effect(Effects.Burning, 5, 2f) },
+        { Effects.Bleeding, new Effect(Effects.Bleeding, 5, 3f) },
     };
     Dictionary<Effects, int> stackCount = new Dictionary<Effects, int>()
     {
@@ -42,19 +42,19 @@ public class PlayerEffectsController : MonoBehaviour
         }
     }
 
-    public void GetEffect(Effects effect, int numberOfStacks, float value)
+    public void GetEffect(Effect effect)
     {
-        for (int i = 1; i <= numberOfStacks; i++)
+        for (int i = 1; i <= effect.stacksCount; i++)
         {
-            if (stackCount[effect] >= effects[effect].maxStackCount)
+            if (stackCount[effect.effect] >= effects[effect.effect].maxStacksCount)
             {
-                effects[effect].curStackDuration.RemoveAt(0);
-                effects[effect].curStackDuration.Insert(0, Time.time + effects[effect].stackDuration);
+                effects[effect.effect].curStackDuration.RemoveAt(0);
+                effects[effect.effect].curStackDuration.Insert(0, Time.time + effects[effect.effect].stackDuration);
             }
             else
             {
-                effects[effect].curStackDuration.Add(Time.time + effects[effect].stackDuration);
-                stackCount[effect]++;
+                effects[effect.effect].curStackDuration.Add(Time.time + effects[effect.effect].stackDuration);
+                stackCount[effect.effect]++;
             }
         }
     }
@@ -82,7 +82,7 @@ public class PlayerEffectsController : MonoBehaviour
             case Effects.Burning:
                 if(periodEffectDelay[kvp.Key] <= Time.time)
                 {
-                    playerAtributes.TakeDamage(kvp.Value.value, HurtType.None, )
+                    playerAtributes.TakeDamage((int)kvp.Value.value, HurtType.None, kvp.Value);
                     periodEffectDelay[kvp.Key] = Time.time + kvp.Value.effectPeriod;
                 }
                 break;

@@ -94,7 +94,7 @@ public class PlayerAtributes : MonoBehaviour
     /// <summary>
     /// Effect damage
     /// </summary>
-    public void TakeDamage(int damage, HurtType hurtType, Effects effect)
+    public void TakeDamage(int damage, HurtType hurtType, Effect effect)
     {
         health -= damage;
         statusBar.HealthChange(health);
@@ -176,9 +176,9 @@ public class PlayerAtributes : MonoBehaviour
         DamageText(damage, element);
     }
 
-    public void TakeEffect(Element element, Effects effect)
+    public void TakeEffect(Effect effect)
     {
-        effectsController.GetEffect(effect, 1, element.value);
+        effectsController.GetEffect(effect);
     }
 
     void DamageText(int damage, Element element)
@@ -193,7 +193,7 @@ public class PlayerAtributes : MonoBehaviour
     /// <summary>
     /// Damage from effect text
     /// </summary>
-    void DamageText(int damage, Effects effect)
+    void DamageText(int damage, Effect effect)
     {
         GameObject damageText = Resources.Load<GameObject>("DamageNumber");
         damageText = Instantiate(damageText, transform);

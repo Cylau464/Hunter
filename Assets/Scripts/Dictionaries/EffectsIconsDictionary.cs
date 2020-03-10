@@ -5,4 +5,4 @@ using RotaryHeart.Lib.SerializableDictionary;
 using Enums;
 
 [System.Serializable]
-public class ElementsIconsDictionary : SerializableDictionaryBase<Elements, Sprite> { }
+public class EffectsIconsDictionary : SerializableDictionaryBase<Effects, Sprite> { }

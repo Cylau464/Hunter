@@ -9,7 +9,7 @@ public class DamageNumber : MonoBehaviour
 {
     public int damage;
     public Element element;
-    public Effects effect = Effects.None;
+    public Effect effect;
     [SerializeField] float moveSpeed = 5f;
     [SerializeField] Text physicDamage = null;
     [SerializeField] Text elementDamage = null;
@@ -28,14 +28,17 @@ public class DamageNumber : MonoBehaviour
 
         if (damage != 0)
         {
-            if (effect != Effects.None)
+            if (effect.effect != Effects.None)
             {
-                elementDamage.color = element.color;
-                elementDamage.text = element.value.ToString();
-                elementIcon.sprite = effectIcons[element.element];
+                elementDamage.color = effect.color;
+                elementDamage.text = effect.value.ToString();
+                elementIcon.sprite = effectIcons[effect.effect];
             }
-            physicDamage.color = target.tag == "Player" ? Color.white : Color.red;
-            physicDamage.text = damage.ToString();
+            else
+            {
+                physicDamage.color = target.tag == "Player" ? Color.white : Color.red;
+                physicDamage.text = damage.ToString();
+            }
         }
         else
             physicDamage.text = "";
