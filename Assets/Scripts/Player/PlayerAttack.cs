@@ -258,7 +258,7 @@ public class PlayerAttack : MonoBehaviour
         {
             movement.isAttacking = false;
             attackType = default;
-            atributes.speedDivisor = 1f;
+            //atributes.speedDivisor = 1f;
         }
     }
 

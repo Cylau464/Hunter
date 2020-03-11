@@ -1621,6 +1621,15 @@ MonoBehaviour:
       element: 0
       value: 0
       color: {r: 0, g: 0, b: 0, a: 0}
+    effect:
+      effect: 0
+      stacksCount: 0
+      maxStacksCount: 0
+      stackDuration: 0
+      curStackDuration: []
+      value: 0
+      effectPeriod: 0
+      color: {r: 0, g: 0, b: 0, a: 0}
     jumpDistance: {x: 0, y: 0}
     jumpDirection: 0
 --- !u!1 &484301478
@@ -1941,6 +1950,15 @@ MonoBehaviour:
       title: 
       element: 0
       value: 0
+      color: {r: 0, g: 0, b: 0, a: 0}
+    effect:
+      effect: 0
+      stacksCount: 0
+      maxStacksCount: 0
+      stackDuration: 0
+      curStackDuration: []
+      value: 0
+      effectPeriod: 0
       color: {r: 0, g: 0, b: 0, a: 0}
     jumpDistance: {x: 0, y: 0}
     jumpDirection: 0
@@ -2569,6 +2587,15 @@ MonoBehaviour:
         element: 0
         value: 0
         color: {r: 0, g: 0, b: 0, a: 0}
+      effect:
+        effect: 0
+        stacksCount: 0
+        maxStacksCount: 0
+        stackDuration: 0
+        curStackDuration: []
+        value: 0
+        effectPeriod: 0
+        color: {r: 0, g: 0, b: 0, a: 0}
       jumpDistance: {x: 17, y: 20}
       jumpDirection: 1
     - cooldown: 12
@@ -2586,6 +2613,15 @@ MonoBehaviour:
         title: 
         element: 0
         value: 0
+        color: {r: 0, g: 0, b: 0, a: 0}
+      effect:
+        effect: 0
+        stacksCount: 0
+        maxStacksCount: 0
+        stackDuration: 0
+        curStackDuration: []
+        value: 0
+        effectPeriod: 0
         color: {r: 0, g: 0, b: 0, a: 0}
       jumpDistance: {x: 10, y: 15}
       jumpDirection: -1
@@ -2605,6 +2641,15 @@ MonoBehaviour:
         element: 1
         value: 2
         color: {r: 0.36, g: 0.56, b: 0.7, a: 1}
+      effect:
+        effect: 0
+        stacksCount: 1
+        maxStacksCount: 0
+        stackDuration: 0
+        curStackDuration: []
+        value: 0.1
+        effectPeriod: 0
+        color: {r: 0.36, g: 0.56, b: 0.7, a: 1}
       jumpDistance: {x: 0, y: 0}
       jumpDirection: 0
     - cooldown: 8
@@ -2622,6 +2667,15 @@ MonoBehaviour:
         title: 
         element: 0
         value: 0
+        color: {r: 0, g: 0, b: 0, a: 0}
+      effect:
+        effect: 0
+        stacksCount: 0
+        maxStacksCount: 0
+        stackDuration: 0
+        curStackDuration: []
+        value: 0
+        effectPeriod: 0
         color: {r: 0, g: 0, b: 0, a: 0}
       jumpDistance: {x: 0, y: 0}
       jumpDirection: 0
@@ -2641,6 +2695,15 @@ MonoBehaviour:
         element: 1
         value: 20
         color: {r: 0.36, g: 0.56, b: 0.7, a: 1}
+      effect:
+        effect: 0
+        stacksCount: 0
+        maxStacksCount: 0
+        stackDuration: 0
+        curStackDuration: []
+        value: 0
+        effectPeriod: 0
+        color: {r: 0, g: 0, b: 0, a: 0}
       jumpDistance: {x: 0, y: 0}
       jumpDirection: 0
     - cooldown: 15
@@ -2659,6 +2722,15 @@ MonoBehaviour:
         element: 0
         value: 0
         color: {r: 0, g: 0, b: 0, a: 0}
+      effect:
+        effect: 0
+        stacksCount: 0
+        maxStacksCount: 0
+        stackDuration: 0
+        curStackDuration: []
+        value: 0
+        effectPeriod: 0
+        color: {r: 0, g: 0, b: 0, a: 0}
       jumpDistance: {x: 0, y: 0}
       jumpDirection: 0
     - cooldown: 5
@@ -2676,6 +2748,15 @@ MonoBehaviour:
         title: 
         element: 0
         value: 0
+        color: {r: 0, g: 0, b: 0, a: 0}
+      effect:
+        effect: 0
+        stacksCount: 0
+        maxStacksCount: 0
+        stackDuration: 0
+        curStackDuration: []
+        value: 0
+        effectPeriod: 0
         color: {r: 0, g: 0, b: 0, a: 0}
       jumpDistance: {x: 0, y: 13}
       jumpDirection: 1
@@ -2926,6 +3007,15 @@ MonoBehaviour:
       title: 
       element: 0
       value: 0
+      color: {r: 0, g: 0, b: 0, a: 0}
+    effect:
+      effect: 0
+      stacksCount: 0
+      maxStacksCount: 0
+      stackDuration: 0
+      curStackDuration: []
+      value: 0
+      effectPeriod: 0
       color: {r: 0, g: 0, b: 0, a: 0}
     jumpDistance: {x: 0, y: 0}
     jumpDirection: 0
@@ -4017,6 +4107,7 @@ GameObject:
   - component: {fileID: 1602877368}
   - component: {fileID: 1602877369}
   - component: {fileID: 1602877370}
+  - component: {fileID: 1602877371}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -4326,7 +4417,9 @@ MonoBehaviour:
   stamina: 0
   restoreStaminaPause: 2
   restoreStaminaDelay: 0.1
+  defSpeedDivisor: 1
   speedDivisor: 1
+  attackSpeed: 0
   statusBarTransform: {fileID: 58596679}
   timeOfLastTakenDamage: 0
 --- !u!114 &1602877370
@@ -4341,6 +4434,68 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44626ac049532ee47a0e5c5a60b87fd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1602877371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1602877359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d11a0daa43590e43b8068c011f09ddc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effects:
+    reorderableList:
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
+      isExpanded: 0
+      label:
+        m_Text: Keys
+        m_Image: {fileID: 0}
+        m_Tooltip: 
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
+      elementDisplayType: 0
+      elementNameProperty: 
+      elementNameOverride: 
+      elementIcon: {fileID: 0}
+    reqReferences: {fileID: 0}
+    isExpanded: 0
+    _keyValues: 000000000100000003000000
+    _keys: 000000000100000003000000
+    _values:
+    - effect: 0
+      stacksCount: 0
+      maxStacksCount: 5
+      stackDuration: 5
+      curStackDuration: []
+      value: 0.1
+      effectPeriod: 0
+      color: {r: 0.36, g: 0.56, b: 0.7, a: 1}
+    - effect: 1
+      stacksCount: 0
+      maxStacksCount: 5
+      stackDuration: 2
+      curStackDuration: []
+      value: 2
+      effectPeriod: 0
+      color: {r: 0.97, g: 0.4, b: 0.18, a: 1}
+    - effect: 3
+      stacksCount: 0
+      maxStacksCount: 5
+      stackDuration: 3
+      curStackDuration: []
+      value: 2.5
+      effectPeriod: 0
+      color: {r: 0, g: 0, b: 0, a: 1}
 --- !u!1 &1767755703
 GameObject:
   m_ObjectHideFlags: 0

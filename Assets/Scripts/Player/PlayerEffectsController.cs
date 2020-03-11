@@ -8,15 +8,15 @@ public class PlayerEffectsController : MonoBehaviour
 {
     [SerializeField] private EffectsDictionary effects = new EffectsDictionary()
     {
-        { Effects.Freeze, new Effect(Effects.Freeze, 5, 1f) },
-        { Effects.Burning, new Effect(Effects.Burning, 5, 2f) },
-        { Effects.Bleeding, new Effect(Effects.Bleeding, 5, 3f) },
+        { Effects.Freeze, new Effect(Effects.Freeze, 5, 1f, .1f) },
+        { Effects.Burning, new Effect(Effects.Burning, 5, 2f, 2f) },
+        { Effects.Bleeding, new Effect(Effects.Bleeding, 5, 3f, 2.5f) },
     };
     Dictionary<Effects, int> stackCount = new Dictionary<Effects, int>()
     {
         { Effects.Freeze, 0 },
         { Effects.Burning, 0 },
-        { Effects.Bleeding, 0}
+        { Effects.Bleeding, 0 }
     };
     Dictionary<Effects, float> periodEffectDelay = new Dictionary<Effects, float>()
     {
@@ -32,13 +32,13 @@ public class PlayerEffectsController : MonoBehaviour
 
     void Update()
     {
-        foreach (KeyValuePair<Effects, Effect> kvp in effects)
+        foreach(KeyValuePair<Effects, Effect> kvp in effects)
         {
             if (stackCount[kvp.Key] <= 0)
                 continue;
 
-            ReduceStacks(kvp);
-            ApplyEffect(kvp);
+            ReduceStacks(kvp.Key);
+            ApplyEffect(kvp.Key);
         }
     }
 
@@ -59,31 +59,31 @@ public class PlayerEffectsController : MonoBehaviour
         }
     }
 
-    void ReduceStacks(KeyValuePair<Effects, Effect> kvp)
+    void ReduceStacks(Effects key)
     {
-        kvp.Value.curStackDuration.ForEach(x =>
+        foreach(var _list in effects[key].curStackDuration.ToArray())
         {
-            if (x <= Time.time)
+            if (_list <= Time.time)
             {
-                kvp.Value.curStackDuration.Remove(x);
-                stackCount[kvp.Key]--;
+                effects[key].curStackDuration.Remove(_list);
+                stackCount[key]--;
             }
-        });
+        }
     }
 
-    void ApplyEffect(KeyValuePair<Effects, Effect> kvp)
+    void ApplyEffect(Effects key)
     {
-        switch(kvp.Key)
+        switch(key)
         {
             case Effects.Freeze:
-                playerAtributes.speedDivisor = playerAtributes.defSpeedDivisor - kvp.Value.value * stackCount[kvp.Key];
-                playerAtributes.SetAnimationSpeed(1f - kvp.Value.value * stackCount[kvp.Key]);
+                playerAtributes.speedDivisor = playerAtributes.defSpeedDivisor - effects[key].value * stackCount[key];
+                playerAtributes.SetAnimationSpeed(1f - effects[key].value * stackCount[key]);
                 break;
             case Effects.Burning:
-                if(periodEffectDelay[kvp.Key] <= Time.time)
+                if(periodEffectDelay[key] <= Time.time)
                 {
-                    playerAtributes.TakeDamage((int)kvp.Value.value, HurtType.None, kvp.Value);
-                    periodEffectDelay[kvp.Key] = Time.time + kvp.Value.effectPeriod;
+                    playerAtributes.TakeDamage((int)effects[key].value, HurtType.None, effects[key]);
+                    periodEffectDelay[key] = Time.time + effects[key].effectPeriod;
                 }
                 break;
         }

@@ -255,15 +255,16 @@ namespace Structures
         /// <summary>
         /// Common effect parameters. 2 parameters - continuous effect, 3 parameters - period effect
         /// </summary>
-        public Effect(Effects effect, int maxStacksCount, float stackDuration, float effectPeriod = 0f)
+        public Effect(Effects effect, int maxStacksCount, float stackDuration, float value, float effectPeriod = 0f)
         {
             this.maxStacksCount  = maxStacksCount;
             this.stackDuration  = stackDuration;
             this.effectPeriod   = effectPeriod;
             this.effect         = effect;
+            this.value          = value;
 
             stacksCount         = 0;
-            value               = 0f;
+            
             curStackDuration    = new List<float>(maxStacksCount);
 
             switch (effect)
@@ -292,12 +293,12 @@ namespace Structures
         /// <summary>
         /// Used by enemies and environment
         /// </summary>
-        public Effect(Effects effect, int stacksCount, float value)
+        public Effect(Effects effect, int stacksCount)
         {
             this.effect = effect;
             this.stacksCount = stacksCount;
-            this.value = value;
 
+            value = 0f;
             maxStacksCount = 0;
             stackDuration = 0f;
             effectPeriod = 0f;

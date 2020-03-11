@@ -120,6 +120,15 @@ MonoBehaviour:
     element: 0
     value: 0
     color: {r: 0, g: 0, b: 0, a: 0}
+  effect:
+    effect: 0
+    stacksCount: 0
+    maxStacksCount: 0
+    stackDuration: 0
+    curStackDuration: []
+    value: 0
+    effectPeriod: 0
+    color: {r: 0, g: 0, b: 0, a: 0}
   moveSpeed: 3
   physicDamage: {fileID: 8690553461473945847}
   elementDamage: {fileID: 8563627651128817149}
@@ -132,7 +141,7 @@ MonoBehaviour:
       draggable: 1
       expandable: 1
       multipleSelection: 1
-      isExpanded: 1
+      isExpanded: 0
       label:
         m_Text: Keys
         m_Image: {fileID: 0}
@@ -147,7 +156,7 @@ MonoBehaviour:
       elementNameOverride: 
       elementIcon: {fileID: 0}
     reqReferences: {fileID: 0}
-    isExpanded: 1
+    isExpanded: 0
     _keyValues: 010000000000000003000000020000000400000005000000
     _keys: 010000000000000003000000020000000400000005000000
     _values:
@@ -157,6 +166,38 @@ MonoBehaviour:
     - {fileID: 21300000, guid: e1967f786396de342b646dd4a345cb9f, type: 3}
     - {fileID: 21300000, guid: 5fd183af2e922cd4c9f71cb102ddd81f, type: 3}
     - {fileID: 21300000, guid: fd9c4f44ccca65c4da61090cd36a8c04, type: 3}
+  effectIcons:
+    reorderableList:
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
+      isExpanded: 0
+      label:
+        m_Text: Keys
+        m_Image: {fileID: 0}
+        m_Tooltip: 
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
+      elementDisplayType: 0
+      elementNameProperty: 
+      elementNameOverride: 
+      elementIcon: {fileID: 0}
+    reqReferences: {fileID: 0}
+    isExpanded: 0
+    _keyValues: 010000000000000002000000030000000400000005000000
+    _keys: 010000000000000002000000030000000400000005000000
+    _values:
+    - {fileID: 21300000, guid: 32260cc66a60f1c4c8f083d1a26c059a, type: 3}
+    - {fileID: 21300000, guid: a3ca4beb0697c1d4aba334ee3418167b, type: 3}
+    - {fileID: 21300000, guid: 42263d9e6f4141f4c99fe33c01070682, type: 3}
+    - {fileID: 21300000, guid: b354f6414b33a2f45b8af1b45aa5859b, type: 3}
+    - {fileID: 21300000, guid: 42263d9e6f4141f4c99fe33c01070682, type: 3}
+    - {fileID: 21300000, guid: de24ce25ee79db546bf8f03ef53843cb, type: 3}
   target: {fileID: 0}
 --- !u!1 &4428506502040504669
 GameObject:

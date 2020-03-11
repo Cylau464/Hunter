@@ -28,7 +28,7 @@ public class DamageNumber : MonoBehaviour
 
         if (damage != 0)
         {
-            if (effect.effect != Effects.None)
+            if (!effect.Equals(default(Effect)))
             {
                 elementDamage.color = effect.color;
                 elementDamage.text = effect.value.ToString();
