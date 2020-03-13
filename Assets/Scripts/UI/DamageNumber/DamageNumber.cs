@@ -9,14 +9,12 @@ public class DamageNumber : MonoBehaviour
 {
     public int damage;
     public Element element;
-    public Effect effect;
     [SerializeField] float moveSpeed = 5f;
     [SerializeField] Text physicDamage = null;
     [SerializeField] Text elementDamage = null;
     [SerializeField] Image elementIcon = null;
     [SerializeField] float lifeTime = 2f;
     [SerializeField] ElementsIconsDictionary elementIcons = null;
-    [SerializeField] EffectsIconsDictionary effectIcons = null;
     float curLifeTime;
     public Transform target;
 
@@ -28,21 +26,10 @@ public class DamageNumber : MonoBehaviour
 
         if (damage != 0)
         {
-            if (!effect.Equals(default(Effect)))
-            {
-                elementDamage.color = effect.color;
-                elementDamage.text = effect.value.ToString();
-                elementIcon.sprite = effectIcons[effect.effect];
-            }
-            else
-            {
-                physicDamage.color = target.tag == "Player" ? Color.white : Color.red;
-                physicDamage.text = damage.ToString();
-            }
+            physicDamage.color = target.tag == "Player" ? Color.white : Color.red;
+            physicDamage.text = damage.ToString();
         }
-        else
-            physicDamage.text = "";
-
+        
         if (element.value != 0)
         {
             elementDamage.color = element.color;
@@ -51,7 +38,7 @@ public class DamageNumber : MonoBehaviour
         }
         else
         {
-            elementDamage.text = "";
+            elementDamage.text = "Где урон, урод?";
             elementIcon.enabled = false;
         }
     }
