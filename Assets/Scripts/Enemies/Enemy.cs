@@ -426,7 +426,7 @@ public class Enemy : MonoBehaviour
 
     void DamageText(int damage)
     {
-        GameObject damageText = Resources.Load<GameObject>("DamageNumber");
+        GameObject damageText = Resources.Load<GameObject>("UI/DamageNumber");
         damageText = Instantiate(damageText, transform);
         damageText.GetComponent<DamageNumber>().damage = damage;
         damageText.GetComponent<DamageNumber>().target = myTransform;

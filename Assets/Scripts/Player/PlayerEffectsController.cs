@@ -1,11 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Structures;
 using Enums;
 
 public class PlayerEffectsController : MonoBehaviour
 {
+    [SerializeField] List<Image> debuffIcons = new List<Image>(6);
+    [SerializeField] List<Text> debuffText = new List<Text>(6);
+    [SerializeField] List<bool> activeDebuffs = new List<bool>(5);
+    Dictionary<Effects, int> debuffCellIndex = new Dictionary<Effects, int>(6)
+    {
+        { Effects.Freeze, 100 },
+        { Effects.Burning, 100 },
+        { Effects.Bleeding, 100 },
+        { Effects.Poison, 100 },
+        { Effects.Root, 100 },
+        { Effects.Stun, 100 },
+    };
+    [SerializeField] EffectsIconsDictionary effectIcons = null;
+
     [SerializeField] private EffectsDictionary effects = new EffectsDictionary()
     {
         { Effects.Freeze, new Effect(Effects.Freeze, 5, 1f, .1f) },
@@ -32,13 +47,12 @@ public class PlayerEffectsController : MonoBehaviour
 
     void Update()
     {
-        foreach(KeyValuePair<Effects, Effect> kvp in effects)
+        foreach (KeyValuePair<Effects, Effect> kvp in effects)
         {
             if (stackCount[kvp.Key] <= 0)
                 continue;
 
             ReduceStacks(kvp.Key);
-            ApplyEffect(kvp.Key);
         }
     }
 
@@ -49,7 +63,7 @@ public class PlayerEffectsController : MonoBehaviour
             if (stackCount[effect.effect] >= effects[effect.effect].maxStacksCount)
             {
                 effects[effect.effect].curStackDuration.RemoveAt(0);
-                effects[effect.effect].curStackDuration.Insert(0, Time.time + effects[effect.effect].stackDuration);
+                effects[effect.effect].curStackDuration.Insert(effects[effect.effect].maxStacksCount - 1, Time.time + effects[effect.effect].stackDuration);
             }
             else
             {
@@ -57,17 +71,91 @@ public class PlayerEffectsController : MonoBehaviour
                 stackCount[effect.effect]++;
             }
         }
+
+        ApplyEffect(effect.effect);
     }
 
     void ReduceStacks(Effects key)
     {
-        foreach(var _list in effects[key].curStackDuration.ToArray())
+        foreach (var _stackDuration in effects[key].curStackDuration.ToArray())
         {
-            if (_list <= Time.time)
+            if (_stackDuration <= Time.time)
             {
-                effects[key].curStackDuration.Remove(_list);
+                effects[key].curStackDuration.Remove(_stackDuration);
                 stackCount[key]--;
+
+                DisabledIconUI(key);
             }
+        }
+    }
+
+    void DisabledIconUI(Effects key)
+    {
+        if (stackCount[key] == 0)
+        {
+            //Cell is not last...
+            if (debuffCellIndex[key] < debuffCellIndex.Count - 1)
+            {
+                //...and next cell is active
+                if (debuffText[debuffCellIndex[key] + 1].enabled)
+                {
+                    for (int i = debuffCellIndex[key]; i < debuffCellIndex.Count; i++)
+                    {
+                        if (i < debuffCellIndex.Count - 1)
+                        {
+                            debuffIcons[i].sprite = debuffIcons[i + 1].sprite;
+                            debuffText[i].text = debuffText[i + 1].text;
+                        }
+                        else
+                        {
+                            debuffIcons[i].enabled = false;
+                            debuffText[i].enabled = false;
+                        }
+                    }
+                }
+                //...and next cell is not active
+                else
+                {
+                    debuffIcons[debuffCellIndex[key]].enabled = false;
+                    debuffText[debuffCellIndex[key]].enabled = false;
+                }
+            }
+            //Cell is last
+            else
+            {
+                debuffIcons[debuffCellIndex[key]].enabled = false;
+                debuffText[debuffCellIndex[key]].enabled = false;
+            }
+
+            debuffCellIndex[key] = 100; //100 random value, beacuse cant set null to int var
+        }
+
+        if (stackCount[key] != 0)
+            ApplyEffect(key);
+    }
+
+    void ApplyToIconsUI(Effects key)
+    {
+        if (debuffCellIndex[key] == 100)
+        {
+            for (int i = 0; i < debuffText.Count; i++)
+            {
+                if (debuffText[i].enabled == false)
+                {
+                    debuffIcons[i].sprite = effectIcons[key];
+                    debuffIcons[i].enabled = true;
+                    debuffText[i].text = stackCount[key].ToString();
+                    debuffText[i].enabled = true;
+
+                    debuffCellIndex[key] = i;
+                    //activeDebuffs[i] = true;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            debuffText[debuffCellIndex[key]].text = stackCount[key].ToString();
         }
     }
 
@@ -78,6 +166,8 @@ public class PlayerEffectsController : MonoBehaviour
             case Effects.Freeze:
                 playerAtributes.speedDivisor = playerAtributes.defSpeedDivisor - effects[key].value * stackCount[key];
                 playerAtributes.SetAnimationSpeed(1f - effects[key].value * stackCount[key]);
+                ApplyToIconsUI(key);
+
                 break;
             case Effects.Burning:
                 if(periodEffectDelay[key] <= Time.time)

@@ -264,7 +264,6 @@ namespace Structures
             this.value          = value;
 
             stacksCount         = 0;
-            
             curStackDuration    = new List<float>(maxStacksCount);
 
             switch (effect)

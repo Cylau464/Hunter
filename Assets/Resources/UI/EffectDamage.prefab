@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 4874090054496433384}
   - component: {fileID: 9161523395244268253}
   - component: {fileID: 1497947738950893709}
-  - component: {fileID: 9109048337946866635}
+  - component: {fileID: 4237943909707073159}
   m_Layer: 5
-  m_Name: DamageNumber
+  m_Name: EffectDamage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33,7 +33,6 @@ RectTransform:
   m_Children:
   - {fileID: 8167990617906232958}
   - {fileID: 7758702283125052184}
-  - {fileID: 8991170163123879996}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -102,7 +101,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &9109048337946866635
+--- !u!114 &4237943909707073159
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -111,15 +110,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2416471552301680503}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fbc7be862468524cbc715f64bbeb713, type: 3}
+  m_Script: {fileID: 11500000, guid: c215784c38ed37147b4e9083aa2544a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 0
-  element:
-    title: 
-    element: 0
-    value: 0
-    color: {r: 0, g: 0, b: 0, a: 0}
   effect:
     effect: 0
     stacksCount: 0
@@ -129,43 +122,10 @@ MonoBehaviour:
     value: 0
     effectPeriod: 0
     color: {r: 0, g: 0, b: 0, a: 0}
-  moveSpeed: 3
-  physicDamage: {fileID: 8690553461473945847}
-  elementDamage: {fileID: 8563627651128817149}
-  elementIcon: {fileID: 2767540743593785058}
-  lifeTime: 0.5
-  elementIcons:
-    reorderableList:
-      canAdd: 1
-      canRemove: 1
-      draggable: 1
-      expandable: 1
-      multipleSelection: 1
-      isExpanded: 0
-      label:
-        m_Text: Keys
-        m_Image: {fileID: 0}
-        m_Tooltip: 
-      headerHeight: 18
-      footerHeight: 13
-      slideEasing: 0.15
-      verticalSpacing: 2
-      showDefaultBackground: 1
-      elementDisplayType: 0
-      elementNameProperty: 
-      elementNameOverride: 
-      elementIcon: {fileID: 0}
-    reqReferences: {fileID: 0}
-    isExpanded: 0
-    _keyValues: 010000000000000003000000020000000400000005000000
-    _keys: 010000000000000003000000020000000400000005000000
-    _values:
-    - {fileID: 21300000, guid: a3ca4beb0697c1d4aba334ee3418167b, type: 3}
-    - {fileID: 21300000, guid: 32260cc66a60f1c4c8f083d1a26c059a, type: 3}
-    - {fileID: 21300000, guid: 2dd2fd07ab633014c906e56582e0bbfa, type: 3}
-    - {fileID: 21300000, guid: e1967f786396de342b646dd4a345cb9f, type: 3}
-    - {fileID: 21300000, guid: 5fd183af2e922cd4c9f71cb102ddd81f, type: 3}
-    - {fileID: 21300000, guid: fd9c4f44ccca65c4da61090cd36a8c04, type: 3}
+  moveSpeed: 5
+  damageText: {fileID: 8690553461473945847}
+  effectIcon: {fileID: 2767540743593785058}
+  lifeTime: 2
   effectIcons:
     reorderableList:
       canAdd: 1
@@ -173,7 +133,7 @@ MonoBehaviour:
       draggable: 1
       expandable: 1
       multipleSelection: 1
-      isExpanded: 0
+      isExpanded: 1
       label:
         m_Text: Keys
         m_Image: {fileID: 0}
@@ -189,16 +149,9 @@ MonoBehaviour:
       elementIcon: {fileID: 0}
     reqReferences: {fileID: 0}
     isExpanded: 0
-    _keyValues: 010000000000000002000000030000000400000005000000
-    _keys: 010000000000000002000000030000000400000005000000
-    _values:
-    - {fileID: 21300000, guid: 32260cc66a60f1c4c8f083d1a26c059a, type: 3}
-    - {fileID: 21300000, guid: a3ca4beb0697c1d4aba334ee3418167b, type: 3}
-    - {fileID: 21300000, guid: 42263d9e6f4141f4c99fe33c01070682, type: 3}
-    - {fileID: 21300000, guid: b354f6414b33a2f45b8af1b45aa5859b, type: 3}
-    - {fileID: 21300000, guid: 42263d9e6f4141f4c99fe33c01070682, type: 3}
-    - {fileID: 21300000, guid: de24ce25ee79db546bf8f03ef53843cb, type: 3}
-  target: {fileID: 0}
+    _keyValues: 
+    _keys: 
+    _values: []
 --- !u!1 &4428506502040504669
 GameObject:
   m_ObjectHideFlags: 0
@@ -284,7 +237,7 @@ GameObject:
   - component: {fileID: 6462374970292241624}
   - component: {fileID: 8690553461473945847}
   m_Layer: 5
-  m_Name: Physic Damage
+  m_Name: Damage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -349,80 +302,3 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 120
---- !u!1 &8143732220292901997
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8991170163123879996}
-  - component: {fileID: 1948631857800588305}
-  - component: {fileID: 8563627651128817149}
-  m_Layer: 5
-  m_Name: Element Damage
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &8991170163123879996
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8143732220292901997}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 188055553938062286}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 3.5, y: 0}
-  m_SizeDelta: {x: 25, y: 25}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &1948631857800588305
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8143732220292901997}
-  m_CullTransparentMesh: 0
---- !u!114 &8563627651128817149
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8143732220292901997}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 1
-    m_FontStyle: 3
-    m_BestFit: 0
-    m_MinSize: 1
-    m_MaxSize: 40
-    m_Alignment: 4
-    m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: 021

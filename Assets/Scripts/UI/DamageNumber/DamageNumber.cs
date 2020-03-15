@@ -29,6 +29,10 @@ public class DamageNumber : MonoBehaviour
             physicDamage.color = target.tag == "Player" ? Color.white : Color.red;
             physicDamage.text = damage.ToString();
         }
+        else
+        {
+            physicDamage.text = "";
+        }
         
         if (element.value != 0)
         {
@@ -38,7 +42,7 @@ public class DamageNumber : MonoBehaviour
         }
         else
         {
-            elementDamage.text = "Где урон, урод?";
+            elementDamage.text = "";
             elementIcon.enabled = false;
         }
     }
