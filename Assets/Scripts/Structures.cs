@@ -277,9 +277,6 @@ namespace Structures
                 case Effects.Freeze:
                     color = new Color(.36f, .56f, .7f);
                     break;
-                case Effects.Stun:
-                    color = Color.blue;
-                    break;
                 case Effects.Poison:
                     color = Color.green;
                     break;
@@ -290,7 +287,7 @@ namespace Structures
         }
 
         /// <summary>
-        /// Used by enemies and environment
+        /// Used for set effect
         /// </summary>
         public Effect(Effects effect, int stacksCount)
         {
@@ -314,8 +311,39 @@ namespace Structures
                 case Effects.Freeze:
                     color = new Color(.36f, .56f, .7f);
                     break;
-                case Effects.Stun:
-                    color = Color.blue;
+                case Effects.Poison:
+                    color = Color.green;
+                    break;
+                default:
+                    color = Color.black;
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Used for set effect with one stack
+        /// </summary>
+        public Effect(Effects effect, float effectDuration)
+        {
+            this.effect = effect;
+            stackDuration = effectDuration;
+            stacksCount = 1;
+
+            value = 0f;
+            maxStacksCount = 0;
+            effectPeriod = 0f;
+            curStackDuration = new List<float>();
+
+            switch (effect)
+            {
+                case Effects.Burning:
+                    color = new Color(.97f, .4f, .18f);
+                    break;
+                case Effects.Root:
+                    color = new Color(.71f, .33f, .1f);
+                    break;
+                case Effects.Freeze:
+                    color = new Color(.36f, .56f, .7f);
                     break;
                 case Effects.Poison:
                     color = Color.green;

@@ -12,7 +12,7 @@ namespace Enums
     public enum WeaponType { Sword, Lance, Staff, Hammer, Bow, Scythe, Gloves }
     public enum WeaponUltimate { Spell, Charging, Buff, Passive }
     public enum BonusAtributes { JumpCount, EvadeCosts, EvadeDistance, Speed }
-    public enum Effects { Freeze, Burning, Poison, Bleeding, Root, Stun }
+    public enum Effects { Freeze, Burning, Poison, Bleeding, Root }
 
     //------------ Player enums ------------
     public enum HurtType { None, Repulsion, Catch };

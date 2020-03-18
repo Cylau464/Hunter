@@ -7,12 +7,12 @@ using Enums;
 public class HowlCirclePulse : MonoBehaviour
 {
     public EnemySpell spell;
-    bool damageDone;
     int isCastParamID;
     int playerLayer = 10;
     CircleCollider2D circleCol;
     Animator anim;
     Transform player;
+    PlayerAtributes playerAtributes;
 
     void Awake()
     {
@@ -29,19 +29,26 @@ public class HowlCirclePulse : MonoBehaviour
         circleCol.radius = .2f;
         float _castTime = Time.time + spell.castTime;
         float _сircleMaxRadius = spell.castRange;
-        float _curDelay = 0f;
+        float _curPeriod = 0f;
 
         while (_castTime > Time.time)
         {
-            if (_curDelay <= Time.time)
-                damageDone = false;
-
-            if (player != null && !damageDone)
+            if (player != null)
             {
-                Vector2 _direction = new Vector2(Mathf.Sign(player.transform.position.x - transform.position.x), Mathf.Sign(player.transform.position.y - transform.position.y));
-                player.GetComponent<PlayerAtributes>().TakeDamage(spell.firstDamage, HurtType.Repulsion, new Vector2(spell.repulseVector.x * _direction.x, spell.repulseVector.y * _direction.y), spell.dazedTime, spell.elementDamage);
-                damageDone = true;
-                _curDelay = spell.periodicityDamage + Time.time;
+                //Not last pulse
+                if (_castTime - Time.time > spell.periodicityDamage)
+                {
+                    if (_curPeriod < Time.time)
+                    {
+                        playerAtributes.TakeDamage(0, HurtType.Repulsion, spell.dazedTime, spell.elementDamage);
+                        _curPeriod = spell.periodicityDamage + Time.time;
+                    }
+                }
+                else
+                {
+                    Vector2 _direction = new Vector2(Mathf.Sign(player.transform.position.x - transform.position.x), Mathf.Sign(player.transform.position.y - transform.position.y));
+                    playerAtributes.TakeDamage(spell.firstDamage, HurtType.Repulsion, new Vector2(spell.repulseVector.x * _direction.x, spell.repulseVector.y * _direction.y), spell.dazedTime, spell.elementDamage);
+                }
             }
 
             if(circleCol.radius < _сircleMaxRadius)
@@ -57,12 +64,18 @@ public class HowlCirclePulse : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.layer == playerLayer)
+        {
             player = collision.transform;
+            playerAtributes = player.GetComponent<PlayerAtributes>();
+        }
     }
 
     void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.layer == playerLayer)
+        {
             player = null;
+            playerAtributes = null;
+        }
     }
 }

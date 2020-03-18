@@ -498,7 +498,7 @@ public class PlayerMovement : MonoBehaviour
             //Follow for catch source
             if (hurtType == HurtType.Catch)
             {
-                playerTransform.position = catchAnchorPoint.position;
+                playerTransform.position = catchAnchorPoint == null ? playerTransform.position : catchAnchorPoint.position;
                 rigidBody.bodyType = RigidbodyType2D.Static;
             }
         }

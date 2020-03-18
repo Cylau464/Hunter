@@ -9,7 +9,6 @@ public class PlayerEffectsController : MonoBehaviour
 {
     [SerializeField] List<Image> debuffIcons = new List<Image>(6);
     [SerializeField] List<Text> debuffText = new List<Text>(6);
-    [SerializeField] List<bool> activeDebuffs = new List<bool>(5);
     Dictionary<Effects, int> debuffCellIndex = new Dictionary<Effects, int>(6)
     {
         { Effects.Freeze, 100 },
@@ -17,7 +16,6 @@ public class PlayerEffectsController : MonoBehaviour
         { Effects.Bleeding, 100 },
         { Effects.Poison, 100 },
         { Effects.Root, 100 },
-        { Effects.Stun, 100 },
     };
     [SerializeField] EffectsIconsDictionary effectIcons = null;
 
@@ -26,17 +24,21 @@ public class PlayerEffectsController : MonoBehaviour
         { Effects.Freeze, new Effect(Effects.Freeze, 5, 1f, .1f) },
         { Effects.Burning, new Effect(Effects.Burning, 5, 2f, 2f) },
         { Effects.Bleeding, new Effect(Effects.Bleeding, 5, 3f, 2.5f) },
+        { Effects.Poison, new Effect(Effects.Poison, 5, 3f, 2.5f) },
     };
     Dictionary<Effects, int> stackCount = new Dictionary<Effects, int>()
     {
         { Effects.Freeze, 0 },
         { Effects.Burning, 0 },
-        { Effects.Bleeding, 0 }
+        { Effects.Bleeding, 0 },
+        { Effects.Poison, 0 },
     };
     Dictionary<Effects, float> periodEffectDelay = new Dictionary<Effects, float>()
     {
         { Effects.Burning, 0f },
-        { Effects.Bleeding, 0f }
+        { Effects.Bleeding, 0f },
+        { Effects.Bleeding, 0 },
+        { Effects.Poison, 0 },
     };
     PlayerAtributes playerAtributes;
 
@@ -53,6 +55,31 @@ public class PlayerEffectsController : MonoBehaviour
                 continue;
 
             ReduceStacks(kvp.Key);
+            ApplyEffect(kvp.Key);
+        }
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            Effect _effect = new Effect();
+            int _rand = Random.Range(0, 4);
+
+            switch(_rand)
+            {
+                case 0:
+                    _effect = new Effect(Effects.Bleeding, 1);
+                    break;
+                case 1:
+                    _effect = new Effect(Effects.Burning, 1);
+                    break;
+                case 2:
+                    _effect = new Effect(Effects.Freeze, 1);
+                    break;
+                case 3:
+                    _effect = new Effect(Effects.Poison, 1);
+                    break;
+            }
+
+            GetEffect(_effect);
         }
     }
 
@@ -148,7 +175,6 @@ public class PlayerEffectsController : MonoBehaviour
                     debuffText[i].enabled = true;
 
                     debuffCellIndex[key] = i;
-                    //activeDebuffs[i] = true;
                     break;
                 }
             }
@@ -169,12 +195,16 @@ public class PlayerEffectsController : MonoBehaviour
                 ApplyToIconsUI(key);
 
                 break;
+            case Effects.Bleeding:
+            case Effects.Poison:
             case Effects.Burning:
                 if(periodEffectDelay[key] <= Time.time)
                 {
                     playerAtributes.TakeDamage((int)effects[key].value, HurtType.None, effects[key]);
                     periodEffectDelay[key] = Time.time + effects[key].effectPeriod;
+                    ApplyToIconsUI(key);
                 }
+
                 break;
         }
     }

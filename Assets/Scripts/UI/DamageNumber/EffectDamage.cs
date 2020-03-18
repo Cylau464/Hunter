@@ -28,6 +28,7 @@ public class EffectDamage : MonoBehaviour
         }
         else
         {
+            damageText.color = Color.green;
             damageText.text = "Где урон, урод?";
             effectIcon.enabled = false;
         }

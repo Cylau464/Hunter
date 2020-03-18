@@ -46,6 +46,7 @@ public class PlayerAtributes : MonoBehaviour
     PlayerMovement movement;
     Animator anim;
     PlayerEffectsController effectsController;
+    public Rigidbody2D rigidBody;
 
     public float timeOfLastTakenDamage;
 
@@ -56,6 +57,7 @@ public class PlayerAtributes : MonoBehaviour
         stamina = maxStamina;
         anim = GetComponent<Animator>();
         movement = GetComponent<PlayerMovement>();
+        rigidBody = GetComponent<Rigidbody2D>();
         effectsController = GetComponent<PlayerEffectsController>();
         statusBar = statusBarTransform.GetComponent<StatusBar>();
         statusBar.maxHealth = maxHealth;
@@ -161,9 +163,12 @@ public class PlayerAtributes : MonoBehaviour
     {
         if (movement.isEvading) return;
 
-        health -= damage + element.value;
-        timeOfLastTakenDamage = Time.time;
-        statusBar.HealthChange(health);
+        if (damage > 0)
+        {
+            health -= damage + element.value;
+            timeOfLastTakenDamage = Time.time;
+            statusBar.HealthChange(health);
+        }
 
         if (health <= 0)
         {
@@ -198,11 +203,6 @@ public class PlayerAtributes : MonoBehaviour
         GameObject damageText = Resources.Load<GameObject>("UI/EffectDamage");
         damageText = Instantiate(damageText, transform);
         damageText.GetComponent<EffectDamage>().effect = effect;
-    }
-
-    void EffectText(Element element)
-    {
-
     }
 
     public void SetAnimationSpeed(float speed)
