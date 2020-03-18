@@ -559,16 +559,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6028c28e11c0ae4c962db4be1191e4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minDamage: 1
-  maxDamage: 4
-  element:
-    title: Ice
-    element: 1
+  effect:
+    effect: 0
+    stacksCount: 1
+    maxStacksCount: 0
+    stackDuration: 0
+    curStackDuration: []
     value: 0
+    effectPeriod: 0
     color: {r: 0.36, g: 0.56, b: 0.7, a: 1}
   delay: 1.5
   damagePeriodicity: 0.8
-  dazedTime: 0.2
 --- !u!4 &136804598 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8836084032477501014, guid: 8deea7c2a0f999d42aa47e72708c86d8,
@@ -3027,11 +3028,11 @@ MonoBehaviour:
       prepareTime: 1.5
       castTime: 3
       castRange: 10
-      periodicityDamage: 0.3
-      dazedTime: 0.3
+      periodicityDamage: 0.5
+      dazedTime: 0.6
       repulseVector: {x: 10, y: 6}
       damageRange: {x: 0, y: 0}
-      firstDamage: 1
+      firstDamage: 5
       lastDamage: 0
       elementDamage:
         title: 
@@ -5071,6 +5072,7 @@ MonoBehaviour:
   speedDivisor: 1
   attackSpeed: 0
   statusBarTransform: {fileID: 58596679}
+  rigidBody: {fileID: 0}
   timeOfLastTakenDamage: 0
 --- !u!114 &1602877370
 MonoBehaviour:
@@ -5110,7 +5112,6 @@ MonoBehaviour:
   - {fileID: 15211263}
   - {fileID: 1905901643}
   - {fileID: 1132613501}
-  activeDebuffs: 
   effectIcons:
     reorderableList:
       canAdd: 1
@@ -5134,11 +5135,13 @@ MonoBehaviour:
       elementIcon: {fileID: 0}
     reqReferences: {fileID: 0}
     isExpanded: 0
-    _keyValues: 0100000000000000
-    _keys: 0100000000000000
+    _keyValues: 01000000000000000200000003000000
+    _keys: 01000000000000000200000003000000
     _values:
     - {fileID: 21300000, guid: 13c075456e4a1af4dae4a79aed39b033, type: 3}
     - {fileID: 21300000, guid: ee4e65de93a236547b838894c150e1ed, type: 3}
+    - {fileID: 21300000, guid: 42263d9e6f4141f4c99fe33c01070682, type: 3}
+    - {fileID: 21300000, guid: b354f6414b33a2f45b8af1b45aa5859b, type: 3}
   effects:
     reorderableList:
       canAdd: 1

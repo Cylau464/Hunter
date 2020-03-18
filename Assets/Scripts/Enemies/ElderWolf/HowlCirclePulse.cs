@@ -18,7 +18,7 @@ public class HowlCirclePulse : MonoBehaviour
     {
         anim = transform.GetComponent<Animator>();
         circleCol = transform.GetComponent<CircleCollider2D>();
-        circleCol.radius = .2f;
+        //.2f;
         isCastParamID = Animator.StringToHash("isCast");
     }
 
@@ -26,7 +26,7 @@ public class HowlCirclePulse : MonoBehaviour
     public IEnumerator CirclePulse()
     {
         anim.SetBool(isCastParamID, true);
-        circleCol.radius = .2f;
+        circleCol.radius = spell.castRange; //circleCol.radius = .2f;
         float _castTime = Time.time + spell.castTime;
         float _сircleMaxRadius = spell.castRange;
         float _curPeriod = 0f;
@@ -40,7 +40,7 @@ public class HowlCirclePulse : MonoBehaviour
                 {
                     if (_curPeriod < Time.time)
                     {
-                        playerAtributes.TakeDamage(0, HurtType.Repulsion, spell.dazedTime, spell.elementDamage);
+                        playerAtributes.TakeDamage(0, HurtType.Catch, spell.dazedTime, spell.elementDamage);
                         _curPeriod = spell.periodicityDamage + Time.time;
                     }
                 }
@@ -48,11 +48,12 @@ public class HowlCirclePulse : MonoBehaviour
                 {
                     Vector2 _direction = new Vector2(Mathf.Sign(player.transform.position.x - transform.position.x), Mathf.Sign(player.transform.position.y - transform.position.y));
                     playerAtributes.TakeDamage(spell.firstDamage, HurtType.Repulsion, new Vector2(spell.repulseVector.x * _direction.x, spell.repulseVector.y * _direction.y), spell.dazedTime, spell.elementDamage);
+                    break;
                 }
             }
 
-            if(circleCol.radius < _сircleMaxRadius)
-                circleCol.radius += spell.castRange * 3f * Time.deltaTime;
+            //if(circleCol.radius < _сircleMaxRadius)
+            //    circleCol.radius += spell.castRange * 3f * Time.deltaTime;
 
             yield return new WaitForEndOfFrame();
         }

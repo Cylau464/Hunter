@@ -37,7 +37,6 @@ public class PlayerEffectsController : MonoBehaviour
     {
         { Effects.Burning, 0f },
         { Effects.Bleeding, 0f },
-        { Effects.Bleeding, 0 },
         { Effects.Poison, 0 },
     };
     PlayerAtributes playerAtributes;
@@ -163,6 +162,9 @@ public class PlayerEffectsController : MonoBehaviour
 
     void ApplyToIconsUI(Effects key)
     {
+        if (stackCount[key] <= 0)
+            return;
+
         if (debuffCellIndex[key] == 100)
         {
             for (int i = 0; i < debuffText.Count; i++)

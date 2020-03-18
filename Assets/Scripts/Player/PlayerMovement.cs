@@ -129,6 +129,8 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+
+        Debug.Log(rigidBody.bodyType);
         if (Input.GetKeyDown(KeyCode.G))
             Time.timeScale = 0.1f;
         if (Input.GetKeyDown(KeyCode.V))
@@ -498,6 +500,7 @@ public class PlayerMovement : MonoBehaviour
             //Follow for catch source
             if (hurtType == HurtType.Catch)
             {
+                
                 playerTransform.position = catchAnchorPoint == null ? playerTransform.position : catchAnchorPoint.position;
                 rigidBody.bodyType = RigidbodyType2D.Static;
             }

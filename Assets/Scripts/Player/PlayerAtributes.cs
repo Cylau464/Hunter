@@ -177,6 +177,7 @@ public class PlayerAtributes : MonoBehaviour
             return;
         }
 
+        movement.hurtType = hurtType;
         movement.Stunned(dazedTime);
         DamageText(damage, element);
     }

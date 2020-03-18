@@ -23,7 +23,7 @@ public class ElderWolf : Enemy
         { "Ice Breath", new EnemySpell(7f, 8f, 2f, 1f, .5f, new Vector2(10f, 5f), new Vector2(2f, 0f), .3f, 2, .5f, new Element("Ice", Elements.Ice, 1), new Effect(Effects.Freeze, 1)) },
         { "Swing Tail", new EnemySpell(5f, 8f, 2f, 1f, .5f, new Vector2(2f, 2f), new Vector2(5f, 2f), 1.5f, 10) },
         { "Ice Spikes", new EnemySpell(11f, 15f, 2f, 1f, 2f, new Vector2(2f, 5f), new Vector2(4f, 2f), 2f, 15, new Element("Ice", Elements.Ice, 10) ) },
-        { "Howl",       new EnemySpell(15f, 15f, 3f, 1.5f, 3f, new Vector2(0f, 0f), new Vector2(4f, 2f), .5f, 0, .5f) },
+        { "Howl",       new EnemySpell(15f, 15f, 3f, 1.5f, 3f, new Vector2(0f, 0f), new Vector2(4f, 2f), .5f, 5, .5f) },
         { "Knockback",  new EnemySpell(2.5f, new Vector2(0f, 5f), 1, 5f, .5f, .5f, 1f, new Vector2(6f, 2f), new Vector2(6f, 6f), 1.5f, 2, 5) },
     };
 
