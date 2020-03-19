@@ -23,7 +23,7 @@ public class EffectDamage : MonoBehaviour
         if (!effect.Equals(default(Effect)))
         {
             damageText.color = effect.color;
-            damageText.text = effect.value.ToString();
+            damageText.text = ((int)effect.value).ToString();
             effectIcon.sprite = effectIcons[effect.effect];
         }
         else

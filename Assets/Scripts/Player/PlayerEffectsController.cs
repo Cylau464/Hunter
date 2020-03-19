@@ -22,9 +22,9 @@ public class PlayerEffectsController : MonoBehaviour
     [SerializeField] private EffectsDictionary effects = new EffectsDictionary()
     {
         { Effects.Freeze, new Effect(Effects.Freeze, 5, 1f, .1f) },
-        { Effects.Burning, new Effect(Effects.Burning, 5, 2f, 2f) },
-        { Effects.Bleeding, new Effect(Effects.Bleeding, 5, 3f, 2.5f) },
-        { Effects.Poison, new Effect(Effects.Poison, 5, 3f, 2.5f) },
+        { Effects.Burning, new Effect(Effects.Burning, 5, 2f, 2f, .5f) },
+        { Effects.Bleeding, new Effect(Effects.Bleeding, 5, 3f, 2.5f, .5f) },
+        { Effects.Poison, new Effect(Effects.Poison, 5, 3f, 2.5f, 1f) },
     };
     Dictionary<Effects, int> stackCount = new Dictionary<Effects, int>()
     {
@@ -57,7 +57,7 @@ public class PlayerEffectsController : MonoBehaviour
             ApplyEffect(kvp.Key);
         }
 
-        if (Input.GetKeyDown(KeyCode.G))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             Effect _effect = new Effect();
             int _rand = Random.Range(0, 4);

@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class CollisionRepulse : MonoBehaviour
 {
-    public float maxRepulseDistance;
+    public float maxRepulseDistance; //
 }

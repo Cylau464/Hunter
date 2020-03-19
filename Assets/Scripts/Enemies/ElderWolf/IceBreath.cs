@@ -85,14 +85,14 @@ public class IceBreath : MonoBehaviour
 
                 if (_hitCount < Mathf.Floor(spell.castTime / spell.periodicityDamage))
                 {
-                    _playerAtributes.TakeDamage(spell.firstDamage, HurtType.None, spell.dazedTime / 2f, spell.elementDamage);
-                    //player.GetComponent<PlayerAtributes>().TakeDamage(spell.firstDamage, HurtType.Repulsion, new Vector2(spell.repulseVector.x * _direction.x, 0f), spell.dazedTime, spell.elementDamage);
+                    //_playerAtributes.TakeDamage(spell.firstDamage, HurtType.None, spell.dazedTime, spell.elementDamage);
+                    _playerAtributes.TakeDamage(spell.firstDamage, HurtType.Repulsion, new Vector2(spell.repulseVector.x * _direction.x, 0f), spell.dazedTime, spell.elementDamage);
                     _playerAtributes.TakeEffect(spell.effect);
                 }
                 else
                 {
                     spell.elementDamage.value = spell.lastDamage;
-                    _playerAtributes.TakeDamage(0, HurtType.Repulsion, new Vector2(spell.repulseVector.x * 3f * _direction.x, spell.repulseVector.y * _direction.y), spell.dazedTime * 2f, spell.elementDamage);
+                    _playerAtributes.TakeDamage(0, HurtType.Repulsion, new Vector2(spell.repulseVector.x * 10f * _direction.x, spell.repulseVector.y * _direction.y), spell.dazedTime * 2f, spell.elementDamage);
                     _playerAtributes.TakeEffect(spell.effect);
                 }
 

@@ -148,10 +148,14 @@ MonoBehaviour:
       elementNameOverride: 
       elementIcon: {fileID: 0}
     reqReferences: {fileID: 0}
-    isExpanded: 0
-    _keyValues: 
-    _keys: 
-    _values: []
+    isExpanded: 1
+    _keyValues: 01000000000000000200000003000000
+    _keys: 01000000000000000200000003000000
+    _values:
+    - {fileID: 21300000, guid: 13c075456e4a1af4dae4a79aed39b033, type: 3}
+    - {fileID: 21300000, guid: ee4e65de93a236547b838894c150e1ed, type: 3}
+    - {fileID: 21300000, guid: 42263d9e6f4141f4c99fe33c01070682, type: 3}
+    - {fileID: 21300000, guid: b354f6414b33a2f45b8af1b45aa5859b, type: 3}
 --- !u!1 &4428506502040504669
 GameObject:
   m_ObjectHideFlags: 0

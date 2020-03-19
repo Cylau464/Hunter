@@ -14,7 +14,7 @@ public class HowlCirclePulse : MonoBehaviour
     Transform player;
     PlayerAtributes playerAtributes;
 
-    void Start()//Awake()
+    void Awake()
     {
         anim = transform.GetComponent<Animator>();
         circleCol = transform.GetComponent<CircleCollider2D>();

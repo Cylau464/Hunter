@@ -129,8 +129,6 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-
-        Debug.Log(rigidBody.bodyType);
         if (Input.GetKeyDown(KeyCode.G))
             Time.timeScale = 0.1f;
         if (Input.GetKeyDown(KeyCode.V))
