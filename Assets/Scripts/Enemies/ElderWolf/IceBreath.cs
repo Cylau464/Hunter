@@ -71,6 +71,7 @@ public class IceBreath : MonoBehaviour
         float _castTime = Time.time + spell.castTime;
         float _curDelay = 0f;
         int _hitCount = 1;
+        PlayerAtributes _playerAtributes = null;
 
         while (_castTime > Time.time)
         {
@@ -80,17 +81,19 @@ public class IceBreath : MonoBehaviour
             if (player != null && !damageDone)
             {
                 Vector2 _direction = new Vector2(Mathf.Sign(player.transform.position.x - transform.position.x), Mathf.Sign(player.transform.position.y - transform.parent.position.y));
+                _playerAtributes = player.GetComponent<PlayerAtributes>();
 
                 if (_hitCount < Mathf.Floor(spell.castTime / spell.periodicityDamage))
                 {
-                    player.GetComponent<PlayerAtributes>().TakeDamage(spell.firstDamage, HurtType.Repulsion, new Vector2(spell.repulseVector.x * _direction.x, 0f), spell.dazedTime, spell.elementDamage);
-                    player.GetComponent<PlayerAtributes>().TakeEffect(spell.effect);
+                    _playerAtributes.TakeDamage(spell.firstDamage, HurtType.None, spell.dazedTime / 2f, spell.elementDamage);
+                    //player.GetComponent<PlayerAtributes>().TakeDamage(spell.firstDamage, HurtType.Repulsion, new Vector2(spell.repulseVector.x * _direction.x, 0f), spell.dazedTime, spell.elementDamage);
+                    _playerAtributes.TakeEffect(spell.effect);
                 }
                 else
                 {
                     spell.elementDamage.value = spell.lastDamage;
-                    player.GetComponent<PlayerAtributes>().TakeDamage(0, HurtType.Repulsion, new Vector2(spell.repulseVector.x * 2f * _direction.x, spell.repulseVector.y * _direction.y), spell.dazedTime * 2f, spell.elementDamage);
-                    player.GetComponent<PlayerAtributes>().TakeEffect(spell.effect);
+                    _playerAtributes.TakeDamage(0, HurtType.Repulsion, new Vector2(spell.repulseVector.x * 3f * _direction.x, spell.repulseVector.y * _direction.y), spell.dazedTime * 2f, spell.elementDamage);
+                    _playerAtributes.TakeEffect(spell.effect);
                 }
 
                 _hitCount++;

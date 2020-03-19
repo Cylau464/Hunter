@@ -20,7 +20,7 @@ public class ElderWolf : Enemy
     {
         { "Long Jump",  new EnemySpell(10f, new Vector2(10f, 5f), 1, 10f, 3f, 1.5f, .75f, new Vector2(2f, 2f), new Vector2(5f, 5f), 1.5f, 5, 7) },
         { "Back Jump",  new EnemySpell(3f, new Vector2(7f, 4f), -1, 12f, 3f, .5f, .5f, new Vector2(2f, 2f), new Vector2(3f, 0f), 1f, 2, 5) },
-        { "Ice Breath", new EnemySpell(7f, 8f, 2f, 1f, .5f, new Vector2(10f, 5f), new Vector2(2f, 0f), .3f, 2, .5f, new Element("Ice", Elements.Ice, 1), new Effect(Effects.Freeze, 1)) },
+        { "Ice Breath", new EnemySpell(7f, 8f, 2f, 1f, .5f, new Vector2(10f, 5f), new Vector2(.5f, 0f), .3f, 2, .5f, new Element("Ice", Elements.Ice, 1), new Effect(Effects.Freeze, 1)) },
         { "Swing Tail", new EnemySpell(5f, 8f, 2f, 1f, .5f, new Vector2(2f, 2f), new Vector2(5f, 2f), 1.5f, 10) },
         { "Ice Spikes", new EnemySpell(11f, 15f, 2f, 1f, 2f, new Vector2(2f, 5f), new Vector2(4f, 2f), 2f, 15, new Element("Ice", Elements.Ice, 10) ) },
         { "Howl",       new EnemySpell(15f, 15f, 3f, 1.5f, 3f, new Vector2(0f, 0f), new Vector2(4f, 2f), .5f, 5, .5f) },
@@ -92,25 +92,16 @@ public class ElderWolf : Enemy
                     spellsCurCooldown["Long Jump"] = mySpells["Long Jump"].cooldown + Time.time;
                     spellsCurCooldown["Ice Spikes"] = mySpells["Ice Spikes"].cooldown + Time.time;
                     spellsCurCooldown["Ice Breath"] = 0f;
-                    //longJumpTiming.curCooldown = mySpells["Long Jump"].cooldown + Time.time;
-                    //iceBreathTiming.curCooldown = 0f;
-                    //iceSpikesTiming.curCooldown = mySpells["Ice Spikes"].cooldown + Time.time;
                     break;
                 case 1:
                     spellsCurCooldown["Long Jump"] = 0f;
                     spellsCurCooldown["Ice Spikes"] = mySpells["Ice Spikes"].cooldown + Time.time;
                     spellsCurCooldown["Ice Breath"] = mySpells["Ice Breath"].cooldown + Time.time;
-                    //longJumpTiming.curCooldown = 0f;
-                    //iceBreathTiming.curCooldown = mySpells["Ice Breath"].cooldown + Time.time;
-                    //iceSpikesTiming.curCooldown = mySpells["Ice Spikes"].cooldown + Time.time;
                     break;
                 case 2:
                     spellsCurCooldown["Long Jump"] = mySpells["Long Jump"].cooldown + Time.time;
                     spellsCurCooldown["Ice Spikes"] = 0f;
                     spellsCurCooldown["Ice Breath"] = mySpells["Ice Breath"].cooldown + Time.time;
-                    //longJumpTiming.curCooldown = mySpells["Long Jump"].cooldown + Time.time;
-                    //iceBreathTiming.curCooldown = mySpells["Ice Breath"].cooldown + Time.time;
-                    //iceSpikesTiming.curCooldown = 0f;
                     break;
             }
         }
@@ -448,11 +439,6 @@ public class ElderWolf : Enemy
                     break;
                 }
         }
-    }
-
-    void SpellPeriodicDamage()
-    {
-
     }
 
     void SpellEnded()

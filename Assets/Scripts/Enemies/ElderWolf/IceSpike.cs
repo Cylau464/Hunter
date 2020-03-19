@@ -75,7 +75,8 @@ public class IceSpike : MonoBehaviour
         if (player != null && !damageDone)
         {
             int _direction = PlayerDirection();
-            player.GetComponent<PlayerAtributes>().TakeDamage(spell.firstDamage, HurtType.Repulsion, new Vector2(spell.repulseVector.x * _direction, spell.repulseVector.y), spell.dazedTime, spell.elementDamage);
+            float _repulseForceY = (1f - myCollider.size.y / maxColSizeY) * spell.repulseVector.y;
+            player.GetComponent<PlayerAtributes>().TakeDamage(spell.firstDamage, HurtType.Repulsion, new Vector2(spell.repulseVector.x * _direction, _repulseForceY), spell.dazedTime, spell.elementDamage);
             damageDone = true;
         }
     }
@@ -96,6 +97,22 @@ public class IceSpike : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.transform.tag == "Player")
+        {
+            player = collision.transform;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.transform.tag == "Player")
+        {
+            player = null;
+        }
+    }
+
     void Casted()
     {
         state = SpellStates.End;
@@ -104,6 +121,14 @@ public class IceSpike : MonoBehaviour
     void End()
     {
         myCollider.isTrigger = false;
+
+        if (player != null && !damageDone)
+        {
+            int _direction = PlayerDirection();
+            float _repulseForceY = spell.repulseVector.y * .3f;
+            player.GetComponent<PlayerAtributes>().TakeDamage(spell.firstDamage, HurtType.Repulsion, new Vector2(spell.repulseVector.x * _direction, _repulseForceY), spell.dazedTime, spell.elementDamage);
+            damageDone = true;
+        }
 
         if (curLifeTime <= Time.time)
             Destroy(gameObject);

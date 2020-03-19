@@ -7,9 +7,9 @@ using Enums;
 
 public class PlayerEffectsController : MonoBehaviour
 {
-    [SerializeField] List<Image> debuffIcons = new List<Image>(6);
-    [SerializeField] List<Text> debuffText = new List<Text>(6);
-    Dictionary<Effects, int> debuffCellIndex = new Dictionary<Effects, int>(6)
+    [SerializeField] List<Image> debuffIcons = new List<Image>(5);
+    [SerializeField] List<Text> debuffText = new List<Text>(5);
+    Dictionary<Effects, int> debuffCellIndex = new Dictionary<Effects, int>(5)
     {
         { Effects.Freeze, 100 },
         { Effects.Burning, 100 },
@@ -195,7 +195,6 @@ public class PlayerEffectsController : MonoBehaviour
                 playerAtributes.speedDivisor = playerAtributes.defSpeedDivisor - effects[key].value * stackCount[key];
                 playerAtributes.SetAnimationSpeed(1f - effects[key].value * stackCount[key]);
                 ApplyToIconsUI(key);
-
                 break;
             case Effects.Bleeding:
             case Effects.Poison:
@@ -206,7 +205,6 @@ public class PlayerEffectsController : MonoBehaviour
                     periodEffectDelay[key] = Time.time + effects[key].effectPeriod;
                     ApplyToIconsUI(key);
                 }
-
                 break;
         }
     }

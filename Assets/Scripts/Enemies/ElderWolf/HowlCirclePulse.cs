@@ -14,11 +14,10 @@ public class HowlCirclePulse : MonoBehaviour
     Transform player;
     PlayerAtributes playerAtributes;
 
-    void Awake()
+    void Start()//Awake()
     {
         anim = transform.GetComponent<Animator>();
         circleCol = transform.GetComponent<CircleCollider2D>();
-        //.2f;
         isCastParamID = Animator.StringToHash("isCast");
     }
 
