@@ -254,9 +254,9 @@ public class PlayerMovement : MonoBehaviour
             atributes.Stamina -= evadingStaminaCosts - (int) bonusAtributes[BonusAtributes.EvadeCosts];
 
             if (input.horizontal != 0)
-                rigidBody.AddForce(new Vector2((evadingDistance * 1.5f + bonusAtributes[BonusAtributes.EvadeDistance]) * Mathf.Sign(input.horizontal), 0f), ForceMode2D.Impulse); //input horizontal instead direction for evade after attack
+                rigidBody.AddForce(new Vector2((evadingDistance * 1.5f + bonusAtributes[BonusAtributes.EvadeDistance]) * atributes.speedDivisor * Mathf.Sign(input.horizontal), 0f), ForceMode2D.Impulse); //input horizontal instead direction for evade after attack
             else
-                rigidBody.AddForce(new Vector2((evadingDistance + bonusAtributes[BonusAtributes.EvadeDistance]) * direction, 0f), ForceMode2D.Impulse);
+                rigidBody.AddForce(new Vector2((evadingDistance + bonusAtributes[BonusAtributes.EvadeDistance]) * atributes.speedDivisor * direction, 0f), ForceMode2D.Impulse);
 
         }
         else if (isEvading && (curEvadingDuration <= Time.time || (input.jumpPressed && extraJumpsCount > 0)))
@@ -498,9 +498,11 @@ public class PlayerMovement : MonoBehaviour
             //Follow for catch source
             if (hurtType == HurtType.Catch)
             {
-                
                 playerTransform.position = catchAnchorPoint == null ? playerTransform.position : catchAnchorPoint.position;
-                rigidBody.bodyType = RigidbodyType2D.Static;
+            }
+            else if(hurtType == HurtType.Stun)
+            {
+                rigidBody.velocity = Vector2.up;
             }
         }
     }

@@ -2890,7 +2890,7 @@ MonoBehaviour:
     _values:
     - cooldown: 10
       globalCD: 1
-      prepareTime: 1.5
+      prepareTime: 1
       castTime: 1
       castRange: 10
       periodicityDamage: 0
@@ -3014,7 +3014,7 @@ MonoBehaviour:
         color: {r: 0.36, g: 0.56, b: 0.7, a: 1}
       effect:
         effect: 0
-        stacksCount: 0
+        stacksCount: 2
         maxStacksCount: 0
         stackDuration: 0
         curStackDuration: []
@@ -3029,7 +3029,7 @@ MonoBehaviour:
       castTime: 3
       castRange: 10
       periodicityDamage: 0.5
-      dazedTime: 0.6
+      dazedTime: 0.5
       repulseVector: {x: 10, y: 6}
       damageRange: {x: 0, y: 0}
       firstDamage: 5
@@ -3087,80 +3087,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 752039246}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &752637994
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 752637995}
-  - component: {fileID: 752637997}
-  - component: {fileID: 752637996}
-  m_Layer: 5
-  m_Name: Debuff Icon 6
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &752637995
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 752637994}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 1}
-  m_Children:
-  - {fileID: 1132613499}
-  m_Father: {fileID: 2023699307}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 245, y: -1.5}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &752637996
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 752637994}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &752637997
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 752637994}
-  m_CullTransparentMesh: 0
 --- !u!1 &817188715
 GameObject:
   m_ObjectHideFlags: 0
@@ -3647,99 +3573,6 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
---- !u!1 &1132613498
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1132613499}
-  - component: {fileID: 1132613502}
-  - component: {fileID: 1132613501}
-  - component: {fileID: 1132613500}
-  m_Layer: 5
-  m_Name: Debuff Count 6
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1132613499
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1132613498}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 752637995}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 34, y: 43}
-  m_SizeDelta: {x: 160, y: 30}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1132613500
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1132613498}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
-  m_EffectDistance: {x: 1, y: -1}
-  m_UseGraphicAlpha: 1
---- !u!114 &1132613501
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1132613498}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 72
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 4
-    m_MaxSize: 72
-    m_Alignment: 4
-    m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 1
-    m_LineSpacing: 1
-  m_Text: 10
---- !u!222 &1132613502
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1132613498}
-  m_CullTransparentMesh: 0
 --- !u!1 &1183156873
 GameObject:
   m_ObjectHideFlags: 0
@@ -5095,23 +4928,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 1602877359}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d11a0daa43590e43b8068c011f09ddc, type: 3}
+  m_Script: {fileID: 11500000, guid: 90e017712ff61fc47b0602ed27d5a795, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debuffIcons:
-  - {fileID: 1486321260}
-  - {fileID: 115850046}
-  - {fileID: 1920011546}
-  - {fileID: 636260206}
-  - {fileID: 231391593}
-  - {fileID: 752637996}
-  debuffText:
-  - {fileID: 1019918137}
-  - {fileID: 2138540927}
-  - {fileID: 1839942500}
-  - {fileID: 15211263}
-  - {fileID: 1905901643}
-  - {fileID: 1132613501}
+  cellsList:
+  - {fileID: 1486321259}
+  - {fileID: 115850045}
+  - {fileID: 1920011545}
+  - {fileID: 636260205}
+  - {fileID: 231391592}
+  cellPrefab: {fileID: 351914347486664091, guid: a0a9a47328b3a89489926597c07a0108,
+    type: 3}
+  transformParent: {fileID: 2023699307}
   effectIcons:
     reorderableList:
       canAdd: 1
@@ -5119,7 +4947,7 @@ MonoBehaviour:
       draggable: 1
       expandable: 1
       multipleSelection: 1
-      isExpanded: 1
+      isExpanded: 0
       label:
         m_Text: Keys
         m_Image: {fileID: 0}
@@ -5134,14 +4962,15 @@ MonoBehaviour:
       elementNameOverride: 
       elementIcon: {fileID: 0}
     reqReferences: {fileID: 0}
-    isExpanded: 1
-    _keyValues: 01000000000000000200000003000000
-    _keys: 01000000000000000200000003000000
+    isExpanded: 0
+    _keyValues: 0100000000000000020000000300000004000000
+    _keys: 0100000000000000020000000300000004000000
     _values:
     - {fileID: 21300000, guid: 13c075456e4a1af4dae4a79aed39b033, type: 3}
     - {fileID: 21300000, guid: ee4e65de93a236547b838894c150e1ed, type: 3}
     - {fileID: 21300000, guid: 42263d9e6f4141f4c99fe33c01070682, type: 3}
     - {fileID: 21300000, guid: b354f6414b33a2f45b8af1b45aa5859b, type: 3}
+    - {fileID: 21300000, guid: de24ce25ee79db546bf8f03ef53843cb, type: 3}
   effects:
     reorderableList:
       canAdd: 1
@@ -5179,7 +5008,7 @@ MonoBehaviour:
     - effect: 1
       stacksCount: 0
       maxStacksCount: 5
-      stackDuration: 2
+      stackDuration: 3
       curStackDuration: []
       value: 2
       effectPeriod: 0.5
@@ -5187,19 +5016,20 @@ MonoBehaviour:
     - effect: 3
       stacksCount: 0
       maxStacksCount: 5
-      stackDuration: 3
+      stackDuration: 4
       curStackDuration: []
-      value: 2.5
-      effectPeriod: 1
+      value: 3
+      effectPeriod: 2
       color: {r: 1, g: 0, b: 0, a: 1}
     - effect: 2
       stacksCount: 0
       maxStacksCount: 5
-      stackDuration: 3
+      stackDuration: 2
       curStackDuration: []
-      value: 2.5
+      value: 4
       effectPeriod: 1
-      color: {r: 0.14122522, g: 1, b: 0, a: 1}
+      color: {r: 0, g: 1, b: 0, a: 1}
+  cellsScript: []
 --- !u!1 &1767755703
 GameObject:
   m_ObjectHideFlags: 0
@@ -5790,7 +5620,6 @@ RectTransform:
   - {fileID: 1920011545}
   - {fileID: 636260205}
   - {fileID: 231391592}
-  - {fileID: 752637995}
   m_Father: {fileID: 58596679}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

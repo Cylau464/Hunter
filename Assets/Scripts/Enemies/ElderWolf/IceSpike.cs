@@ -20,14 +20,16 @@ public class IceSpike : MonoBehaviour
     bool damageDone;
     Animator anim;
     BoxCollider2D myCollider;
-    Transform player;
+    PolygonCollider2D tipCollider;
+    PlayerAtributes playerAtributes;
     SpellStates state = SpellStates.Prepare;
 
     // Start is called before the first frame update
     void Awake()
     {
         anim = transform.GetComponent<Animator>();
-        myCollider = transform.GetComponent<BoxCollider2D>();
+        myCollider = GetComponent<BoxCollider2D>();
+        tipCollider = GetComponent<PolygonCollider2D>();
         maxColSizeY = myCollider.size.y;
         maxColOffsetY = myCollider.offset.y;
         myCollider.size = new Vector2(myCollider.size.x, .3f);
@@ -72,11 +74,12 @@ public class IceSpike : MonoBehaviour
         if (myCollider.offset.y < maxColOffsetY)
             myCollider.offset = new Vector2(myCollider.offset.x, myCollider.offset.y + maxColOffsetY / .25f * Time.deltaTime);
 
-        if (player != null && !damageDone)
+        if (playerAtributes != null && !damageDone)
         {
-            int _direction = PlayerDirection();
+            int _direction = playerAtributesDirection();
             float _repulseForceY = (1f - myCollider.size.y / maxColSizeY) * spell.repulseVector.y;
-            player.GetComponent<PlayerAtributes>().TakeDamage(spell.firstDamage, HurtType.Repulsion, new Vector2(spell.repulseVector.x * _direction, _repulseForceY), spell.dazedTime, spell.elementDamage);
+            playerAtributes.TakeDamage(spell.firstDamage, HurtType.Repulsion, new Vector2(spell.repulseVector.x * _direction, _repulseForceY), spell.dazedTime, spell.elementDamage);
+            playerAtributes.TakeEffect(spell.effect);
             damageDone = true;
         }
     }
@@ -85,7 +88,7 @@ public class IceSpike : MonoBehaviour
     {
         if (collision.transform.tag == "Player")
         {
-            player = collision.transform;
+            playerAtributes = collision.GetComponent<PlayerAtributes>();
         }
     }
 
@@ -93,7 +96,7 @@ public class IceSpike : MonoBehaviour
     {
         if (collision.transform.tag == "Player")
         {
-            player = null;
+            playerAtributes = null;
         }
     }
 
@@ -101,7 +104,7 @@ public class IceSpike : MonoBehaviour
     {
         if (collision.transform.tag == "Player")
         {
-            player = collision.transform;
+            //playerAtributes = collision.transform.GetComponent<PlayerAtributes>();
         }
     }
 
@@ -109,7 +112,7 @@ public class IceSpike : MonoBehaviour
     {
         if (collision.transform.tag == "Player")
         {
-            player = null;
+            //playerAtributes = null;
         }
     }
 
@@ -121,21 +124,26 @@ public class IceSpike : MonoBehaviour
     void End()
     {
         myCollider.isTrigger = false;
+        tipCollider.enabled = true;
 
-        if (player != null && !damageDone)
+        if (playerAtributes != null && !damageDone)
         {
-            int _direction = PlayerDirection();
-            float _repulseForceY = spell.repulseVector.y * .3f;
-            player.GetComponent<PlayerAtributes>().TakeDamage(spell.firstDamage, HurtType.Repulsion, new Vector2(spell.repulseVector.x * _direction, _repulseForceY), spell.dazedTime, spell.elementDamage);
-            damageDone = true;
+            if (playerAtributes.rigidBody.velocity.y < 0)
+            {
+                int _direction = playerAtributesDirection();
+                float _repulseForceY = spell.repulseVector.y * .3f;
+                playerAtributes.TakeDamage(spell.firstDamage, HurtType.Repulsion, new Vector2(spell.repulseVector.x * _direction, _repulseForceY), spell.dazedTime, spell.elementDamage);
+                playerAtributes.TakeEffect(spell.effect);
+                damageDone = true;
+            }
         }
 
         if (curLifeTime <= Time.time)
             Destroy(gameObject);
     }
 
-    int PlayerDirection()
+    int playerAtributesDirection()
     {
-        return (int) Mathf.Sign(player.position.x - transform.position.x);
+        return (int) Mathf.Sign(playerAtributes.transform.position.x - transform.position.x);
     }
 }

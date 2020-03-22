@@ -2,13 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 using Structures;
 using Enums;
 
 public class PlayerEffectsController : MonoBehaviour
 {
-    [SerializeField] List<Image> debuffIcons = new List<Image>(5);
-    [SerializeField] List<Text> debuffText = new List<Text>(5);
+    [SerializeField] List<RectTransform> cellsList = null;
+    [SerializeField] GameObject cellPrefab = null;
+    [SerializeField] RectTransform transformParent = null;
+    [SerializeField] EffectsIconsDictionary effectIcons = null;
+    [SerializeField] EffectsDictionary effects = new EffectsDictionary()
+    {
+        { Effects.Freeze, new Effect(Effects.Freeze, 5, 1f, .1f) },
+        { Effects.Burning, new Effect(Effects.Burning, 5, 2f, 2f, .5f) },
+        { Effects.Bleeding, new Effect(Effects.Bleeding, 5, 3f, 2.5f, .5f) },
+        { Effects.Poison, new Effect(Effects.Poison, 5, 3f, 2.5f, 1f) },
+    };
+    List<Vector3> cellsCoordinate = new List<Vector3>();
+    [SerializeField] List<DebuffEffect> cellsScript = new List<DebuffEffect>();
     Dictionary<Effects, int> debuffCellIndex = new Dictionary<Effects, int>(5)
     {
         { Effects.Freeze, 100 },
@@ -17,52 +29,25 @@ public class PlayerEffectsController : MonoBehaviour
         { Effects.Poison, 100 },
         { Effects.Root, 100 },
     };
-    [SerializeField] EffectsIconsDictionary effectIcons = null;
-
-    [SerializeField] private EffectsDictionary effects = new EffectsDictionary()
-    {
-        { Effects.Freeze, new Effect(Effects.Freeze, 5, 1f, .1f) },
-        { Effects.Burning, new Effect(Effects.Burning, 5, 2f, 2f, .5f) },
-        { Effects.Bleeding, new Effect(Effects.Bleeding, 5, 3f, 2.5f, .5f) },
-        { Effects.Poison, new Effect(Effects.Poison, 5, 3f, 2.5f, 1f) },
-    };
-    Dictionary<Effects, int> stackCount = new Dictionary<Effects, int>()
-    {
-        { Effects.Freeze, 0 },
-        { Effects.Burning, 0 },
-        { Effects.Bleeding, 0 },
-        { Effects.Poison, 0 },
-    };
-    Dictionary<Effects, float> periodEffectDelay = new Dictionary<Effects, float>()
-    {
-        { Effects.Burning, 0f },
-        { Effects.Bleeding, 0f },
-        { Effects.Poison, 0 },
-    };
     PlayerAtributes playerAtributes;
 
+    // Start is called before the first frame update
     void Start()
     {
         playerAtributes = GetComponent<PlayerAtributes>();
+
+        cellsList.ForEach(x => { cellsCoordinate.Add(x.position); Destroy(x.gameObject); });
+        cellsList = null;
     }
 
     void Update()
     {
-        foreach (KeyValuePair<Effects, Effect> kvp in effects)
-        {
-            if (stackCount[kvp.Key] <= 0)
-                continue;
-
-            ReduceStacks(kvp.Key);
-            ApplyEffect(kvp.Key);
-        }
-
         if (Input.GetKeyDown(KeyCode.E))
         {
             Effect _effect = new Effect();
             int _rand = Random.Range(0, 4);
 
-            switch(_rand)
+            switch (_rand)
             {
                 case 0:
                     _effect = new Effect(Effects.Bleeding, 1);
@@ -84,128 +69,27 @@ public class PlayerEffectsController : MonoBehaviour
 
     public void GetEffect(Effect effect)
     {
-        for (int i = 1; i <= effect.stacksCount; i++)
+        if(debuffCellIndex[effect.effect] == 100)
         {
-            if (stackCount[effect.effect] >= effects[effect.effect].maxStacksCount)
-            {
-                effects[effect.effect].curStackDuration.RemoveAt(0);
-                effects[effect.effect].curStackDuration.Insert(effects[effect.effect].maxStacksCount - 1, Time.time + effects[effect.effect].stackDuration);
-            }
-            else
-            {
-                effects[effect.effect].curStackDuration.Add(Time.time + effects[effect.effect].stackDuration);
-                stackCount[effect.effect]++;
-            }
-        }
-
-        ApplyEffect(effect.effect);
-    }
-
-    void ReduceStacks(Effects key)
-    {
-        foreach (var _stackDuration in effects[key].curStackDuration.ToArray())
-        {
-            if (_stackDuration <= Time.time)
-            {
-                effects[key].curStackDuration.Remove(_stackDuration);
-                stackCount[key]--;
-
-                DisabledIconUI(key);
-            }
-        }
-    }
-
-    void DisabledIconUI(Effects key)
-    {
-        if (stackCount[key] == 0)
-        {
-            //Cell is not last...
-            if (debuffCellIndex[key] < debuffCellIndex.Count - 1)
-            {
-                //...and next cell is active
-                if (debuffText[debuffCellIndex[key] + 1].enabled)
-                {
-                    for (int i = debuffCellIndex[key]; i < debuffCellIndex.Count; i++)
-                    {
-                        if (i < debuffCellIndex.Count - 1)
-                        {
-                            debuffIcons[i].sprite = debuffIcons[i + 1].sprite;
-                            debuffText[i].text = debuffText[i + 1].text;
-                        }
-                        else
-                        {
-                            debuffIcons[i].enabled = false;
-                            debuffText[i].enabled = false;
-                        }
-                    }
-                }
-                //...and next cell is not active
-                else
-                {
-                    debuffIcons[debuffCellIndex[key]].enabled = false;
-                    debuffText[debuffCellIndex[key]].enabled = false;
-                }
-            }
-            //Cell is last
-            else
-            {
-                debuffIcons[debuffCellIndex[key]].enabled = false;
-                debuffText[debuffCellIndex[key]].enabled = false;
-            }
-
-            debuffCellIndex[key] = 100; //100 random value, beacuse cant set null to int var
-        }
-
-        if (stackCount[key] != 0)
-            ApplyEffect(key);
-    }
-
-    void ApplyToIconsUI(Effects key)
-    {
-        if (stackCount[key] <= 0)
-            return;
-
-        if (debuffCellIndex[key] == 100)
-        {
-            for (int i = 0; i < debuffText.Count; i++)
-            {
-                if (debuffText[i].enabled == false)
-                {
-                    debuffIcons[i].sprite = effectIcons[key];
-                    debuffIcons[i].enabled = true;
-                    debuffText[i].text = stackCount[key].ToString();
-                    debuffText[i].enabled = true;
-
-                    debuffCellIndex[key] = i;
-                    break;
-                }
-            }
+            cellsScript.Add(Instantiate(cellPrefab, transformParent).GetComponent<DebuffEffect>());
+            debuffCellIndex[effect.effect] = cellsScript.Count - 1;
+            cellsScript[debuffCellIndex[effect.effect]].GetEffect(cellsCoordinate[debuffCellIndex[effect.effect]], this, debuffCellIndex[effect.effect], effect.stacksCount, effects[effect.effect], effectIcons[effect.effect], playerAtributes, effects[effect.effect].effectPeriod);
         }
         else
         {
-            debuffText[debuffCellIndex[key]].text = stackCount[key].ToString();
+            cellsScript[debuffCellIndex[effect.effect]].GetEffect(effect.stacksCount);
         }
     }
 
-    void ApplyEffect(Effects key)
+    public void RemoveCell(int cellIndex, Effects effect)
     {
-        switch(key)
+        cellsScript.RemoveAt(cellIndex);
+        debuffCellIndex[effect] = 100;
+
+        //Update position on next cells
+        for (int i = cellIndex; i <= cellsScript.Count - 1; i++)
         {
-            case Effects.Freeze:
-                playerAtributes.speedDivisor = playerAtributes.defSpeedDivisor - effects[key].value * stackCount[key];
-                playerAtributes.SetAnimationSpeed(1f - effects[key].value * stackCount[key]);
-                ApplyToIconsUI(key);
-                break;
-            case Effects.Bleeding:
-            case Effects.Poison:
-            case Effects.Burning:
-                if(periodEffectDelay[key] <= Time.time)
-                {
-                    playerAtributes.TakeDamage((int)effects[key].value, HurtType.None, effects[key]);
-                    periodEffectDelay[key] = Time.time + effects[key].effectPeriod;
-                    ApplyToIconsUI(key);
-                }
-                break;
+            cellsScript[i].SetPosition(cellsCoordinate[i], i);
         }
     }
 }

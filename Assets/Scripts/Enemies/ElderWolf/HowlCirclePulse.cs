@@ -39,7 +39,7 @@ public class HowlCirclePulse : MonoBehaviour
                 {
                     if (_curPeriod < Time.time)
                     {
-                        playerAtributes.TakeDamage(0, HurtType.Catch, spell.dazedTime, spell.elementDamage);
+                        playerAtributes.TakeDamage(0, HurtType.Stun, spell.dazedTime * .95f, spell.elementDamage);
                         _curPeriod = spell.periodicityDamage + Time.time;
                     }
                 }

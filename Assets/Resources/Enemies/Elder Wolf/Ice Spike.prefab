@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: -4052873853294763013}
   - component: {fileID: 812699101}
   - component: {fileID: 812699100}
+  - component: {fileID: 6023398071493891265}
   m_Layer: 15
   m_Name: Ice Spike
   m_TagString: Untagged
@@ -58,6 +59,20 @@ MonoBehaviour:
     damageRange: {x: 0, y: 0}
     firstDamage: 0
     lastDamage: 0
+    elementDamage:
+      title: 
+      element: 0
+      value: 0
+      color: {r: 0, g: 0, b: 0, a: 0}
+    effect:
+      effect: 0
+      stacksCount: 0
+      maxStacksCount: 0
+      stackDuration: 0
+      curStackDuration: []
+      value: 0
+      effectPeriod: 0
+      color: {r: 0, g: 0, b: 0, a: 0}
     jumpDistance: {x: 0, y: 0}
     jumpDirection: 0
   lifeTime: 3
@@ -158,3 +173,32 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!60 &6023398071493891265
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1856873711373124839}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0}
+    oldSize: {x: 2.4, y: 4}
+    newSize: {x: 2.4, y: 4}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.62, y: 2.5}
+      - {x: 0.67, y: 2.5}
+      - {x: 0.67, y: 3.9}
+      - {x: -0.62, y: 3.9}

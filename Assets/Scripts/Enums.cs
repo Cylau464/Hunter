@@ -15,7 +15,7 @@ namespace Enums
     public enum Effects { Freeze, Burning, Poison, Bleeding, Root }
 
     //------------ Player enums ------------
-    public enum HurtType { None, Repulsion, Catch };
+    public enum HurtType { None, Repulsion, Catch, Stun };
     public enum AttackTypes { NotAttacking, Light, Strong, Joint, TopDown }
     public enum AttackState { Free, Start, Damage, End }
     public enum InputsEnum { Evade, StrongAttack, LightAttack, JointAttack, TopDownAttack }
