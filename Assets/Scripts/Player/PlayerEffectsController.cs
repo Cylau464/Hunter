@@ -36,7 +36,10 @@ public class PlayerEffectsController : MonoBehaviour
     {
         playerAtributes = GetComponent<PlayerAtributes>();
 
-        cellsList.ForEach(x => { cellsCoordinate.Add(x.position); Destroy(x.gameObject); });
+        cellsList.ForEach(x => {
+            cellsCoordinate.Add(x.position);
+            Destroy(x.gameObject);
+        });
         cellsList = null;
     }
 

@@ -428,8 +428,7 @@ public class Enemy : MonoBehaviour
     {
         GameObject damageText = Resources.Load<GameObject>("UI/DamageNumber");
         damageText = Instantiate(damageText, transform);
-        damageText.GetComponent<DamageNumber>().damage = damage;
-        damageText.GetComponent<DamageNumber>().target = myTransform;
+        damageText.GetComponent<DamageNumber>().GetParameters(damage, myTransform);
     }
 
     void SpriteBlinkingEffect()

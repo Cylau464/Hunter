@@ -7,16 +7,17 @@ using Enums;
 
 public class DamageNumber : MonoBehaviour
 {
-    public int damage;
-    public Element element;
-    [SerializeField] float moveSpeed = 5f;
+    [SerializeField] Vector2 moveSpeed = new Vector2(5f, 5f);
     [SerializeField] Text physicDamage = null;
     [SerializeField] Text elementDamage = null;
     [SerializeField] Image elementIcon = null;
     [SerializeField] float lifeTime = 2f;
     [SerializeField] ElementsIconsDictionary elementIcons = null;
+    int damage;
+    Element element;
     float curLifeTime;
-    public Transform target;
+    Transform target;
+    Rigidbody2D rigidBody;
 
 
     // Start is called before the first frame update
@@ -45,6 +46,9 @@ public class DamageNumber : MonoBehaviour
             elementDamage.text = "";
             elementIcon.enabled = false;
         }
+
+        rigidBody = GetComponent<Rigidbody2D>();
+        rigidBody.AddForce(moveSpeed, ForceMode2D.Impulse);
     }
 
     // Update is called once per frame
@@ -53,6 +57,13 @@ public class DamageNumber : MonoBehaviour
         if (curLifeTime <= Time.time)
             Destroy(gameObject);
 
-        transform.position = new Vector3(transform.position.x + moveSpeed * Time.deltaTime, transform.position.y + moveSpeed * Time.deltaTime, transform.position.z);
+        //transform.position = new Vector3(transform.position.x + moveSpeed * Time.deltaTime, transform.position.y + moveSpeed * Time.deltaTime, transform.position.z);
+    }
+
+    public void GetParameters(int damage, Transform target, Element element = new Element())
+    {
+        this.damage = damage;
+        this.target = target;
+        this.element = element;
     }
 }

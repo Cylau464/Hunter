@@ -6,23 +6,11 @@ using Enums;
 
 public class IceAura : MonoBehaviour
 {
-    //[SerializeField] int minDamage = 1;
-    //[SerializeField] int maxDamage = 5;
-    //float damage;
-    //[SerializeField] Element element = new Element("Ice", Elements.Ice, 0);
-
     [SerializeField] Effect effect = new Effect(Effects.Freeze, 1);
     [SerializeField] float delay = 1.5f;
     float curDelay;
     [SerializeField] float damagePeriodicity = .5f;
-
-    //[SerializeField] float dazedTime = .3f;
     PlayerAtributes playerAtributes;
-
-    void Start()
-    {
-        //element.value = minDamage;
-    }
 
     void OnTriggerStay2D(Collider2D col)
     {
@@ -39,15 +27,6 @@ public class IceAura : MonoBehaviour
             if(curDelay <= Time.time)
             {
                 playerAtributes.TakeEffect(effect);
-                //if (element.value < maxDamage)
-                //{
-                //    playerAtributes.TakeDamage(0, HurtType.None, element);
-                //    damage += .4f;
-                //    element.value = Mathf.RoundToInt(element.value + damage);
-                //}
-                //else
-                //    playerAtributes.TakeDamage(0, HurtType.Repulsion, dazedTime, element);
-
                 curDelay = damagePeriodicity + Time.time;
             }
         }
@@ -58,8 +37,6 @@ public class IceAura : MonoBehaviour
         if (col.TryGetComponent(out PlayerAtributes _atributes))
         {
             playerAtributes = null;
-            //element.value = 0;
-            //damage = 0f;
         }
     }
 }

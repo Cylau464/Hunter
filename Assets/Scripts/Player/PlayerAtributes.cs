@@ -189,11 +189,9 @@ public class PlayerAtributes : MonoBehaviour
 
     void DamageText(int damage, Element element)
     {
-        GameObject damageText = Resources.Load<GameObject>("UI/DamageNumber");
-        damageText = Instantiate(damageText, transform);
-        damageText.GetComponent<DamageNumber>().damage = damage;
-        damageText.GetComponent<DamageNumber>().element = element;
-        damageText.GetComponent<DamageNumber>().target = movement.transform;
+        GameObject _damageText = Resources.Load<GameObject>("UI/DamageNumber");
+        _damageText = Instantiate(_damageText, transform);
+        _damageText.GetComponent<DamageNumber>().GetParameters(damage, movement.transform, element);
     }
 
     /// <summary>
