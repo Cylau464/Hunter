@@ -9,6 +9,7 @@ namespace Structures
     /// <summary>
     /// Player spell properties
     /// </summary>
+    [Serializable]
     public struct PlayerSpell
     {
         public int damage;

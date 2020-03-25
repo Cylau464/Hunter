@@ -19,7 +19,7 @@ namespace Enums
     public enum AttackTypes { NotAttacking, Light, Strong, Joint, TopDown }
     public enum AttackState { Free, Start, Damage, End }
     public enum InputsEnum { Evade, StrongAttack, LightAttack, JointAttack, TopDownAttack, FirstSpell, SecondSpell, ThirdSpell }
-    public enum SpellsTitle { CircleSmash, IronSpike }
+    public enum SpellsTitle { CircleSmash, FireSpike, IcePunch }
 
     //------------ Enemy enums ------------
     public enum SpellStates { None, Prepare, Cast, End }

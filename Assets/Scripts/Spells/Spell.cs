@@ -6,19 +6,13 @@ using UnityEngine.EventSystems;
 using Structures;
 using Enums;
 
-class Spell : MonoBehaviour, IPointerClickHandler
+class Spell : MonoBehaviour
 {
-    public Sprite icon;
+    public PlayerSpell spell;
     public SpellsTitle title;
-    [SerializeField] int cellIndex;
 
-    public void OnPointerClick(PointerEventData eventData)
+    private void Start()
     {
-        ChangeSpell();
-    }
-
-    void ChangeSpell()
-    {
-        //Create window with spell list
+        Debug.Log("CREARED");
     }
 }

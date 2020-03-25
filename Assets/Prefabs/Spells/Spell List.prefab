@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6843692788545032428
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2217095145872674725}
+  - component: {fileID: 5288160135840046608}
+  m_Layer: 0
+  m_Name: Spell List
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2217095145872674725
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6843692788545032428}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 43.288536, y: 54.30108, z: -496.87216}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5288160135840046608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6843692788545032428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df4aa0e59daadf149a7339cf6ee3281f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spells:
+    reorderableList:
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
+      isExpanded: 1
+      label:
+        m_Text: Keys
+        m_Image: {fileID: 0}
+        m_Tooltip: 
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
+      elementDisplayType: 0
+      elementNameProperty: 
+      elementNameOverride: 
+      elementIcon: {fileID: 0}
+    reqReferences: {fileID: 0}
+    isExpanded: 1
+    _keyValues: 00000000
+    _keys: 00000000
+    _values:
+    - {fileID: 7979112885621644935, guid: 0f5b33d233f8c2948b2bcbf0f47a7f27, type: 3}

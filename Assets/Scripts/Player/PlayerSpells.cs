@@ -6,11 +6,10 @@ using Enums;
 
 class PlayerSpells : MonoBehaviour
 {
-    PlayerSpell[] spells = new PlayerSpell[3];
+    [SerializeField] GameObject spellListPrefab = null;
+    [SerializeField] SpellBar spellBar = null;
 
-    GameObject spellListPrefab = null;
     SpellsList spellList;
-    SpellBar spellBar;
     PlayerInput input;
     PlayerMovement movement;
     PlayerAtributes atributes;
@@ -19,6 +18,9 @@ class PlayerSpells : MonoBehaviour
     void Start()
     {
         spellList = spellListPrefab.GetComponent<SpellsList>();
+        movement = GetComponent<PlayerMovement>();
+        input = GetComponent<PlayerInput>();
+        attack = GetComponent<PlayerAttack>();
     }
 
     void Update()
@@ -42,6 +44,7 @@ class PlayerSpells : MonoBehaviour
                     break;
             }
 
+            input.lastInputs.RemoveAt(0);
             CastSpell(_spellTitle);
         }
     }
