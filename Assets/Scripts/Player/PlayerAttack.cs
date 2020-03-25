@@ -81,8 +81,9 @@ public class PlayerAttack : MonoBehaviour
         if (!movement.isDead)
         {
             if (!movement.isEvading && !movement.isClimbing && !movement.isHanging && canAttack &&
-                input.lastInputs.Count != 0 && (input.lastInputs[0] == InputsEnum.StrongAttack || input.lastInputs[0] == InputsEnum.LightAttack ||
-                input.lastInputs[0] == InputsEnum.JointAttack || input.lastInputs[0] == InputsEnum.TopDownAttack) && timeBtwAttacks + Time.deltaTime <= Time.time)
+                input.lastInputs.Count > 0 && (input.lastInputs[0] == InputsEnum.StrongAttack || input.lastInputs[0] == InputsEnum.LightAttack ||
+                input.lastInputs[0] == InputsEnum.JointAttack || input.lastInputs[0] == InputsEnum.TopDownAttack) &&
+                timeBtwAttacks + Time.deltaTime <= Time.time)
             {
                 if (!movement.isOnGround && lightCombo + strongCombo + jointCombo > 0)
                     switchAttack = true;
@@ -104,7 +105,7 @@ public class PlayerAttack : MonoBehaviour
                         attackType = AttackTypes.TopDown;
                         break;
                 }
-                //attackType = input.lastInputs[0] == InputsEnum.JointAttack ? AttackTypes.Joint : input.lastInputs[0] == InputsEnum.StrongAttack ? AttackTypes.Strong : AttackTypes.Light;
+                
                 input.lastInputs.RemoveAt(0);
                 MeleeAttack(attackType);
                 Debug.Log(attackType);
@@ -216,13 +217,8 @@ public class PlayerAttack : MonoBehaviour
                 rigidBody.AddForce(Vector2.right * movement.direction * attackForceDistance, ForceMode2D.Impulse);
 
             GameObject _inst            = Instantiate(damageBox, transform);
-            DamageBox _damageBoxInst    = _inst.GetComponent<DamageBox>();
-            _damageBoxInst.position     = weapon.position;
-            _damageBoxInst.damage       = damage;
-            _damageBoxInst.damageType   = weaponDamageType;
-            _damageBoxInst.element      = weaponElement;
-            _damageBoxInst.lifeTime     = attackDuration;
-            _damageBoxInst.colliderSize = new Vector2(attackRangeX, attackRangeY);
+            DamageBox _damageBox        = _inst.GetComponent<DamageBox>();
+            _damageBox.GetParameters(damage, weaponDamageType, weaponElement, weapon.position, new Vector2(attackRangeX, attackRangeY), attackDuration);
         }
     }
 

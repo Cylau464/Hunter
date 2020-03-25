@@ -7,6 +7,30 @@ using Enums;
 namespace Structures
 {
     /// <summary>
+    /// Player spell properties
+    /// </summary>
+    public struct PlayerSpell
+    {
+        public int damage;
+        public int manacost;
+        public float cooldown;
+        public Vector2 damageRange;
+        public Element element;
+        public Sprite icon;
+
+        public PlayerSpell(int damage, int manacost, float cooldown, Vector2 damageRange, Element element)
+        {
+            this.damage = damage;
+            this.manacost = manacost;
+            this.cooldown = cooldown;
+            this.damageRange = damageRange;
+            this.element = element;
+
+            icon = null;
+        }
+    }
+
+    /// <summary>
     /// Stores spell properties
     /// </summary>
     [Serializable]

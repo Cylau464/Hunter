@@ -6,12 +6,12 @@ using Enums;
 
 public class DamageBox : MonoBehaviour
 {
-    public int damage;
-    public DamageTypes damageType;
-    public Element element;
-    public Vector2 position;
-    public Vector2 colliderSize;
-    public float lifeTime;
+    int damage;
+    DamageTypes damageType;
+    Element element;
+    Vector2 position;
+    Vector2 colliderSize;
+    float lifeTime;
     BoxCollider2D myCollider;
 
     // Start is called before the first frame update
@@ -48,4 +48,14 @@ public class DamageBox : MonoBehaviour
         int newDamage = Random.Range(damage - percent, damage + percent);
         return newDamage;
     }
+
+    public void GetParameters(int damage, DamageTypes damageType, Element element, Vector2 position, Vector2 colliderSize, float lifeTime)
+    {
+        this.damage = damage;
+        this.damageType = damageType;
+        this.element = element;
+        this.position = position;
+        this.colliderSize = colliderSize;
+        this.lifeTime = lifeTime;
+}
 }

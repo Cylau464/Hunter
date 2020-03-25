@@ -21,6 +21,7 @@ public class PlayerInput : MonoBehaviour
     [HideInInspector] public bool hook;
     [HideInInspector] public bool horizontalAccess = true;
     [HideInInspector] public bool switchWeapon;
+    [HideInInspector] public bool[] spell = new bool[3];
     [HideInInspector] public static bool restart;
     public List<InputsEnum> lastInputs = new List<InputsEnum>(1);           //Create new list for 2 elements for writting 2 last inputs
 
@@ -28,6 +29,7 @@ public class PlayerInput : MonoBehaviour
 
     PlayerAttack attack;
     PlayerMovement movement;
+    PlayerAtributes atributes;
 
     Coroutine lastInputsCoroutine;
 
@@ -35,6 +37,7 @@ public class PlayerInput : MonoBehaviour
     {
         attack = GetComponent<PlayerAttack>();
         movement = GetComponent<PlayerMovement>();
+        atributes = GetComponent<PlayerAtributes>();
     }
 
     private void FixedUpdate()
@@ -100,6 +103,8 @@ public class PlayerInput : MonoBehaviour
         //evade = evade || Input.GetButtonDown("Evade");
         if(Input.GetButtonDown("Evade"))
         {
+            if (atributes.Stamina <= 0) return;
+
             //If list have a free slot for new input
             if (lastInputs.Count < lastInputs.Capacity)
                 lastInputs.Add(InputsEnum.Evade);
@@ -111,8 +116,49 @@ public class PlayerInput : MonoBehaviour
             }
         }
 
+        if(Input.GetButtonDown("First Spell"))
+        {
+            //If list have a free slot for new input
+            if (lastInputs.Count < lastInputs.Capacity)
+                lastInputs.Add(InputsEnum.FirstSpell);
+            //If haven't - remove the first element and add a new input at the end
+            else
+            {
+                lastInputs.RemoveAt(0);
+                lastInputs.Add(InputsEnum.FirstSpell);
+            }
+        }
+
+        if (Input.GetButtonDown("Second Spell"))
+        {
+            //If list have a free slot for new input
+            if (lastInputs.Count < lastInputs.Capacity)
+                lastInputs.Add(InputsEnum.SecondSpell);
+            //If haven't - remove the first element and add a new input at the end
+            else
+            {
+                lastInputs.RemoveAt(0);
+                lastInputs.Add(InputsEnum.SecondSpell);
+            }
+        }
+
+        if (Input.GetButtonDown("Third Spell"))
+        {
+            //If list have a free slot for new input
+            if (lastInputs.Count < lastInputs.Capacity)
+                lastInputs.Add(InputsEnum.ThirdSpell);
+            //If haven't - remove the first element and add a new input at the end
+            else
+            {
+                lastInputs.RemoveAt(0);
+                lastInputs.Add(InputsEnum.ThirdSpell);
+            }
+        }
+
         if (Input.GetButtonDown("LightAttack"))
         {
+            if (atributes.Stamina <= 0) return;
+
             //Top-down attack
             if (crouchHeld && !movement.isOnGround)
             {
@@ -146,6 +192,8 @@ public class PlayerInput : MonoBehaviour
         }
         if (Input.GetButtonDown("StrongAttack"))
         {
+            if (atributes.Stamina <= 0) return;
+
             //Top-down attack
             if (crouchHeld && !movement.isOnGround)
             {

@@ -18,7 +18,8 @@ namespace Enums
     public enum HurtType { None, Repulsion, Catch, Stun };
     public enum AttackTypes { NotAttacking, Light, Strong, Joint, TopDown }
     public enum AttackState { Free, Start, Damage, End }
-    public enum InputsEnum { Evade, StrongAttack, LightAttack, JointAttack, TopDownAttack }
+    public enum InputsEnum { Evade, StrongAttack, LightAttack, JointAttack, TopDownAttack, FirstSpell, SecondSpell, ThirdSpell }
+    public enum SpellsTitle { CircleSmash, IronSpike }
 
     //------------ Enemy enums ------------
     public enum SpellStates { None, Prepare, Cast, End }
