@@ -66,7 +66,7 @@ public class Player : MonoBehaviour
     SpriteRenderer sprite;                                       //Maybe create property for public get?
     PlayerAttack attack;
     Transform playerTransform;
-    WeaponAtributes weapon;
+    WeaponAttributes weapon;
     WeaponAttackType weaponAttackType;
     Hook hook;
     Transform hookTransform;
@@ -101,7 +101,7 @@ public class Player : MonoBehaviour
         sprite                  = GetComponent<SpriteRenderer>();
         attack                  = GetComponent<PlayerAttack>();
         playerTransform         = GetComponent<Transform>();
-        weapon                  = GetComponentInChildren<WeaponAtributes>();
+        weapon                  = GetComponentInChildren<WeaponAttributes>();
         hook                    = GetComponentInChildren<Hook>();
         weaponAttackType        = weapon.weaponAttackType;
 

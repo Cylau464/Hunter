@@ -13,6 +13,7 @@ public class SwitchWeapon : MonoBehaviour
     PlayerAttack playerAttack;
     PlayerMovement playerMovement;
     StatusBar statusBar;
+    SpellBar spellBar;
 
     float cooldown = .5f;
     float curCooldown;
@@ -25,12 +26,15 @@ public class SwitchWeapon : MonoBehaviour
         input           = GetComponent<PlayerInput>();
         playerMovement  = GetComponent<PlayerMovement>();
 
-        GameObject[] _go = GameObject.FindGameObjectsWithTag("UI");
+        GameObject[] _go = GameObject.FindGameObjectsWithTag("PlayerUI");
 
         foreach (GameObject go in _go)
         {
             if (go.TryGetComponent(out StatusBar _sb) && statusBar == null)
                 statusBar = _sb;
+
+            if (go.TryGetComponent(out SpellBar _sb2) && spellBar == null)
+                spellBar = _sb2;
         }
     }
 
@@ -51,9 +55,13 @@ public class SwitchWeapon : MonoBehaviour
         secondWeapon = _main;
         secondWeapon.gameObject.SetActive(false);
 
+        //Switch weapons on UI
         playerAttack.weapon = mainWeapon;
         playerAttack.GetWeapon();
         statusBar.WeaponIconChange();
+
+        //Switch spells
+        spellBar.SetSpells(mainWeapon.GetComponent<WeaponAttributes>().spells);
 
         input.switchWeapon = false;
         curCooldown = cooldown + Time.time;

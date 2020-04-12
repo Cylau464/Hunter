@@ -15,7 +15,7 @@ public class EnemyCUCOLD : MonoBehaviour
     public float patrolSpeed = 2f;
     public float chaseSpeed = 4f;
     
-    [Header("Atributes")]
+    [Header("Attributes")]
     public int maxHealth = 5;
     public int health;
     public int patrolDistance = 20;
@@ -34,7 +34,7 @@ public class EnemyCUCOLD : MonoBehaviour
         new Element("Water", Elements.Water, 0)
     };*/
 
-    [Header("Attack atributes")]
+    [Header("Attack attributes")]
     public int damage;
     /*
     public Element[] elementDamage = {

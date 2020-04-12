@@ -4,7 +4,7 @@ using UnityEngine;
 using Structures;
 using Enums;
 
-class SpellsList : MonoBehaviour
+public class SpellsList : MonoBehaviour
 {
     public PlayerSpellDictionary spells = new PlayerSpellDictionary();
 }

@@ -12,9 +12,9 @@ public class PlayerAttack : MonoBehaviour
     public int lightCombo;                            //current number of light combo
     public int strongCombo;                           //current number of strong combo
     public int jointCombo;                            //current number of joint combo
-    [SerializeField] int airLightComboCount = 3;      //count of combo
-    [SerializeField] int airStrongComboCount = 2;     //count of combo
-    [SerializeField] int airJointComboCount = 1;      //count of combo
+    //[SerializeField] int airLightComboCount = 3;      //count of combo
+    //[SerializeField] int airStrongComboCount = 2;     //count of combo
+    //[SerializeField] int airJointComboCount = 1;      //count of combo
     public int airLightCombo;                         //current number of air light combo
     public int airStrongCombo;                        //current number of air strong combo
     public int airJointCombo;                         //current number of air joint combo
@@ -32,13 +32,13 @@ public class PlayerAttack : MonoBehaviour
     PlayerMovement movement;
     PlayerInput input;
     public Transform weapon;
-    PlayerAtributes atributes;
+    PlayerAttributes attributes;
     Animator anim;
     Rigidbody2D rigidBody;
-    WeaponAtributes weaponAtributes;
+    WeaponAttributes weaponAttributes;
     GameObject shellPrefab;
     GameObject shellObj;
-    [SerializeField] GameObject damageBox = null;
+    public GameObject damageBox = null;
     Shell shell;
 
     float attackRangeX;
@@ -51,6 +51,7 @@ public class PlayerAttack : MonoBehaviour
     float curForceDurtaion;
     float posX;
     float rotZ;
+    [HideInInspector] public float weaponMass;
 
     int damage;
     int staminaCosts;
@@ -58,6 +59,9 @@ public class PlayerAttack : MonoBehaviour
     public WeaponAttackType weaponAttackType;
     DamageTypes weaponDamageType;
     Element weaponElement;
+
+    AudioClip weaponAudioClip;
+    AudioClip weaponImpactClip;
 
     private void OnGUI()
     {
@@ -69,7 +73,7 @@ public class PlayerAttack : MonoBehaviour
         movement            = GetComponent<PlayerMovement>();
         weapon              = GameObject.FindWithTag("Main Weapon").transform;
         GetWeapon();
-        atributes           = GetComponent<PlayerAtributes>();
+        attributes           = GetComponent<PlayerAttributes>();
         rigidBody           = GetComponent<Rigidbody2D>();
         sprite              = GetComponent<SpriteRenderer>();
         anim                = GetComponent<Animator>();
@@ -78,9 +82,9 @@ public class PlayerAttack : MonoBehaviour
     
     void Update()
     {
-        if (!movement.isDead)
+        if (!movement.isDead && !movement.isHurt)
         {
-            if (!movement.isEvading && !movement.isClimbing && !movement.isHanging && canAttack &&
+            if (!movement.isEvading && !movement.isClimbing && !movement.isHanging && !movement.isHealing && canAttack &&
                 input.lastInputs.Count > 0 && (input.lastInputs[0] == InputsEnum.StrongAttack || input.lastInputs[0] == InputsEnum.LightAttack ||
                 input.lastInputs[0] == InputsEnum.JointAttack || input.lastInputs[0] == InputsEnum.TopDownAttack) &&
                 timeBtwAttacks + Time.deltaTime <= Time.time)
@@ -134,15 +138,16 @@ public class PlayerAttack : MonoBehaviour
     public void GetWeapon()
     {
         posX = weapon.localPosition.x;
-        weaponAtributes = weapon.GetComponent<WeaponAtributes>();
-        attackRangeX = weaponAtributes.attackRangeX;
-        attackRangeY = weaponAtributes.attackRangeY;
-        weaponAttackType = weaponAtributes.weaponAttackType;
+        weaponAttributes = weapon.GetComponent<WeaponAttributes>();
+        attackRangeX = weaponAttributes.attackRangeX;
+        attackRangeY = weaponAttributes.attackRangeY;
+        weaponAttackType = weaponAttributes.weaponAttackType;
+        weaponMass = weaponAttributes.mass;
 
-        switch (weaponAtributes.weaponUltimate.type)
+        switch (weaponAttributes.weaponUltimate.type)
         {
             case WeaponUltimate.Passive:
-                movement.bonusAtributes = weaponAtributes.weaponUltimate.atributes;
+                movement.bonusAttributes = weaponAttributes.weaponUltimate.attributes;
                 break;
             case WeaponUltimate.Buff:
                 break;
@@ -168,7 +173,7 @@ public class PlayerAttack : MonoBehaviour
         input.jointAttack = false;
         input.topDownAttack = false;
 
-        GetWeaponAtributes(attackType);
+        GetWeaponAttributes(attackType);
         SetCombo(attackType);
         //Stop character before attack
         if(weaponAttackType != WeaponAttackType.Range)
@@ -200,7 +205,7 @@ public class PlayerAttack : MonoBehaviour
         movement.canFlip = false;
         curDelayResetCombo = Time.time + delayResetCombo;
         curForceDurtaion = Time.time + forceDuration;
-        atributes.Stamina -= staminaCosts;
+        attributes.Stamina -= staminaCosts;
 
         if (weaponAttackType != WeaponAttackType.Melee)
         {
@@ -218,8 +223,11 @@ public class PlayerAttack : MonoBehaviour
 
             GameObject _inst            = Instantiate(damageBox, transform);
             DamageBox _damageBox        = _inst.GetComponent<DamageBox>();
-            _damageBox.GetParameters(damage, weaponDamageType, weaponElement, weapon.position, new Vector2(attackRangeX, attackRangeY), attackDuration);
+            int targetLayer             = 12;
+            _damageBox.GetParameters(damage, weaponDamageType, weaponElement, weapon.position, new Vector2(attackRangeX, attackRangeY), attackDuration - Time.time, weaponImpactClip, targetLayer, attributes);
         }
+
+        AudioManager.PlayAttackAudio(weaponAudioClip);
     }
 
     void EndOfAttack()
@@ -253,7 +261,7 @@ public class PlayerAttack : MonoBehaviour
         {
             movement.isAttacking = false;
             attackType = default;
-            //atributes.speedDivisor = 1f;
+            //attributes.speedDivisor = 1f;
         }
     }
 
@@ -354,62 +362,62 @@ public class PlayerAttack : MonoBehaviour
         }
     }
 
-    void GetWeaponAtributes(AttackTypes type)
+    void GetWeaponAttributes(AttackTypes type)
     {
-        weaponAttackType = weaponAtributes.weaponAttackType;
-        shellPrefab = weaponAtributes.shellPrefab;
-        shellSpeed = weaponAtributes.shellSpeed;
+        weaponAttackType = weaponAttributes.weaponAttackType;
+        weaponImpactClip = weaponAttributes.impactClip;
+        shellPrefab = weaponAttributes.shellPrefab;
+        shellSpeed = weaponAttributes.shellSpeed;
         float _delayMultiplier = movement.isOnGround ? 1f : 1.5f;
 
         switch (type)
         {
             case AttackTypes.Light:
-                damage                      = weaponAtributes.lightAttackDamage;
-                staminaCosts                = weaponAtributes.lightAttackStaminaCosts;
-                weaponElement               = weaponAtributes.elements[type];
-                weaponDamageType            = weaponAtributes.damageTypesOfAttacks[type]; //fix it
-                attackForceDistance         = weaponAtributes.lightAttackForce;
+                damage                      = weaponAttributes.lightAttackDamage;
+                staminaCosts                = weaponAttributes.lightAttackStaminaCosts;
+                weaponElement               = weaponAttributes.elements[type];
+                weaponDamageType            = weaponAttributes.damageTypesOfAttacks[type]; //fix it
+                attackForceDistance         = weaponAttributes.lightAttackForce;
                 //If the stamina enough to attack - multiply = 1 else = 2
-                //anim.speed              = atributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
-                timeBtwAttacks              = weaponAtributes.lightAttackSpeed + Time.time;
-                attackDuration              = weaponAtributes.lightAttackSpeed * _delayMultiplier + Time.time;
-                atributes.defSpeedDivisor   = weaponAtributes.speedDivisorL;
+                //anim.speed              = attributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
+                timeBtwAttacks              = weaponAttributes.lightAttackSpeed / attributes.attackSpeed + Time.time;
+                attackDuration              = weaponAttributes.lightAttackSpeed / attributes.attackSpeed * _delayMultiplier + Time.time;
+                weaponAudioClip             = weaponAttributes.lightAttackClips[Random.Range(0, weaponAttributes.lightAttackClips.Length)];
                 break;
             case AttackTypes.Strong:
-                damage                      = weaponAtributes.strongAttackDamage;
-                staminaCosts                = weaponAtributes.strongAttackStaminaCosts;
-                weaponElement               = weaponAtributes.elements[type];
-                weaponDamageType            = weaponAtributes.damageTypesOfAttacks[type]; //fix it
-                attackForceDistance         = weaponAtributes.strongAttackForce;
+                damage                      = weaponAttributes.strongAttackDamage;
+                staminaCosts                = weaponAttributes.strongAttackStaminaCosts;
+                weaponElement               = weaponAttributes.elements[type];
+                weaponDamageType            = weaponAttributes.damageTypesOfAttacks[type]; //fix it
+                attackForceDistance         = weaponAttributes.strongAttackForce;
                 //If the stamina enough to attack - multiply = 1 else = 2
-                //anim.speed              = atributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
-                timeBtwAttacks              = (movement.isOnGround ? weaponAtributes.strongAttackSpeed : weaponAtributes.lightAttackSpeed) + Time.time;
-                attackDuration              = (movement.isOnGround ? weaponAtributes.strongAttackSpeed : weaponAtributes.lightAttackSpeed) * _delayMultiplier + Time.time;
-                atributes.defSpeedDivisor   = weaponAtributes.speedDivisorS;
+                //anim.speed              = attributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
+                timeBtwAttacks              = (movement.isOnGround ? weaponAttributes.strongAttackSpeed : weaponAttributes.lightAttackSpeed) / attributes.attackSpeed + Time.time;
+                attackDuration              = (movement.isOnGround ? weaponAttributes.strongAttackSpeed : weaponAttributes.lightAttackSpeed) / attributes.attackSpeed * _delayMultiplier + Time.time;
+                weaponAudioClip             = weaponAttributes.strongAttackClips[Random.Range(0, weaponAttributes.strongAttackClips.Length)];
                 break;
             case AttackTypes.Joint:
-                damage                      = weaponAtributes.jointAttackDamage;
-                staminaCosts                = weaponAtributes.jointAttackStaminaCosts;
-                weaponElement               = weaponAtributes.elements[type];
-                weaponDamageType            = weaponAtributes.damageTypesOfAttacks[type]; //fix it
-                attackForceDistance         = weaponAtributes.jointAttackForce;
+                damage                      = weaponAttributes.jointAttackDamage;
+                staminaCosts                = weaponAttributes.jointAttackStaminaCosts;
+                weaponElement               = weaponAttributes.elements[type];
+                weaponDamageType            = weaponAttributes.damageTypesOfAttacks[type]; //fix it
+                attackForceDistance         = weaponAttributes.jointAttackForce;
                 //If the stamina enough to attack - multiply = 1 else = 2
-                //anim.speed              = atributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
-                timeBtwAttacks              = (movement.isOnGround ? weaponAtributes.jointAttackSpeed : weaponAtributes.lightAttackSpeed) + Time.time;
-                attackDuration              = (movement.isOnGround ? weaponAtributes.jointAttackSpeed : weaponAtributes.lightAttackSpeed) * _delayMultiplier + Time.time;
-                atributes.defSpeedDivisor   = weaponAtributes.speedDivisorJ;
+                //anim.speed              = attributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
+                timeBtwAttacks              = (movement.isOnGround ? weaponAttributes.jointAttackSpeed : weaponAttributes.lightAttackSpeed) / attributes.attackSpeed + Time.time;
+                attackDuration              = (movement.isOnGround ? weaponAttributes.jointAttackSpeed : weaponAttributes.lightAttackSpeed) / attributes.attackSpeed * _delayMultiplier + Time.time;
+                weaponAudioClip             = weaponAttributes.jointAttackClips[Random.Range(0, weaponAttributes.jointAttackClips.Length)];
                 break;
             case AttackTypes.TopDown:
-                damage                      = weaponAtributes.topDownAttackDamage;//atributes.Stamina >= staminaCosts ? weaponAtributes.topDownAttackDamage : weaponAtributes.topDownAttackDamage / 10;
-                staminaCosts                = weaponAtributes.topDownAttackStaminaCosts;
-                weaponElement               = weaponAtributes.elements[type];
-                weaponDamageType            = weaponAtributes.damageTypesOfAttacks[type]; //fix it
-                attackForceDistance         = weaponAtributes.topDownAttackForce;
+                damage                      = weaponAttributes.topDownAttackDamage;//attributes.Stamina >= staminaCosts ? weaponAttributes.topDownAttackDamage : weaponAttributes.topDownAttackDamage / 10;
+                staminaCosts                = weaponAttributes.topDownAttackStaminaCosts;
+                weaponElement               = weaponAttributes.elements[type];
+                weaponDamageType            = weaponAttributes.damageTypesOfAttacks[type]; //fix it
+                attackForceDistance         = weaponAttributes.topDownAttackForce;
                 //If the stamina enough to attack - multiply = 1 else = 2
-                //anim.speed              = atributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
-                timeBtwAttacks              = weaponAtributes.topDownAttackSpeed + Time.time;
-                attackDuration              = weaponAtributes.topDownAttackSpeed * _delayMultiplier + Time.time;
-                atributes.defSpeedDivisor   = weaponAtributes.speedDivisorTD;
+                //anim.speed              = attributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
+                timeBtwAttacks              = weaponAttributes.topDownAttackSpeed / attributes.attackSpeed + Time.time;
+                attackDuration              = weaponAttributes.topDownAttackSpeed / attributes.attackSpeed * _delayMultiplier + Time.time;
                 break;
         }
     }

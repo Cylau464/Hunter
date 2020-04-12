@@ -8,13 +8,14 @@ using System.Linq;
 
 public class Enemy : MonoBehaviour
 {
-    [Header("Atributes Properties")]
+    [Header("Attributes Properties")]
     [SerializeField] protected int maxHealth = 100;
     int health;
     [SerializeField] float viewDistance = 20f;
     public DragType dragType = DragType.Draggable;
 
     [Header("Attack Properties")]
+    [SerializeField] GameObject damageBox = null;
     [SerializeField] protected EnemyComboDictionary combos = new EnemyComboDictionary();
     [SerializeField] ElementDictionary elementDamage = new ElementDictionary()
     {
@@ -31,7 +32,7 @@ public class Enemy : MonoBehaviour
     protected float curGlobalSpellCD = 0f;
     protected float curAttackCD = 0f;
     protected string lastAttack;
-    protected bool isHitPlayer;
+    [HideInInspector] public bool isHitPlayer;
     bool increaseAttackNumber;
     [HideInInspector] public int comboNumber;       //For animations
     [HideInInspector] public int curAttackNumber;   //For switch animations
@@ -90,13 +91,13 @@ public class Enemy : MonoBehaviour
 
     protected Transform myTransform;
     protected Rigidbody2D rigidBody;
-    BoxCollider2D bodyCollider;
+    protected BoxCollider2D bodyCollider;
     protected Collider2D target;
     protected LayerMask playerLayer = 1 << 10;       //10 - player layer
     Transform hookTransform;
     Transform myHookTarget;
     protected PlayerMovement playerMovement;
-    protected PlayerAtributes playerAtributes;
+    protected PlayerAttributes playerAttributes;
     protected SpriteRenderer sprite;
     Vector2 startPos;
 
@@ -127,7 +128,12 @@ public class Enemy : MonoBehaviour
     protected string spell = "None";
     protected string lastSpell;
 
-    public SpellStates spellState = SpellStates.None;
+    public EnemySpellStates spellState = EnemySpellStates.None;
+
+    [Header("Audio")]
+    [SerializeField] protected AudioSource audioSource = null;
+    [SerializeField] AudioClip[] stepClips = null;
+    [SerializeField] AudioClip impactClip = null;
 
     //UI
     [SerializeField] Transform statusBarTransform = null;
@@ -142,9 +148,10 @@ public class Enemy : MonoBehaviour
         rigidBody           = GetComponent<Rigidbody2D>();
         sprite              = GetComponent<SpriteRenderer>();
         startPos            = myTransform.position;
-        playerAtributes     = GameObject.FindWithTag("Player").GetComponent<PlayerAtributes>();
+        playerAttributes     = GameObject.FindWithTag("Player").GetComponent<PlayerAttributes>();
 
-        statusBar = statusBarTransform.GetComponent<StatusBar>();
+        statusBarTransform.TryGetComponent(out StatusBar _bar);
+        statusBar = _bar;
         statusBar.maxHealth = maxHealth;
         statusBar.HealthChange(health);
 
@@ -159,7 +166,7 @@ public class Enemy : MonoBehaviour
     {
         Gizmos.color = Color.red;
         if(bodyCollider != null)
-            Gizmos.DrawWireCube(new Vector2(transform.position.x +(bodyCollider.size.x / 2f + attackRange.x / 2f) * direction, transform.position.y + attackRange.y / 2f), attackRange);
+            Gizmos.DrawWireCube(new Vector2(transform.position.x + (attackRange.x / 2f + curCombo.attackRange / 2f) * direction, transform.position.y + attackRange.y / 2f), new Vector2(attackRange.x + curCombo.attackRange, attackRange.y));
     }
 
     protected void Update()
@@ -189,9 +196,6 @@ public class Enemy : MonoBehaviour
     protected void FixedUpdate()
     {
         if(currentState == State.Dead) return;
-
-        if(currentState == State.Patrol)
-            CheckPlayer();
 
         SwitchSpell();
 
@@ -223,10 +227,15 @@ public class Enemy : MonoBehaviour
                 //currentState = State.Null;
                 break;
         }
+
+        CheckPlayer();
     }
 
     protected void SwitchState(State newState)
     {
+        if (lastSpell == "Knockback" && isCast)
+            FlipCharacter(false);
+
         isPatrol    = false;
         isChase     = false;
         isAttack    = false;
@@ -235,7 +244,7 @@ public class Enemy : MonoBehaviour
         isDead      = false;
 
         spellNumber = 0;
-        spellState = SpellStates.None;
+        spellState = EnemySpellStates.None;
         currentState = newState;
 
         if (newState == State.Dead)
@@ -289,15 +298,15 @@ public class Enemy : MonoBehaviour
 
     protected void Chase()
     {
-        //Flip enemy towards the player
-        if(Mathf.Sign(target.transform.position.x - transform.position.x) != direction)
-            FlipCharacter(false);
-
         //Chase while the player in view area
-        if (DistanceToPlayer().x <= viewDistance)
+        if (target)//(DistanceToPlayer().x <= viewDistance)
         {
+            //Flip enemy towards the player
+            if (Mathf.Sign(target.transform.position.x - transform.position.x) != direction)
+                FlipCharacter(false);
+
             //Move towards the player until the attack distance is reached...
-            if (Mathf.Abs(target.transform.position.x - transform.position.x - attackRange.x * direction) > attackRange.x)
+            if (DistanceToPlayer().x > attackRange.x + curCombo.attackRange)
                 rigidBody.velocity = new Vector2(chaseSpeed * direction, rigidBody.velocity.y);
             else
                 //...and attack when it reached
@@ -305,7 +314,7 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            //SwitchState(State.Patrol);
+            SwitchState(State.Patrol);
             //target = null;
         }
     }
@@ -327,7 +336,7 @@ public class Enemy : MonoBehaviour
                         if (_random < combo.Value.chance + _chance)
                         {
                             //If player too far
-                            if (DistanceToPlayer().x - attackRange.x * direction > attackRange.x + combo.Value.attackRange)
+                            if (DistanceToPlayer().x > attackRange.x + combo.Value.attackRange)
                             {
                                 SwitchState(State.Chase);
                                 return;
@@ -359,6 +368,10 @@ public class Enemy : MonoBehaviour
             {
                 curAttackNumber++;      //This will switch the animation to the next attack
                 increaseAttackNumber = false;
+
+                //Flip enemy towards the player
+                if (Mathf.Sign(target.transform.position.x - transform.position.x) != direction)
+                    FlipCharacter(false);
             }
         }
     }
@@ -399,9 +412,9 @@ public class Enemy : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void TakeDamage(int damage, DamageTypes damageType, Element element /*, bool crit*/)
+    public int TakeDamage(int damage, DamageTypes damageType, Element element /*, bool crit*/)
     {
-        if (currentState == State.Dead) return;
+        if (currentState == State.Dead) return default;
 
         //Debug.Log("BEFORE damage " + damage + " element " + element.value);
         element.value = element.value - Mathf.CeilToInt(element.value / 100f * elementDefence[element.element]);    //Calculation of defence from elements
@@ -422,6 +435,8 @@ public class Enemy : MonoBehaviour
             currentState = State.Hurt;*/
         statusBar.HealthChange(health);
         DamageText(damage + element.value);
+
+        return damage + element.value;
     }
 
     void DamageText(int damage)
@@ -456,21 +471,19 @@ public class Enemy : MonoBehaviour
 
     void GiveDamage()
     {
-        Debug.Log("ATTACK");
+        GameObject _inst = Instantiate(damageBox, transform);
+        DamageBox _damageBox = _inst.GetComponent<DamageBox>();
+        int targetLayer = 10;
+        float _dbLifeTime = curCombo.timeBtwAttack[curAttackNumber] > 0f ? curCombo.timeBtwAttack[curAttackNumber] : .1f;
+        _damageBox.GetParameters(curCombo.damage[curAttackNumber], curCombo.element, new Vector2(transform.position.x + attackRange.x / 2f * direction, transform.position.y + attackRange.y / 2f), attackRange, _dbLifeTime, impactClip, targetLayer, curCombo.dazedTime[curAttackNumber], curCombo.repulseDistantion[curAttackNumber], this);
+        PlayAttackAudio(curCombo.attackClips[curAttackNumber]);
+
         if (curCombo.attackCount <= curAttackNumber + 1)
             curAttackCD = Time.time + curCombo.attackCD;                        //Cooldown of attack
         else
         {
             curAttackCD = Time.time + curCombo.timeBtwAttack[curAttackNumber];  //Cooldown between combo attacks
             increaseAttackNumber = true;
-        }
-
-        Collider2D _objectToDamage = Physics2D.OverlapBox(new Vector2(transform.position.x + (bodyCollider.size.x / 2f + attackRange.x / 2f) * direction, transform.position.y + attackRange.y / 2f), attackRange, 0, playerLayer); //Need to create child object "Attack Point"
-
-        if (_objectToDamage != null)
-        {
-            _objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(curCombo.damage[curAttackNumber], HurtType.Repulsion, new Vector2(curCombo.repulseDistantion[curAttackNumber].x * direction, curCombo.repulseDistantion[curAttackNumber].y), curCombo.dazedTime[curAttackNumber], curCombo.element);
-            isHitPlayer = true;
         }
     }
 
@@ -481,10 +494,9 @@ public class Enemy : MonoBehaviour
             isAttack = false;
     }
 
-    void FlipCharacter(bool onlyDir)
+    protected void FlipCharacter(bool onlyDir)
     {
         direction = -direction;
-        
         //If need to invert not only direction
         if(!onlyDir)
         {
@@ -505,21 +517,23 @@ public class Enemy : MonoBehaviour
 
     protected void CheckPlayer()
     {
-        if (playerMovement != null && playerMovement.isDead)
+        if (playerMovement != null)
         {
-            target = null;
-            return;
+            if (playerMovement.isDead)
+                target = null;
         }
-
-        //Find the player in area of view
-        if (Physics2D.OverlapCircle(transform.position, viewDistance, 1 << 10) && target == null)
+        else
         {
-            target = Physics2D.OverlapCircle(transform.position, viewDistance, 1 << 10);
-            playerMovement = target.GetComponent<PlayerMovement>();
-        }
+            //Find the player in area of view
+            if (Physics2D.OverlapCircle(transform.position, viewDistance, 1 << 10) && target == null)
+            { 
+                target = Physics2D.OverlapCircle(transform.position, viewDistance, 1 << 10);
+                playerMovement = target.GetComponent<PlayerMovement>();
+            }
 
-        if(target && isPatrol)
-            SwitchState(State.Chase);
+            if (target && isPatrol)
+                SwitchState(State.Chase);
+        }
     }
 
     protected bool IsPlayerBehind()
@@ -536,5 +550,25 @@ public class Enemy : MonoBehaviour
         float _x = Mathf.Abs(target.transform.position.x - transform.position.x);
         float _y = target.transform.position.y - transform.position.y;
         return new Vector2(_x, _y);
+    }
+
+    void PlayStepsAudio()
+    {
+        if (audioSource == null)
+            return;
+
+        audioSource.pitch = 1f;
+        audioSource.clip = stepClips[Random.Range(0, stepClips.Length)];
+        audioSource.volume = .25f;
+        audioSource.Play();
+    }
+
+    void PlayAttackAudio(AudioClip clip)
+    {
+        if (audioSource == null)
+            return;
+
+        audioSource.pitch = Random.Range(.5f, .8f);
+        audioSource.PlayOneShot(clip);
     }
 }

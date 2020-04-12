@@ -2,27 +2,42 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using Structures;
 using Enums;
 
-class SpellBar : MonoBehaviour
+public class SpellBar : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] GameObject[] spellCells = new GameObject[3];
+    [SerializeField] GameObject spellSelector = null;
 
-    Image[] spellIcons = new Image[3];
-    Text[] spellKey = new Text[3];
-    [HideInInspector] public SpellsTitle[] spellTitle = new SpellsTitle[3];
+    [HideInInspector] public SpellUI[] spellUI = new SpellUI[3];
 
-    void Start()
+    void Awake()
     {
         for(int i = 0; i < spellCells.Length; i++)
         {
-            SpellUI _spell = spellCells[i].GetComponent<SpellUI>();
-            spellTitle[i] = _spell.title;
-            spellIcons[i] = spellCells[i].GetComponentInChildren<Image>();
-            spellIcons[i].sprite = _spell.icon;
-            spellKey[i] = spellCells[i].GetComponentInChildren<Text>();
-            spellKey[i].text = (i + 1).ToString();
+            spellUI[i] = spellCells[i].GetComponent<SpellUI>();
+            spellUI[i].cellIndex = i;
+            spellUI[i].spellSelector = spellSelector;
+        }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        GameManager.UIOverlapsMouse = true;
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        GameManager.UIOverlapsMouse = false;
+    }
+
+    public void SetSpells(Spell[] spells)
+    {
+        for (int i = 0; i < spells.Length; i++)
+        {
+            spellUI[i].ChangeSpell(spells[i].title, spells[i].spell);
         }
     }
 }

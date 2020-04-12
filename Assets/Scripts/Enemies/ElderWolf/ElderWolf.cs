@@ -19,13 +19,14 @@ public class ElderWolf : Enemy
     [SerializeField] EnemySpellDictionary mySpells = new EnemySpellDictionary()
     {
         { "Long Jump",  new EnemySpell(10f, new Vector2(10f, 5f), 1, 10f, 3f, 1.5f, .75f, new Vector2(2f, 2f), new Vector2(5f, 5f), 1.5f, 5, 7) },
-        { "Back Jump",  new EnemySpell(3f, new Vector2(7f, 4f), -1, 12f, 3f, .5f, .5f, new Vector2(2f, 2f), new Vector2(3f, 0f), 1f, 2, 5) },
+        { "Back Jump",  new EnemySpell(3f, new Vector2(7f, 4f), -1, 7f, 3f, .5f, .5f, new Vector2(2f, 2f), new Vector2(3f, 0f), 1f, 2, 5) },
         { "Ice Breath", new EnemySpell(7f, 8f, 2f, 1f, .5f, new Vector2(10f, 5f), new Vector2(.5f, 0f), .3f, 2, .5f, new Element("Ice", Elements.Ice, 1), new Effect(Effects.Freeze, 1)) },
         { "Swing Tail", new EnemySpell(5f, 8f, 2f, 1f, .5f, new Vector2(2f, 2f), new Vector2(5f, 2f), 1.5f, 10) },
         { "Ice Spikes", new EnemySpell(11f, 15f, 2f, 1f, 2f, new Vector2(2f, 5f), new Vector2(4f, 2f), 2f, 15, new Element("Ice", Elements.Ice, 10), new Effect(Effects.Freeze, 2)) },
         { "Howl",       new EnemySpell(15f, 15f, 3f, 1.5f, 3f, new Vector2(0f, 0f), new Vector2(4f, 2f), .5f, 5, .5f) },
-        { "Knockback",  new EnemySpell(2.5f, new Vector2(0f, 5f), 1, 5f, .5f, .5f, 1f, new Vector2(6f, 2f), new Vector2(6f, 6f), 1.5f, 2, 5) },
+        { "Knockback",  new EnemySpell(2.5f, new Vector2(10f, 5f), 1, 5f, .5f, .5f, 1f, new Vector2(6f, 2f), new Vector2(6f, 6f), 1.5f, 2, 5) },
     };
+    [SerializeField] GameObject iceCloudPrefab = null;
 
     Dictionary<string, float> spellsCurCooldown = new Dictionary<string, float>();
 
@@ -38,8 +39,9 @@ public class ElderWolf : Enemy
     IceBreath iceBreath;
     BoxCollider2D tailCol;
     Collider2D objectToDamage;
+    [SerializeField] GameObject wolfPrefab = null;
 
-    float maxDurationWithoutDamage = 15f;       //For Howl and other spells which used if Wolf can't give damage a long time
+    float maxDurationWithoutDamage = 15f;       //For Howl and other spells which used if Wolf can't give damage a long time    
 
     private void OnGUI()
     {
@@ -104,16 +106,18 @@ public class ElderWolf : Enemy
                     spellsCurCooldown["Ice Breath"] = mySpells["Ice Breath"].cooldown + Time.time;
                     break;
             }
+
+            spellsCurCooldown["Howl"] = mySpells["Howl"].cooldown / 2f + Time.time;
         }
 
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            GameObject _spawner = Resources.Load<GameObject>("Enemies/Elder Wolf/Ice Spike Spawner");
-            GameObject _inst = Instantiate(_spawner, myTransform);
-            IceSpikesSpawner _iss = _inst.GetComponent<IceSpikesSpawner>();
-            _iss.spell = mySpells["Ice Spikes"];
-            _iss.player = playerMovement == null ? GameObject.Find("Player").GetComponent<PlayerMovement>() : playerMovement;
-        }
+        //if (Input.GetKeyDown(KeyCode.Y))
+        //{
+        //    GameObject _spawner = Resources.Load<GameObject>("Enemies/Elder Wolf/Ice Spike Spawner");
+        //    GameObject _inst = Instantiate(_spawner, myTransform);
+        //    IceSpikesSpawner _iss = _inst.GetComponent<IceSpikesSpawner>();
+        //    _iss.spell = mySpells["Ice Spikes"];
+        //    _iss.player = playerMovement == null ? GameObject.Find("Player").GetComponent<PlayerMovement>() : playerMovement;
+        //}
     }
 
     override protected void SwitchSpell()
@@ -123,10 +127,20 @@ public class ElderWolf : Enemy
         {
             bool spellSelected = false;
 
-            if (spellsCurCooldown["Knockback"] <= Time.time && DistanceToPlayer().x < mySpells["Knockback"].castRange && DistanceToPlayer().y < 2f)
+            if ((spellsCurCooldown["Back Jump"] <= Time.time || spellsCurCooldown["Knockback"] <= Time.time) && DistanceToPlayer().x < mySpells["Knockback"].castRange && DistanceToPlayer().y < 2f)
             {
-                spell = "Knockback";
-                spellSelected = true;
+                int _rand = Random.Range(0, 2);
+
+                if (_rand == 0 && spellsCurCooldown["Back Jump"] <= Time.time)
+                {
+                    spell = "Back Jump";
+                    spellSelected = true;
+                }
+                else if(_rand == 1 && spellsCurCooldown["Knockback"] <= Time.time)
+                {
+                    spell = "Knockback";
+                    spellSelected = true;
+                }
             }
             else
             { 
@@ -157,7 +171,7 @@ public class ElderWolf : Enemy
                             spell = "Back Jump";
                             spellSelected = true;
                         }
-                    
+
                     }
                     //Ice Breath:
                     //  Two fast attack combo if one of them hit the player then Back Jump and Ice Breath
@@ -169,7 +183,8 @@ public class ElderWolf : Enemy
                         if ((lastAttack == "Two Fast Attack" && lastSpell == "Back Jump") ||
                              lastAttack == "One Attack" ||
                             (lastSpell  == "Long Jump" && Random.Range(0, 100) > 50) ||
-                             DistanceToPlayer().x <= mySpells["Ice Breath"].castRange && Random.Range(0, 100) > 30)
+                             DistanceToPlayer().x <= mySpells["Ice Breath"].castRange && DistanceToPlayer().x >= bodyCollider.size.x / 2f && Random.Range(0, 100) > 30 ||
+                             lastSpell == "Knockback")
                         {
                             spell = "Ice Breath";
                             spellSelected = true;
@@ -208,7 +223,7 @@ public class ElderWolf : Enemy
                     if (!spellSelected && spellsCurCooldown["Howl"] <= Time.time)
                     {
                         if ((lastSpell == "Back Jump" && damageTakenDPS >= maxHealth / 100 * 3 && Random.Range(0, 100) > 50) ||
-                           (playerAtributes.timeOfLastTakenDamage + maxDurationWithoutDamage <= Time.time && DistanceToPlayer().x <= mySpells["Howl"].castRange) ||
+                           (playerAttributes.timeOfLastTakenDamage + maxDurationWithoutDamage <= Time.time && DistanceToPlayer().x <= mySpells["Howl"].castRange) ||
                            (damageTakenDPS >= maxHealth / 100 * 3 && Random.Range(0, 100) > 50))
                         {
                             spell = "Howl";
@@ -225,21 +240,21 @@ public class ElderWolf : Enemy
                 lastSpell = spell;
                 curSpellPrepareTime = mySpells[spell].prepareTime + Time.time;
                 SwitchState(State.CastSpell);
-                spellState = SpellStates.Prepare;
+                spellState = EnemySpellStates.Prepare;
             }
         }
     }
 
     override protected void CastSpell()
     {
-        if (spellState == SpellStates.Prepare && curSpellPrepareTime <= Time.time)
+        if (spellState == EnemySpellStates.Prepare && curSpellPrepareTime <= Time.time)
         {
-            spellState = SpellStates.Cast;
+            spellState = EnemySpellStates.Cast;
             curSpellCastTime = mySpells[spell].castTime + Time.time;
         }
 
-        if (spellState == SpellStates.Cast && curSpellCastTime <= Time.time)
-            spellState = SpellStates.End;
+        if (spellState == EnemySpellStates.Cast && curSpellCastTime <= Time.time)
+            spellState = EnemySpellStates.End;
 
         switch (spell)
         {
@@ -289,7 +304,7 @@ public class ElderWolf : Enemy
         {
             SpellCasted();
         }
-        else if (!frontLegs.gameObject.activeSelf && spellState == SpellStates.Cast)
+        else if (!frontLegs.gameObject.activeSelf && spellState == EnemySpellStates.Cast)
         {
             frontLegs.gameObject.SetActive(true);
             frontLegs.GetComponent<EWLongJump>().spell = mySpells[spell];
@@ -359,9 +374,10 @@ public class ElderWolf : Enemy
     void StartJump()
     {
         rigidBody.AddForce(new Vector2(mySpells[spell].jumpDistance.x * mySpells[spell].jumpDirection * direction, mySpells[spell].jumpDistance.y), ForceMode2D.Impulse);
-
-        if (spell == "Knockback")
-            SpellOnceDamage();
+        PlayJumpAudio(mySpells[spell].jumpClip);
+        SpawnIceCloud();
+        //if (spell == "Knockback")
+        //    SpellOnceDamage();
     }
 
     new private void OnDrawGizmosSelected()
@@ -378,21 +394,33 @@ public class ElderWolf : Enemy
 
     void Landing()
     {
-        rigidBody.velocity = Vector2.zero;
         frontLegs.gameObject.SetActive(false);
 
-        GameObject _landingEffect = Resources.Load<GameObject>("Enemies/Elder Wolf/Elder Wolf Landing Effect");
-        Instantiate(_landingEffect, myTransform.position, Quaternion.identity);
+        if (spell != "Knockback")
+        {
+            rigidBody.velocity = Vector2.zero;
+            isSpellCasted = true;
+            Instantiate(iceCloudPrefab, myTransform.position, Quaternion.identity);
+        }
+        else
+        {
+            rigidBody.AddForce(new Vector2(mySpells["Knockback"].jumpDistance.x / 4f * direction, 0f), ForceMode2D.Impulse);
+            GameObject _iceTracks = Resources.Load<GameObject>("Enemies/Elder Wolf/Particles/IceTracks");
+            Instantiate(_iceTracks, new Vector2(myTransform.position.x + 2.8f * -direction, myTransform.position.y + 0.2f), myTransform.rotation, myTransform);
+        }
+
+        //GameObject _landingEffect = Resources.Load<GameObject>("Enemies/Elder Wolf/Elder Wolf Landing Effect");
+        //Instantiate(_landingEffect, myTransform.position, Quaternion.identity);
+        PlayLandingAudio(mySpells[spell].landingClip);
+        
 
         objectToDamage = Physics2D.OverlapBox(myTransform.position, mySpells[spell].damageRange, 0f, playerLayer);
 
         if (objectToDamage != null)
         {
             int _repulseDirection = IsPlayerBehind() ? -1 : 1;
-            objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].lastDamage, HurtType.Repulsion, new Vector2(mySpells[spell].repulseVector.x * _repulseDirection, mySpells[spell].repulseVector.y), mySpells[spell].dazedTime, mySpells[spell].elementDamage);
+            objectToDamage.GetComponent<PlayerAttributes>().TakeDamage(mySpells[spell].lastDamage, HurtType.Repulsion, new Vector2(mySpells[spell].repulseVector.x * _repulseDirection, mySpells[spell].repulseVector.y), mySpells[spell].dazedTime, mySpells[spell].elementDamage);
         }
-
-        isSpellCasted = true;
     }
 
     void SpellOnceDamage()
@@ -410,7 +438,9 @@ public class ElderWolf : Enemy
                 objectToDamage = Physics2D.OverlapBox(tailCol.transform.position, new Vector2(tailCol.size.x, tailCol.size.y), 0, playerLayer);
 
                 if (objectToDamage != null)
-                    objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].firstDamage, HurtType.Repulsion, new Vector2(mySpells[spell].repulseVector.x * -direction, mySpells[spell].repulseVector.y), mySpells[spell].dazedTime, mySpells[spell].elementDamage);
+                    objectToDamage.GetComponent<PlayerAttributes>().TakeDamage(mySpells[spell].firstDamage, HurtType.Repulsion, new Vector2(mySpells[spell].repulseVector.x * -direction, mySpells[spell].repulseVector.y), mySpells[spell].dazedTime, mySpells[spell].elementDamage);
+
+                audioSource.PlayOneShot(mySpells[spell].spellClip);
 
                 break;
             case "Howl":
@@ -418,6 +448,12 @@ public class ElderWolf : Enemy
                 head.gameObject.SetActive(true);
                 _hcp.spell = mySpells[spell];
                 _hcp.StartCoroutine(_hcp.CirclePulse());
+
+                for (int i = 0; i <= 1; i++)
+                {
+                    int _xPos = i % 2 == 0 ? 1 : -1;
+                    Instantiate(wolfPrefab, new Vector2(myTransform.position.x + 20 * _xPos, myTransform.position.y), myTransform.rotation);
+                }
                 break;
             case "Knockback":
                 objectToDamage = Physics2D.OverlapBox(myTransform.position, mySpells[spell].damageRange, 0, playerLayer);
@@ -425,7 +461,7 @@ public class ElderWolf : Enemy
                 if (objectToDamage != null)
                 {
                     int _repulseDirection = IsPlayerBehind() ? -1 : 1;
-                    objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(mySpells[spell].firstDamage, HurtType.Repulsion, new Vector2(mySpells[spell].repulseVector.x * _repulseDirection, mySpells[spell].repulseVector.y), mySpells[spell].dazedTime / 3f, mySpells[spell].elementDamage);
+                    objectToDamage.GetComponent<PlayerAttributes>().TakeDamage(mySpells[spell].firstDamage, HurtType.Repulsion, new Vector2(mySpells[spell].repulseVector.x * _repulseDirection, mySpells[spell].repulseVector.y), mySpells[spell].dazedTime / 3f, mySpells[spell].elementDamage);
                 }
                 break;
             case "Ice Breath":
@@ -441,6 +477,11 @@ public class ElderWolf : Enemy
         }
     }
 
+    void SpawnIceCloud()
+    {
+        Instantiate(iceCloudPrefab, myTransform.position, myTransform.rotation);
+    }
+
     void SpellEnded()
     {
         isSpellCasted = true;
@@ -452,5 +493,23 @@ public class ElderWolf : Enemy
         frontLegs.transform.localPosition = new Vector2(-frontLegs.transform.localPosition.x, frontLegs.transform.localPosition.y);
         head.transform.localPosition = new Vector2(-head.transform.localPosition.x, head.transform.localPosition.y);
         iceBreath.FlipObject();
+    }
+
+    void PlayJumpAudio(AudioClip clip)
+    {
+        if (audioSource == null)
+            return;
+
+        audioSource.pitch = Random.Range(.6f, .9f);
+        audioSource.PlayOneShot(clip);
+    }
+
+    void PlayLandingAudio(AudioClip clip)
+    {
+        if (audioSource == null)
+            return;
+
+        audioSource.pitch = 1f;
+        audioSource.PlayOneShot(clip, 2f);
     }
 }

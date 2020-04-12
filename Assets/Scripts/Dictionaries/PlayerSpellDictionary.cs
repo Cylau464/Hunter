@@ -6,4 +6,4 @@ using Structures;
 using Enums;
 
 [System.Serializable]
-public class PlayerSpellDictionary : SerializableDictionaryBase<SpellsTitle, GameObject> { }
+public class PlayerSpellDictionary : SerializableDictionaryBase<SpellTitles, GameObject> { }

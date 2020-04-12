@@ -22,14 +22,18 @@ public class PlayerInput : MonoBehaviour
     [HideInInspector] public bool horizontalAccess = true;
     [HideInInspector] public bool switchWeapon;
     [HideInInspector] public bool[] spell = new bool[3];
+    [HideInInspector] public bool healingPotionHeld;
+    [HideInInspector] public bool healingPotionPressed;
     [HideInInspector] public static bool restart;
     public List<InputsEnum> lastInputs = new List<InputsEnum>(1);           //Create new list for 2 elements for writting 2 last inputs
+    [SerializeField] float clearInputsDelay = .3f;
+    float curClearDelay;
 
     bool readyToClear;
 
     PlayerAttack attack;
     PlayerMovement movement;
-    PlayerAtributes atributes;
+    PlayerAttributes attributes;
 
     Coroutine lastInputsCoroutine;
 
@@ -37,7 +41,7 @@ public class PlayerInput : MonoBehaviour
     {
         attack = GetComponent<PlayerAttack>();
         movement = GetComponent<PlayerMovement>();
-        atributes = GetComponent<PlayerAtributes>();
+        attributes = GetComponent<PlayerAttributes>();
     }
 
     private void FixedUpdate()
@@ -79,11 +83,13 @@ public class PlayerInput : MonoBehaviour
         evade = false;
         restart = false;
         switchWeapon = false;
+        healingPotionHeld = false;
+        healingPotionPressed = false;
         hook = false;
 
         readyToClear = false;
 
-        if (!attack.canAttack)
+        if (curClearDelay <= Time.time || !attack.canAttack || (attributes.Stamina <= 0 && lastInputs.Count > 0 && lastInputs[0] != InputsEnum.FirstSpell && lastInputs[0] != InputsEnum.SecondSpell && lastInputs[0] != InputsEnum.ThirdSpell))
             lastInputs.Clear();
     }
 
@@ -98,12 +104,15 @@ public class PlayerInput : MonoBehaviour
         crouchHeld = crouchHeld || Input.GetButton("Crouch");
 
         switchWeapon = switchWeapon || Input.GetButtonDown("Switch Weapon");
+        healingPotionHeld = healingPotionHeld || Input.GetButton("Healing Potion");
+        healingPotionPressed = healingPotionPressed || Input.GetButtonDown("Healing Potion");
+
         hook = hook || Input.GetButtonDown("Hook");
 
         //evade = evade || Input.GetButtonDown("Evade");
         if(Input.GetButtonDown("Evade"))
         {
-            if (atributes.Stamina <= 0) return;
+            if (attributes.Stamina <= 0) return;
 
             //If list have a free slot for new input
             if (lastInputs.Count < lastInputs.Capacity)
@@ -114,6 +123,8 @@ public class PlayerInput : MonoBehaviour
                 lastInputs.RemoveAt(0);
                 lastInputs.Add(InputsEnum.Evade);
             }
+
+            curClearDelay = Time.time + clearInputsDelay;
         }
 
         if(Input.GetButtonDown("First Spell"))
@@ -127,6 +138,8 @@ public class PlayerInput : MonoBehaviour
                 lastInputs.RemoveAt(0);
                 lastInputs.Add(InputsEnum.FirstSpell);
             }
+
+            curClearDelay = Time.time + clearInputsDelay;
         }
 
         if (Input.GetButtonDown("Second Spell"))
@@ -140,6 +153,8 @@ public class PlayerInput : MonoBehaviour
                 lastInputs.RemoveAt(0);
                 lastInputs.Add(InputsEnum.SecondSpell);
             }
+
+            curClearDelay = Time.time + clearInputsDelay;
         }
 
         if (Input.GetButtonDown("Third Spell"))
@@ -153,11 +168,13 @@ public class PlayerInput : MonoBehaviour
                 lastInputs.RemoveAt(0);
                 lastInputs.Add(InputsEnum.ThirdSpell);
             }
+
+            curClearDelay = Time.time + clearInputsDelay;
         }
 
-        if (Input.GetButtonDown("LightAttack"))
+        if (Input.GetButtonDown("LightAttack") && !GameManager.UIOverlapsMouse)
         {
-            if (atributes.Stamina <= 0) return;
+            if (attributes.Stamina <= 0) return;
 
             //Top-down attack
             if (crouchHeld && !movement.isOnGround)
@@ -189,10 +206,12 @@ public class PlayerInput : MonoBehaviour
                     lastInputsCoroutine = StartCoroutine(SetLastInputs(InputsEnum.LightAttack, .07f));
                 }
             }
+
+            curClearDelay = Time.time + clearInputsDelay;
         }
-        if (Input.GetButtonDown("StrongAttack"))
+        if (Input.GetButtonDown("StrongAttack") && !GameManager.UIOverlapsMouse)
         {
-            if (atributes.Stamina <= 0) return;
+            if (attributes.Stamina <= 0) return;
 
             //Top-down attack
             if (crouchHeld && !movement.isOnGround)
@@ -224,6 +243,8 @@ public class PlayerInput : MonoBehaviour
                     lastInputsCoroutine = StartCoroutine(SetLastInputs(InputsEnum.StrongAttack, .07f));
                 }
             }
+
+            curClearDelay = Time.time + clearInputsDelay;
         }
 
         restart = restart || Input.GetKeyDown(KeyCode.R);

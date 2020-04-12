@@ -7,57 +7,72 @@ using Enums;
 public class HowlCirclePulse : MonoBehaviour
 {
     public EnemySpell spell;
-    int isCastParamID;
+    //int isCastParamID;
     int playerLayer = 10;
     CircleCollider2D circleCol;
-    Animator anim;
+    //Animator anim;
+    ParticleSystem particle;
     Transform player;
-    PlayerAtributes playerAtributes;
+    PlayerAttributes playerAttributes;
+    [SerializeField] AudioSource audioSource = null;
 
     void Awake()
     {
-        anim = transform.GetComponent<Animator>();
+        //sprite = transform.GetComponent<SpriteRenderer>();
+        foreach (Transform child in transform)
+        {
+            particle = child.GetComponent<ParticleSystem>();
+        }
+        //anim = transform.GetComponent<Animator>();
         circleCol = transform.GetComponent<CircleCollider2D>();
-        isCastParamID = Animator.StringToHash("isCast");
+        //isCastParamID = Animator.StringToHash("isCast");
+
+        gameObject.SetActive(false);
     }
 
     //Started from ElderWolf script
     public IEnumerator CirclePulse()
     {
-        anim.SetBool(isCastParamID, true);
-        circleCol.radius = spell.castRange; //circleCol.radius = .2f;
+        PlayHowlAudio();
+        particle.Play();
+        //anim.SetBool(isCastParamID, true);
+        circleCol.radius = circleCol.radius = .2f;
         float _castTime = Time.time + spell.castTime;
         float _сircleMaxRadius = spell.castRange;
-        float _curPeriod = 0f;
+        //float _curPeriod = 0f;
 
         while (_castTime > Time.time)
         {
             if (player != null)
             {
-                //Not last pulse
-                if (_castTime - Time.time > spell.periodicityDamage)
-                {
-                    if (_curPeriod < Time.time)
-                    {
-                        playerAtributes.TakeDamage(0, HurtType.Stun, spell.dazedTime * .95f, spell.elementDamage);
-                        _curPeriod = spell.periodicityDamage + Time.time;
-                    }
-                }
-                else
-                {
-                    Vector2 _direction = new Vector2(Mathf.Sign(player.transform.position.x - transform.position.x), Mathf.Sign(player.transform.position.y - transform.position.y));
-                    playerAtributes.TakeDamage(spell.firstDamage, HurtType.Repulsion, new Vector2(spell.repulseVector.x * _direction.x, spell.repulseVector.y * _direction.y), spell.dazedTime, spell.elementDamage);
-                    break;
-                }
+                playerAttributes.TakeEffect(spell.effect);
+                playerAttributes.StartCoroutine(playerAttributes.DecreaseSpeedDivisor(.4f, spell.dazedTime));
+                //playerAttributes.TakeDamage(0, HurtType.Stun, _castTime - Time.time, spell.elementDamage);
+                ////Not last pulse
+                //if (_castTime - Time.time > spell.periodicityDamage)
+                //{
+                //    if (_curPeriod < Time.time)
+                //    {
+                //        playerAttributes.TakeDamage(0, HurtType.Stun, spell.dazedTime * .95f, spell.elementDamage);
+                //        _curPeriod = spell.periodicityDamage + Time.time;
+                //    }
+                //}
+                //else
+                //{
+                //    Vector2 _direction = new Vector2(Mathf.Sign(player.transform.position.x - transform.position.x), Mathf.Sign(player.transform.position.y - transform.position.y));
+                //    playerAttributes.TakeDamage(spell.firstDamage, HurtType.Repulsion, new Vector2(spell.repulseVector.x * _direction.x, spell.repulseVector.y * _direction.y), spell.dazedTime, spell.elementDamage);
+                //    break;
+                //}
             }
 
-            //if(circleCol.radius < _сircleMaxRadius)
-            //    circleCol.radius += spell.castRange * 3f * Time.deltaTime;
+            if (circleCol.radius < _сircleMaxRadius)
+                circleCol.radius += spell.castRange * 1f * Time.deltaTime;
 
             yield return new WaitForEndOfFrame();
         }
 
-        anim.SetBool(isCastParamID, false);
+        particle.Stop();
+        //anim.SetBool(isCastParamID, false);
         gameObject.SetActive(false);
     }
 
@@ -66,7 +81,7 @@ public class HowlCirclePulse : MonoBehaviour
         if (collision.gameObject.layer == playerLayer)
         {
             player = collision.transform;
-            playerAtributes = player.GetComponent<PlayerAtributes>();
+            playerAttributes = player.GetComponent<PlayerAttributes>();
         }
     }
 
@@ -75,7 +90,15 @@ public class HowlCirclePulse : MonoBehaviour
         if (collision.gameObject.layer == playerLayer)
         {
             player = null;
-            playerAtributes = null;
+            playerAttributes = null;
         }
+    }
+
+    void PlayHowlAudio()
+    {
+        if (audioSource == null)
+            return;
+
+        audioSource.PlayOneShot(spell.spellClip, .5f);
     }
 }

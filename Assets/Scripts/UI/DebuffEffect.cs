@@ -16,7 +16,7 @@ public class DebuffEffect : MonoBehaviour
     Effect effect;
     List<float> curStackDuration;
     RectTransform rectTransform;
-    PlayerAtributes playerAtributes;
+    PlayerAttributes playerAttributes;
     PlayerEffectsController controller;
 
     // Start is called before the first frame update
@@ -32,12 +32,12 @@ public class DebuffEffect : MonoBehaviour
         ApplyEffect();
     }
 
-    public void GetEffect(Vector3 cellPos, PlayerEffectsController controller, int cellIndex, int stackCount, Effect effect, Sprite icon, PlayerAtributes playerAtributes, float periodEffectDelay = 0f)
+    public void GetEffect(Vector3 cellPos, PlayerEffectsController controller, int cellIndex, int stackCount, Effect effect, Sprite icon, PlayerAttributes playerAttributes, float periodEffectDelay = 0f)
     {
         curStackDuration = new List<float>(effect.maxStacksCount);
         this.controller = controller;
         this.effect = effect;
-        this.playerAtributes = playerAtributes;
+        this.playerAttributes = playerAttributes;
         this.periodEffectDelay = periodEffectDelay;
         image.sprite = icon;
         text.text = stackCount.ToString();
@@ -100,15 +100,16 @@ public class DebuffEffect : MonoBehaviour
         switch (effect.effect)
         {
             case Effects.Freeze:
-                playerAtributes.speedDivisor = playerAtributes.defSpeedDivisor - effect.value * stackCount;
-                playerAtributes.SetAnimationSpeed(1f - effect.value * stackCount);
+                playerAttributes.speedDivisor = playerAttributes.defSpeedDivisor - effect.value * stackCount;
+                playerAttributes.attackSpeed = playerAttributes.defAttackSpeed - effect.value * stackCount;
+                playerAttributes.SetAnimationSpeed(1f - effect.value * stackCount);
                 break;
             case Effects.Bleeding:
             case Effects.Poison:
             case Effects.Burning:
                 if (periodEffectDelay <= Time.time)
                 {
-                    playerAtributes.TakeDamage((int)effect.value, HurtType.None, effect);
+                    playerAttributes.TakeDamage((int)effect.value, HurtType.None, effect);
                     periodEffectDelay = Time.time + effect.effectPeriod;
                 }
                 break;

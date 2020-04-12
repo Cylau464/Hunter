@@ -8,6 +8,8 @@ TagManager:
   - Hook Target
   - UI
   - Second Weapon
+  - Fire
+  - PlayerUI
   layers:
   - Default
   - TransparentFX
@@ -25,8 +27,8 @@ TagManager:
   - Triggers
   - EnemyBody
   - DamageObjects
-  - 
-  - 
+  - PlayerDamageObjects
+  - ParticleEffects
   - 
   - 
   - 
@@ -44,6 +46,12 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 2360927025
+    locked: 0
+  - name: Platforms
+    uniqueID: 525074445
     locked: 0
   - name: Enemies
     uniqueID: 2168585929

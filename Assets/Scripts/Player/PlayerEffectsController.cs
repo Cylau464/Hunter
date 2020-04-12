@@ -19,6 +19,21 @@ public class PlayerEffectsController : MonoBehaviour
         { Effects.Bleeding, new Effect(Effects.Bleeding, 5, 3f, 2.5f, .5f) },
         { Effects.Poison, new Effect(Effects.Poison, 5, 3f, 2.5f, 1f) },
     };
+    [SerializeField] EffectsGameObjectDictionary particlePrefabs = new EffectsGameObjectDictionary()
+    {
+        { Effects.Freeze, null },
+        { Effects.Burning, null },
+        { Effects.Bleeding, null },
+        { Effects.Poison, null }
+    };
+    Dictionary<Effects, GameObject> activeParicles = new Dictionary<Effects, GameObject>(5)
+    {
+        { Effects.Freeze, null },
+        { Effects.Burning, null },
+        { Effects.Bleeding, null },
+        { Effects.Poison, null },
+        { Effects.Root, null }
+    };
     List<Vector3> cellsCoordinate = new List<Vector3>();
     [SerializeField] List<DebuffEffect> cellsScript = new List<DebuffEffect>();
     Dictionary<Effects, int> debuffCellIndex = new Dictionary<Effects, int>(5)
@@ -29,12 +44,12 @@ public class PlayerEffectsController : MonoBehaviour
         { Effects.Poison, 100 },
         { Effects.Root, 100 },
     };
-    PlayerAtributes playerAtributes;
+    PlayerAttributes playerAttributes;
 
     // Start is called before the first frame update
     void Start()
     {
-        playerAtributes = GetComponent<PlayerAtributes>();
+        playerAttributes = GetComponent<PlayerAttributes>();
 
         cellsList.ForEach(x => {
             cellsCoordinate.Add(x.position);
@@ -76,7 +91,11 @@ public class PlayerEffectsController : MonoBehaviour
         {
             cellsScript.Add(Instantiate(cellPrefab, transformParent).GetComponent<DebuffEffect>());
             debuffCellIndex[effect.effect] = cellsScript.Count - 1;
-            cellsScript[debuffCellIndex[effect.effect]].GetEffect(cellsCoordinate[debuffCellIndex[effect.effect]], this, debuffCellIndex[effect.effect], effect.stacksCount, effects[effect.effect], effectIcons[effect.effect], playerAtributes, effects[effect.effect].effectPeriod);
+            cellsScript[debuffCellIndex[effect.effect]].GetEffect(cellsCoordinate[debuffCellIndex[effect.effect]], this, debuffCellIndex[effect.effect], effect.stacksCount, effects[effect.effect], effectIcons[effect.effect], playerAttributes, effects[effect.effect].effectPeriod);
+
+            //Instantiate particle prefab
+            if(particlePrefabs[effect.effect] != null)
+                activeParicles[effect.effect] = Instantiate(particlePrefabs[effect.effect], transform);
         }
         else
         {
@@ -88,6 +107,8 @@ public class PlayerEffectsController : MonoBehaviour
     {
         cellsScript.RemoveAt(cellIndex);
         debuffCellIndex[effect] = 100;
+        Destroy(activeParicles[effect]);
+        activeParicles[effect] = null;
 
         //Update position on next cells
         for (int i = cellIndex; i <= cellsScript.Count - 1; i++)

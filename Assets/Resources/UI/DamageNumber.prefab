@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 9161523395244268253}
   - component: {fileID: 1497947738950893709}
   - component: {fileID: 9109048337946866635}
+  - component: {fileID: -5266411713476166423}
   m_Layer: 5
   m_Name: DamageNumber
   m_TagString: Untagged
@@ -114,13 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fbc7be862468524cbc715f64bbeb713, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 0
-  element:
-    title: 
-    element: 0
-    value: 0
-    color: {r: 0, g: 0, b: 0, a: 0}
-  moveSpeed: 3
+  moveSpeed: {x: 10, y: 20}
   physicDamage: {fileID: 8690553461473945847}
   elementDamage: {fileID: 8563627651128817149}
   elementIcon: {fileID: 2767540743593785058}
@@ -148,8 +143,8 @@ MonoBehaviour:
       elementIcon: {fileID: 0}
     reqReferences: {fileID: 0}
     isExpanded: 0
-    _keyValues: 010000000000000003000000020000000400000005000000
-    _keys: 010000000000000003000000020000000400000005000000
+    _keyValues: 020000000100000004000000030000000500000006000000
+    _keys: 020000000100000004000000030000000500000006000000
     _values:
     - {fileID: 21300000, guid: a3ca4beb0697c1d4aba334ee3418167b, type: 3}
     - {fileID: 21300000, guid: 32260cc66a60f1c4c8f083d1a26c059a, type: 3}
@@ -157,7 +152,27 @@ MonoBehaviour:
     - {fileID: 21300000, guid: e1967f786396de342b646dd4a345cb9f, type: 3}
     - {fileID: 21300000, guid: 5fd183af2e922cd4c9f71cb102ddd81f, type: 3}
     - {fileID: 21300000, guid: fd9c4f44ccca65c4da61090cd36a8c04, type: 3}
-  target: {fileID: 0}
+--- !u!50 &-5266411713476166423
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2416471552301680503}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &4428506502040504669
 GameObject:
   m_ObjectHideFlags: 0

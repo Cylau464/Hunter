@@ -13,12 +13,14 @@ public class EWLongJump : MonoBehaviour
     BoxCollider2D myCollider;
     BoxCollider2D playerCollider;
     Transform myTransform;
+    Rigidbody2D parentRigidBody;
     LayerMask playerLayer = 1 << 10;       //10 - player layer
     LayerMask platformLayer = 1 << 9;
 
     private void Awake()
     {
         myTransform = transform;
+        parentRigidBody = myTransform.parent.GetComponent<Rigidbody2D>();
         myCollider = myTransform.GetComponent<BoxCollider2D>();
         playerCollider = GameObject.Find("Player").GetComponent<BoxCollider2D>();
     }
@@ -41,7 +43,7 @@ public class EWLongJump : MonoBehaviour
         //If player collided with front legs
         else if (!isPlayerCaught)
         {
-            objectToDamage.GetComponent<PlayerAtributes>().TakeDamage(spell.firstDamage, HurtType.Catch, myTransform, spell.elementDamage);
+            objectToDamage.GetComponent<PlayerAttributes>().TakeDamage(spell.firstDamage, HurtType.Catch, myTransform, parentRigidBody, spell.elementDamage);
             isPlayerCaught = true;
         }
     }

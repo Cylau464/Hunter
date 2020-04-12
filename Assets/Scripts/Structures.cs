@@ -12,22 +12,51 @@ namespace Structures
     [Serializable]
     public struct PlayerSpell
     {
-        public int damage;
-        public int manacost;
+        public int attackCount;
+        public int[] damage;
+        public float[] timeBtwAttack;
+        public DamageTypes[] damageType;
+        public SpellTypes type;
+        [Range(1, 3)] public int energyCost;
+        public float castTime;
         public float cooldown;
-        public Vector2 damageRange;
+        public Vector2[] damageRange;
         public Element element;
         public Sprite icon;
+        //public AnimationClip spellAnimation;
+        public AnimationClip castAnimation;
+        public AnimationClip[] attackAnimations;
+        public AudioClip audioCast;
+        public AudioClip[] audioAttacks;
+        public AudioClip audioImpact;
 
-        public PlayerSpell(int damage, int manacost, float cooldown, Vector2 damageRange, Element element)
+        [Header("Movement Properties")]
+        public Vector2[] forceDirection;
+
+        [Header("Range Properties")]
+        public float[] castDistance;
+
+        public PlayerSpell(int attackCount, int[] damage, float[] timeBtwAttack, DamageTypes[] damageType, SpellTypes type, int energyCost, float castTime, float cooldown, Vector2[] damageRange, Element element, Vector2[] forceDirection, float[] castDistance)
         {
+            this.attackCount = attackCount;
             this.damage = damage;
-            this.manacost = manacost;
+            this.timeBtwAttack = timeBtwAttack;
+            this.damageType = damageType;
+            this.type = type;
+            this.energyCost = energyCost;
+            this.castTime = castTime;
             this.cooldown = cooldown;
             this.damageRange = damageRange;
             this.element = element;
+            this.forceDirection = forceDirection;
+            this.castDistance = castDistance;
 
             icon = null;
+            castAnimation = null;
+            attackAnimations = null;
+            audioCast = null;
+            audioImpact = null;
+            audioAttacks = null;
         }
     }
 
@@ -60,6 +89,11 @@ namespace Structures
         public Vector2 jumpDistance;
         public int jumpDirection;       //-1 = back, 1 = forward
 
+        [Header("Audio")]
+        public AudioClip spellClip;
+        public AudioClip jumpClip;
+        public AudioClip landingClip;
+
         /// <summary>
         /// For spells with jumps
         /// </summary>
@@ -83,6 +117,9 @@ namespace Structures
 
             //Not used
             periodicityDamage = 0f;
+            spellClip = null;
+            jumpClip = null;
+            landingClip = null;
         }
 
         /// <summary>
@@ -107,6 +144,9 @@ namespace Structures
             jumpDirection = 0;
             periodicityDamage = 0f;
             jumpDistance = Vector2.zero;
+            spellClip = null;
+            jumpClip = null;
+            landingClip = null;
         }
 
         /// <summary>
@@ -131,6 +171,9 @@ namespace Structures
             lastDamage = 0;
             jumpDirection = 0;
             jumpDistance = Vector2.zero;
+            spellClip = null;
+            jumpClip = null;
+            landingClip = null;
         }
     }
 
@@ -150,6 +193,7 @@ namespace Structures
         public Vector2[] repulseDistantion;
         public WeaponAttackType attackType;
         public Element element;
+        public AudioClip[] attackClips;
 
         /// <summary>
         /// For melee attacks. In arrays indicate values in order
@@ -167,6 +211,7 @@ namespace Structures
             this.element = element;
 
             attackRange = 0f;
+            attackClips = null;
         }
 
         /// <summary>
@@ -184,6 +229,8 @@ namespace Structures
             this.repulseDistantion = repulseDistantion;
             this.attackRange = attackRange;
             this.element = element;
+
+            attackClips = null;
         }
     }
 
@@ -219,7 +266,7 @@ namespace Structures
             switch (element)
             {
                 case Elements.Fire:
-                    color = Color.cyan;
+                    color = new Color(.91f, .33f, .1f);
                     break;
                 case Elements.Earth:
                     color = new Color(.71f, .33f, .1f);
@@ -252,16 +299,16 @@ namespace Structures
         public WeaponUltimate type;
 
         [Header("Passive Ultimate")]
-        public AtributesDictionary atributes;
+        public AttributesDictionary attributes;
 
         /// <summary>
         /// Passive ultimates
         /// </summary>
-        public Ultimate(string title, WeaponUltimate type, AtributesDictionary atributes)
+        public Ultimate(string title, WeaponUltimate type, AttributesDictionary attributes)
         {
             this.title = title;
             this.type = type;
-            this.atributes = atributes;
+            this.attributes = attributes;
         }
     }
 

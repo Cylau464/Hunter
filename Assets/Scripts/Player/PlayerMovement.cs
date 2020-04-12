@@ -36,8 +36,8 @@ public class PlayerMovement : MonoBehaviour
     public int direction { get; private set; }      = 1;            //Character direction
     [SerializeField] LayerMask groundLayer          = 1 << 9;       //9 - Platforms layer
 
-    [Header("Atributes Bonus")]
-    public AtributesDictionary bonusAtributes = new AtributesDictionary();
+    [Header("Attributes Bonus")]
+    public AttributesDictionary bonusAttributes = new AttributesDictionary();
 
     [Header("Hurt Properties")]
     float curDazedTime = 0f;
@@ -55,6 +55,7 @@ public class PlayerMovement : MonoBehaviour
     public bool isClimbing;
     bool isHooked;
     public bool isCast;
+    public bool isHealing;
     public bool isHurt;
     public bool isDead;
     public bool canFlip = true;
@@ -65,15 +66,12 @@ public class PlayerMovement : MonoBehaviour
     [HideInInspector] public BoxCollider2D bodyCollider;
     SpriteRenderer sprite;                         //Maybe create property for public get?
     PlayerAttack attack;
-    PlayerAtributes atributes;
+    PlayerAttributes attributes;
     Transform playerTransform;
-    WeaponAtributes weapon;
     Hook hook;
     Transform hookTransform;
-    Transform catchAnchorPoint;
+    Rigidbody2D targetRigidBody;
     PhysicsMaterial2D physicMaterial;
-
-    WeaponAttackType weaponAttackType;
 
     int extraJumpsCount;                          //Current count extra jumps
 
@@ -91,10 +89,7 @@ public class PlayerMovement : MonoBehaviour
 
     const float smallAmount = .05f;               //A small amount used for hanging position and something else
 
-    //Collision with enemy
-    CollisionRepulse colRepulse;
-    float halfColSizeX;
-    int repulseQuantity = 3;
+    public AnimationClip castAnim = null;         //Set here default cast animation
 
     void Start()
     {
@@ -104,23 +99,19 @@ public class PlayerMovement : MonoBehaviour
         bodyCollider            = GetComponent<BoxCollider2D>();
         sprite                  = GetComponent<SpriteRenderer>();
         attack                  = GetComponent<PlayerAttack>();
-        atributes               = GetComponent<PlayerAtributes>();
+        attributes               = GetComponent<PlayerAttributes>();
         playerTransform         = GetComponent<Transform>();
-        weapon                  = GameObject.FindGameObjectWithTag("Main Weapon").GetComponent<WeaponAtributes>();
         hook                    = GetComponentInChildren<Hook>();
-        weaponAttackType        = weapon.weaponAttackType;
         physicMaterial          = bodyCollider.sharedMaterial;
 
         playerHeight            = bodyCollider.size.y;
 
         colliderStandSize       = bodyCollider.size;
         colliderStandOffset     = bodyCollider.offset;
+
         //Decrease collider size and offset for this strange values. Need to change they on variables with percent, not numbers
         colliderCrouchSize      = new Vector2(bodyCollider.size.x, .85f);
         colliderCrouchOffset    = new Vector2(bodyCollider.offset.x, -.17f);
-        //Dividing jump height by weapon mass
-        //jumpForce /= weapon.weaponMass;
-        //jumpHoldForce /= weapon.weaponMass;
     }
 
     private void OnGUI()
@@ -147,7 +138,7 @@ public class PlayerMovement : MonoBehaviour
         if (isOnGround)
         {
             curCoyoteTime = Time.time + coyoteDuration;
-            extraJumpsCount = extraJumps + (bonusAtributes.ContainsKey(BonusAtributes.JumpCount) ? (int) bonusAtributes[BonusAtributes.JumpCount] : 0);
+            extraJumpsCount = extraJumps + (bonusAttributes.ContainsKey(BonusAttributes.JumpCount) ? (int) bonusAttributes[BonusAttributes.JumpCount] : 0);
         }
 
         //aimDirection = Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position);
@@ -167,6 +158,7 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             PhysicsCheck();
+            Healing();
             GroundMovement();
             AirMovement();
         }
@@ -178,7 +170,7 @@ public class PlayerMovement : MonoBehaviour
             if (!isOnGround)
                 rigidBody.gravityScale = 0;
         }
-        else if (rigidBody.gravityScale != 1)
+        else if (rigidBody.gravityScale != 1 && !isHurt)
             rigidBody.gravityScale = 1;
     }
 
@@ -231,7 +223,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //Evading
-        if (input.lastInputs.Contains(InputsEnum.Evade) && attack.attackState != AttackState.Damage && !isEvading && curEvadingCooldown <= Time.time)
+        if (input.lastInputs.Contains(InputsEnum.Evade) && attack.attackState != AttackState.Damage && !isEvading && !isCast && !isHealing && curEvadingCooldown <= Time.time)
         {
             //If use evade in hanging state
             if (rigidBody.bodyType == RigidbodyType2D.Static)
@@ -248,15 +240,18 @@ public class PlayerMovement : MonoBehaviour
             CancelInvoke("HorizontalAccess");
             input.horizontalAccess = false;
             canFlip = false;
+            attributes.isInvulnerable = true;
             curEvadingDuration = Time.time + evadingDuration;
             Crouch();
             rigidBody.velocity = Vector2.zero;
-            atributes.Stamina -= evadingStaminaCosts - (int)bonusAtributes[BonusAtributes.EvadeCosts];
+            attributes.Stamina -= evadingStaminaCosts - (int)bonusAttributes[BonusAttributes.EvadeCosts];
 
             if (input.horizontal != 0)
-                rigidBody.AddForce(new Vector2((evadingDistance * 1.5f + bonusAtributes[BonusAtributes.EvadeDistance]) * atributes.speedDivisor * Mathf.Sign(input.horizontal), 0f), ForceMode2D.Impulse); //input horizontal instead direction for evade after attack
+                rigidBody.AddForce(new Vector2((evadingDistance * 1.5f + bonusAttributes[BonusAttributes.EvadeDistance]) * attributes.speedDivisor * Mathf.Sign(input.horizontal), 0f), ForceMode2D.Impulse); //input horizontal instead direction for evade after attack
             else
-                rigidBody.AddForce(new Vector2((evadingDistance + bonusAtributes[BonusAtributes.EvadeDistance]) * atributes.speedDivisor * direction, 0f), ForceMode2D.Impulse);
+                rigidBody.AddForce(new Vector2((evadingDistance + bonusAttributes[BonusAttributes.EvadeDistance]) * attributes.speedDivisor * direction, 0f), ForceMode2D.Impulse);
+
+            AudioManager.PlayEvadeAudio();
 
         }
         else if (isEvading && (curEvadingDuration <= Time.time || (input.jumpPressed && extraJumpsCount > 0)))
@@ -264,6 +259,7 @@ public class PlayerMovement : MonoBehaviour
             isEvading = false;
             input.horizontalAccess = true;
             canFlip = true;
+            attributes.isInvulnerable = false;
             curEvadingCooldown = Time.time + evadingCooldown;
 
             //Skip stand up animation
@@ -271,7 +267,7 @@ public class PlayerMovement : MonoBehaviour
                 Crouch();
         }
         //Clear up all evade inputs from the inputs list if CD has not yet passed or not enough stamina
-        if (curEvadingCooldown > Time.time || atributes.Stamina < evadingStaminaCosts)
+        if (curEvadingCooldown > Time.time || attributes.Stamina < evadingStaminaCosts)
             input.lastInputs.RemoveAll(x => x == InputsEnum.Evade);
 
         //Climbing
@@ -313,7 +309,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (input.horizontalAccess && !isAttacking || attack.weaponAttackType == WeaponAttackType.Range)
         {
-            xVelocity = (speed * atributes.speedDivisor + (bonusAtributes.ContainsKey(BonusAtributes.Speed) ? bonusAtributes[BonusAtributes.Speed] : 0)/*/ weapon.weaponMass*/) * input.horizontal;
+            xVelocity = ((speed * attributes.speedDivisor + (bonusAttributes.ContainsKey(BonusAttributes.Speed) ? bonusAttributes[BonusAttributes.Speed] : 0)) * input.horizontal) / attack.weaponMass;
             rigidBody.velocity = new Vector2(xVelocity, rigidBody.velocity.y);
             //Flip caharcter if his direction != input horizontal
             if (xVelocity * direction < 0f)
@@ -362,7 +358,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //Jump
-        if (input.jumpPressed && attack.attackState != AttackState.Damage && (isOnGround || curCoyoteTime > Time.time))
+        if (input.jumpPressed && attack.attackState != AttackState.Damage && !isHealing && (isOnGround || curCoyoteTime > Time.time))
         {
             if (isCrouching && !isHeadBlocked)
                 StandUp();
@@ -374,6 +370,8 @@ public class PlayerMovement : MonoBehaviour
 
             rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0f);
             rigidBody.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+
+            AudioManager.PlayJumpAudio();
         }
         //Higher jump
         else if (isJumping)
@@ -399,6 +397,8 @@ public class PlayerMovement : MonoBehaviour
             rigidBody.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
 
             extraJumpsCount--;
+
+            AudioManager.PlayDoubleJumpAudio();
         }
 
         //Фиксирование максимальной скорости падения
@@ -410,7 +410,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!canFlip)
             return;
-
+        
         direction *= -1;
         sprite.flipX = !sprite.flipX;
     }
@@ -437,6 +437,32 @@ public class PlayerMovement : MonoBehaviour
         rigidBody.velocity = Vector2.zero;
     }
 
+    public void CastSpell(AnimationClip castAnim)
+    {
+        if (isCrouching)
+            StandUp();
+
+        this.castAnim = castAnim;
+        
+        isAttacking = false;
+        isCast = true;
+        input.horizontalAccess = false;
+        canFlip = false;
+        rigidBody.velocity = Vector2.zero;
+    }
+
+    public void NextSpellAttack(AnimationClip castAnim)
+    {
+        this.castAnim = castAnim;
+    }
+
+    public void SpellCastEnd()
+    {
+        isCast = false;
+        canFlip = true;
+        HorizontalAccess();
+    }
+
     void Climb()
     {
         int numColliders = 10;
@@ -455,7 +481,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
     
-    void HorizontalAccess()
+    public void HorizontalAccess()
     {
         input.horizontalAccess = true;
     }
@@ -485,38 +511,47 @@ public class PlayerMovement : MonoBehaviour
     {
         if (curDazedTime != 0f && curDazedTime <= Time.time)
         {
+            canFlip = true;
             curDazedTime = 0f;
             isHurt = false;
             hurtType = HurtType.None;
-            catchAnchorPoint = null;
+            targetRigidBody = null;
             bodyCollider.sharedMaterial = physicMaterial;
+
+            if(rigidBody.gravityScale == 0f)
+                rigidBody.gravityScale = 1f;
         }
         else
         {
             bodyCollider.sharedMaterial = null;
+            canFlip = false;
+
+            if (isHealing) HealingEnd();
 
             //Follow for catch source
             if (hurtType == HurtType.Catch)
             {
-                playerTransform.position = catchAnchorPoint == null ? playerTransform.position : catchAnchorPoint.position;
+                rigidBody.velocity = targetRigidBody.velocity;
             }
             else if(hurtType == HurtType.Stun)
             {
-                rigidBody.velocity = Vector2.up;
+                rigidBody.velocity = Vector2.zero;
+                rigidBody.gravityScale = 0f;
             }
         }
     }
 
-    public void GetCaught(HurtType hurtType, Transform anchorPoint)
+    public void GetCaught(HurtType hurtType, Rigidbody2D targetRigidBody)
     {
-        isJumping = isDoubleJump = isHeadBlocked = isCrouching = isAttacking = isEvading = isHanging = isClimbing = isHooked = false;
+        isJumping = isDoubleJump = isHeadBlocked = isCrouching = isAttacking = isHanging = isClimbing = isHooked = false;
         this.hurtType = hurtType;
-        catchAnchorPoint = anchorPoint;
+        this.targetRigidBody = targetRigidBody;
         isHurt = true;
     }
 
     public void Repulse(Vector2 repulseDistantion, float dazedTime)
     {
+        isJumping = isDoubleJump = isHeadBlocked = isCrouching = isAttacking = isHanging = isClimbing = isHooked = false;
         rigidBody.bodyType = RigidbodyType2D.Dynamic;
         rigidBody.velocity = Vector2.zero;
         isHurt = true;
@@ -527,68 +562,100 @@ public class PlayerMovement : MonoBehaviour
 
     public void Stunned(float dazedTime)
     {
+        isJumping = isDoubleJump = isHeadBlocked = isCrouching = isAttacking = isHanging = isClimbing = isHooked = false;
         isHurt = true;
         curDazedTime = dazedTime + Time.time;
     }
 
-    private void OnTriggerEnter2D(Collider2D col)
+    void Healing()
     {
-        if (col.gameObject.TryGetComponent(out CollisionRepulse _colRepulse))
+        if (!input.healingPotionHeld || isCast || !isOnGround || isHanging || isClimbing || isAttacking || isEvading || attributes.curHealingPotionCount <= 0 || attributes.curHealingDelay > Time.time)
         {
-            colRepulse = _colRepulse;
-            halfColSizeX = _colRepulse.maxRepulseDistance;
-            repulseQuantity = repulseQuantity <= -1 ? 3 : repulseQuantity;
+            if ((!input.healingPotionHeld && isHealing) || (attributes.curHealingPotionCount <= 0 && isHealing))
+                attributes.AnimationHealingEnd(true);
+
+            return;
         }
-    }
 
-    private void OnTriggerExit2D(Collider2D col)
-    {
-        colRepulse = col.gameObject.TryGetComponent(out CollisionRepulse _colRepulse) ? _colRepulse : colRepulse;
-    }
-
-    float DistanceToEnemy()
-    {
-        return playerTransform.position.x - colRepulse.transform.position.x;
-    }
-
-    void OnTriggerStay2D(Collider2D col)
-    {
-        //If interacting with the enemy (14 - enemy body layer)
-        if (col.gameObject.layer == 14)
+        if (!isHealing)
         {
-            if (!isHurt && !isDead && !isEvading && !isAttacking && isOnGround && input.horizontalAccess)
-            {
-                //Not moving - push player from the enemy
-                if (input.horizontal == 0)
-                {
-                    float _forceDir = Mathf.Sign(playerTransform.position.x - col.transform.position.x);
+            if (isCrouching) StandUp();
 
-                    rigidBody.AddForce(new Vector2(speed / halfColSizeX * _forceDir, 0f), ForceMode2D.Impulse);
-                    //rigidBody.velocity = new Vector2(rigidBody.velocity.x + _forceDir * speed / 2f, rigidBody.velocity.y);
-                }
-                //Moving - push player in the opposite direction to the movement
-                else
-                {
-                    if (Mathf.Abs(DistanceToEnemy()) >= halfColSizeX && Mathf.Sign(DistanceToEnemy()) != Mathf.Sign(input.horizontal) && repulseQuantity > 0)
-                    {
-                        rigidBody.AddForce(new Vector2(speed * 1.3f * -Mathf.Sign(input.horizontal), 0f), ForceMode2D.Impulse);
-                        //rigidBody.velocity = new Vector2(rigidBody.velocity.x + speed / DistanceToEnemy(), rigidBody.velocity.y);
-                        repulseQuantity--;
-                    }
-                    else
-                    {
-                        rigidBody.velocity = new Vector2(rigidBody.velocity.x + Mathf.Lerp(0f, speed / 2f, DistanceToEnemy() / halfColSizeX), rigidBody.velocity.y);
-                        repulseQuantity--;
-                    }
-                }
-
-                input.horizontalAccess = false;
-                Invoke("HorizontalAccess", .1f);
-            }
+            rigidBody.velocity = Vector2.zero;
+            input.horizontalAccess = false;
+            isHealing = true;
+            // Healing applies from animation from attributes script
         }
-        else
-            halfColSizeX = 1.2f;
+
+        if (!AudioManager.current.playerSource.isPlaying)
+            AudioManager.PlayHealingAudio();
     }
+
+    void HealingEnd()
+    {
+        isHealing = false;
+        HorizontalAccess();
+        attributes.AnimationHealingEnd(false);
+    }
+
+    //private void OnTriggerEnter2D(Collider2D col)
+    //{
+    //    if (col.gameObject.TryGetComponent(out CollisionRepulse _colRepulse))
+    //    {
+    //        colRepulse = _colRepulse;
+    //        halfColSizeX = _colRepulse.maxRepulseDistance;
+    //        repulseQuantity = repulseQuantity <= -1 ? 3 : repulseQuantity;
+    //    }
+    //}
+
+    //private void OnTriggerExit2D(Collider2D col)
+    //{
+    //    colRepulse = col.gameObject.TryGetComponent(out CollisionRepulse _colRepulse) ? _colRepulse : colRepulse;
+    //}
+
+    //float DistanceToEnemy()
+    //{
+    //    return playerTransform.position.x - colRepulse.transform.position.x;
+    //}
+
+    //void OnTriggerStay2D(Collider2D col)
+    //{
+    //    //If interacting with the enemy (14 - enemy body layer)
+    //    if (col.gameObject.layer == 14)
+    //    {
+    //        if (!isHurt && !isDead && !isEvading && !isAttacking && isOnGround && input.horizontalAccess)
+    //        {
+    //            //Not moving - push player from the enemy
+    //            if (input.horizontal == 0)
+    //            {
+    //                float _forceDir = Mathf.Sign(playerTransform.position.x - col.transform.position.x);
+
+    //                rigidBody.AddForce(new Vector2(speed / halfColSizeX * _forceDir, 0f), ForceMode2D.Impulse);
+    //                //rigidBody.velocity = new Vector2(rigidBody.velocity.x + _forceDir * speed / 2f, rigidBody.velocity.y);
+    //            }
+    //            //Moving - push player in the opposite direction to the movement
+    //            else
+    //            {
+    //                if (Mathf.Abs(DistanceToEnemy()) >= halfColSizeX && Mathf.Sign(DistanceToEnemy()) != Mathf.Sign(input.horizontal) && repulseQuantity > 0)
+    //                {
+    //                    rigidBody.AddForce(new Vector2(speed * 1.3f * -Mathf.Sign(input.horizontal), 0f), ForceMode2D.Impulse);
+    //                    //rigidBody.velocity = new Vector2(rigidBody.velocity.x + speed / DistanceToEnemy(), rigidBody.velocity.y);
+    //                    repulseQuantity--;
+    //                }
+    //                else
+    //                {
+    //                    rigidBody.velocity = new Vector2(rigidBody.velocity.x + Mathf.Lerp(0f, speed / 2f, DistanceToEnemy() / halfColSizeX), rigidBody.velocity.y);
+    //                    repulseQuantity--;
+    //                }
+    //            }
+
+    //            input.horizontalAccess = false;
+    //            Invoke("HorizontalAccess", .1f);
+    //        }
+    //    }
+    //    else
+    //        halfColSizeX = 1.2f;
+    //}
 
     RaycastHit2D Raycast(Vector2 offset, Vector2 rayDirection, float length)
     {

@@ -9,16 +9,16 @@ public class IceAura : MonoBehaviour
     [SerializeField] Effect effect = new Effect(Effects.Freeze, 1);
     [SerializeField] float delay = 1.5f;
     float curDelay;
-    [SerializeField] float damagePeriodicity = .5f;
-    PlayerAtributes playerAtributes;
+    [SerializeField] float effectPeriodicity = .5f;
+    PlayerAttributes playerAttributes;
 
     void OnTriggerStay2D(Collider2D col)
     {
-        if (playerAtributes == null)
+        if (playerAttributes == null)
         {
-            if (col.TryGetComponent(out PlayerAtributes _atributes))
+            if (col.TryGetComponent(out PlayerAttributes _attributes))
             {
-                playerAtributes = _atributes;
+                playerAttributes = _attributes;
                 curDelay = delay + Time.time;
             }
         }
@@ -26,17 +26,17 @@ public class IceAura : MonoBehaviour
         {
             if(curDelay <= Time.time)
             {
-                playerAtributes.TakeEffect(effect);
-                curDelay = damagePeriodicity + Time.time;
+                playerAttributes.TakeEffect(effect);
+                curDelay = effectPeriodicity + Time.time;
             }
         }
     }
 
     void OnTriggerExit2D(Collider2D col)
     {
-        if (col.TryGetComponent(out PlayerAtributes _atributes))
+        if (col.TryGetComponent(out PlayerAttributes _attributes))
         {
-            playerAtributes = null;
+            playerAttributes = null;
         }
     }
 }

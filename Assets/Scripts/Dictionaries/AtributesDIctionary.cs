@@ -5,4 +5,4 @@ using RotaryHeart.Lib.SerializableDictionary;
 using Enums;
 
 [System.Serializable]
-public class AtributesDictionary : SerializableDictionaryBase<BonusAtributes, float> { }
+public class AttributesDictionary : SerializableDictionaryBase<BonusAttributes, float> { }

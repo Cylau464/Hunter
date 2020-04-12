@@ -80,14 +80,14 @@ public class EnemyAnimation : MonoBehaviour
 
         switch(enemy.spellState)
         {
-            /*case SpellStates.Prepare:
+            /*case EnemySpellStates.Prepare:
                 anim.SetTrigger(spellPrepareParamID);
                 break;*/
-            case SpellStates.Cast:
+            case EnemySpellStates.Cast:
                 anim.ResetTrigger(spellEndParamID);
                 anim.SetTrigger(spellCastParamID);
                 break;
-            case SpellStates.End:
+            case EnemySpellStates.End:
                 anim.ResetTrigger(spellCastParamID);
                 anim.SetTrigger(spellEndParamID);
                 break;

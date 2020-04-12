@@ -6,13 +6,18 @@ using UnityEngine.EventSystems;
 using Structures;
 using Enums;
 
-class Spell : MonoBehaviour
+public class Spell : MonoBehaviour
 {
     public PlayerSpell spell;
-    public SpellsTitle title;
+    public SpellTitles title;
 
     private void Start()
     {
         Debug.Log("CREARED");
+    }
+
+    protected void DestroyOnEnd()
+    {
+        Destroy(gameObject);
     }
 }
