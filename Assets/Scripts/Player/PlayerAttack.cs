@@ -46,6 +46,7 @@ public class PlayerAttack : MonoBehaviour
     float attackDuration;
     float attackForceDistance;
     float shellSpeed;
+    float shellFlyTime;
     float timeBtwAttacks;
     float curDelayResetCombo;
     float curForceDurtaion;
@@ -60,6 +61,7 @@ public class PlayerAttack : MonoBehaviour
     DamageTypes weaponDamageType;
     Element weaponElement;
 
+    AudioClip weaponSwingClip;
     AudioClip weaponAudioClip;
     AudioClip weaponImpactClip;
 
@@ -112,7 +114,6 @@ public class PlayerAttack : MonoBehaviour
                 
                 input.lastInputs.RemoveAt(0);
                 MeleeAttack(attackType);
-                Debug.Log(attackType);
             }
 
             EndOfAttack();
@@ -211,8 +212,7 @@ public class PlayerAttack : MonoBehaviour
         {
             shellObj                    = Instantiate(shellPrefab, transform.position, Quaternion.Euler(0f, 0f, rotZ));
             shell                       = shellObj.GetComponent<Shell>();
-            shell.damage                = damage;
-            shell.speed                 = shellSpeed;
+            shell.SetParameters(damage, weaponDamageType, weaponElement, shellSpeed, shellFlyTime, weaponImpactClip);
         }
         else
         {
@@ -261,6 +261,7 @@ public class PlayerAttack : MonoBehaviour
         {
             movement.isAttacking = false;
             attackType = default;
+            attributes.SetAnimationSpeed(attributes.AnimSpeed);
             //attributes.speedDivisor = 1f;
         }
     }
@@ -368,6 +369,7 @@ public class PlayerAttack : MonoBehaviour
         weaponImpactClip = weaponAttributes.impactClip;
         shellPrefab = weaponAttributes.shellPrefab;
         shellSpeed = weaponAttributes.shellSpeed;
+        shellFlyTime = weaponAttributes.shellFlyTime;
         float _delayMultiplier = movement.isOnGround ? 1f : 1.5f;
 
         switch (type)
@@ -380,8 +382,9 @@ public class PlayerAttack : MonoBehaviour
                 attackForceDistance         = weaponAttributes.lightAttackForce;
                 //If the stamina enough to attack - multiply = 1 else = 2
                 //anim.speed              = attributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
-                timeBtwAttacks              = weaponAttributes.lightAttackSpeed / attributes.attackSpeed + Time.time;
-                attackDuration              = weaponAttributes.lightAttackSpeed / attributes.attackSpeed * _delayMultiplier + Time.time;
+                timeBtwAttacks              = weaponAttributes.lightAttackSpeed / attributes.AnimSpeed + Time.time;
+                attackDuration              = weaponAttributes.lightAttackSpeed / attributes.AnimSpeed * _delayMultiplier + Time.time;
+                weaponSwingClip             = weaponAttributes.lightSwingClips.Length > 0 ? weaponAttributes.lightSwingClips[Random.Range(0, weaponAttributes.lightSwingClips.Length)] : null;
                 weaponAudioClip             = weaponAttributes.lightAttackClips[Random.Range(0, weaponAttributes.lightAttackClips.Length)];
                 break;
             case AttackTypes.Strong:
@@ -392,8 +395,9 @@ public class PlayerAttack : MonoBehaviour
                 attackForceDistance         = weaponAttributes.strongAttackForce;
                 //If the stamina enough to attack - multiply = 1 else = 2
                 //anim.speed              = attributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
-                timeBtwAttacks              = (movement.isOnGround ? weaponAttributes.strongAttackSpeed : weaponAttributes.lightAttackSpeed) / attributes.attackSpeed + Time.time;
-                attackDuration              = (movement.isOnGround ? weaponAttributes.strongAttackSpeed : weaponAttributes.lightAttackSpeed) / attributes.attackSpeed * _delayMultiplier + Time.time;
+                timeBtwAttacks              = (movement.isOnGround ? weaponAttributes.strongAttackSpeed : weaponAttributes.lightAttackSpeed) / attributes.AnimSpeed + Time.time;
+                attackDuration              = (movement.isOnGround ? weaponAttributes.strongAttackSpeed : weaponAttributes.lightAttackSpeed) / attributes.AnimSpeed * _delayMultiplier + Time.time;
+                weaponSwingClip             = weaponAttributes.strongSwingClips.Length > 0 ? weaponAttributes.strongSwingClips[Random.Range(0, weaponAttributes.strongSwingClips.Length)] : null;
                 weaponAudioClip             = weaponAttributes.strongAttackClips[Random.Range(0, weaponAttributes.strongAttackClips.Length)];
                 break;
             case AttackTypes.Joint:
@@ -404,8 +408,9 @@ public class PlayerAttack : MonoBehaviour
                 attackForceDistance         = weaponAttributes.jointAttackForce;
                 //If the stamina enough to attack - multiply = 1 else = 2
                 //anim.speed              = attributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
-                timeBtwAttacks              = (movement.isOnGround ? weaponAttributes.jointAttackSpeed : weaponAttributes.lightAttackSpeed) / attributes.attackSpeed + Time.time;
-                attackDuration              = (movement.isOnGround ? weaponAttributes.jointAttackSpeed : weaponAttributes.lightAttackSpeed) / attributes.attackSpeed * _delayMultiplier + Time.time;
+                timeBtwAttacks              = (movement.isOnGround ? weaponAttributes.jointAttackSpeed : weaponAttributes.lightAttackSpeed) / attributes.AnimSpeed + Time.time;
+                attackDuration              = (movement.isOnGround ? weaponAttributes.jointAttackSpeed : weaponAttributes.lightAttackSpeed) / attributes.AnimSpeed * _delayMultiplier + Time.time;
+                weaponSwingClip             = weaponAttributes.jointSwingClips.Length > 0 ? weaponAttributes.jointSwingClips[Random.Range(0, weaponAttributes.jointSwingClips.Length)] : null;
                 weaponAudioClip             = weaponAttributes.jointAttackClips[Random.Range(0, weaponAttributes.jointAttackClips.Length)];
                 break;
             case AttackTypes.TopDown:
@@ -414,12 +419,15 @@ public class PlayerAttack : MonoBehaviour
                 weaponElement               = weaponAttributes.elements[type];
                 weaponDamageType            = weaponAttributes.damageTypesOfAttacks[type]; //fix it
                 attackForceDistance         = weaponAttributes.topDownAttackForce;
-                //If the stamina enough to attack - multiply = 1 else = 2
-                //anim.speed              = attributes.Stamina >= staminaCosts ? anim.speed : anim.speed / 2f;
-                timeBtwAttacks              = weaponAttributes.topDownAttackSpeed / attributes.attackSpeed + Time.time;
-                attackDuration              = weaponAttributes.topDownAttackSpeed / attributes.attackSpeed * _delayMultiplier + Time.time;
+                timeBtwAttacks              = weaponAttributes.topDownAttackSpeed / attributes.AnimSpeed + Time.time;
+                attackDuration              = weaponAttributes.topDownAttackSpeed / attributes.AnimSpeed * _delayMultiplier + Time.time;
                 break;
         }
+
+        attributes.SetAnimationSpeed(attributes.defAnimSpeed / (timeBtwAttacks - Time.time));
+
+        if (weaponSwingClip != null)
+            AudioManager.PlaySwingAudio(weaponSwingClip);
     }
 
     private void OnDrawGizmosSelected()

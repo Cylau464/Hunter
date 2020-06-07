@@ -28,8 +28,11 @@ public class WeaponAttributes : MonoBehaviour
     public float strongAttackForce          = 2f;
     public float jointAttackForce           = 2.5f;
     public float topDownAttackForce         = 10f;
+    public float mass = 1f;                    //It multiplier character move speed and jump height. 1 = 100% speed and height
+
+    [Header("Shell Properties")]
     public float shellSpeed                 = 0f;
-    public float mass                       = 1f;                    //It multiplier character move speed and jump height. 1 = 100% speed and height
+    public float shellFlyTime               = 1f;
 
     [Header("Dictionaries of Types")]
     public DamageTypeOfAttackDictionary damageTypesOfAttacks = new DamageTypeOfAttackDictionary()
@@ -57,16 +60,19 @@ public class WeaponAttributes : MonoBehaviour
         { AttackTypes.TopDown, new Element("Wind", Elements.Wind, 0) }
     };
 
-    [Header("Spells")]
-    [SerializeField] GameObject[] spellPrefabs = new GameObject[3];
-    [HideInInspector] public Spell[] spells = new Spell[3];
-    [SerializeField] SpellBar spellBar = null;
+    //[Header("Spells")]
+    //[SerializeField] GameObject[] spellPrefabs = new GameObject[3];
+    //[HideInInspector] public Spell[] spells = new Spell[3];
+    //[SerializeField] SpellBar spellBar = null;
 
     [Header("Weapon Icon")]
     public Sprite icon;
     StatusBar statusBar;
 
     [Header("Audio Clips")]
+    public AudioClip[] lightSwingClips;
+    public AudioClip[] strongSwingClips;
+    public AudioClip[] jointSwingClips;
     public AudioClip[] lightAttackClips;
     public AudioClip[] strongAttackClips;
     public AudioClip[] jointAttackClips;
@@ -84,14 +90,14 @@ public class WeaponAttributes : MonoBehaviour
 
         statusBar.WeaponIconSet(icon, gameObject.tag);
 
-        for (int i = 0; i < spellPrefabs.Length; i++)
-        {
-            spells[i] = spellPrefabs[i].GetComponent<Spell>();
-        }
+        //for (int i = 0; i < spellPrefabs.Length; i++)
+        //{
+        //    spells[i] = spellPrefabs[i].GetComponent<Spell>();
+        //}
 
-        if (gameObject.tag == "Second Weapon")
-            gameObject.SetActive(false);
-        else
-            spellBar.SetSpells(spells);
+        //if (gameObject.tag == "Second Weapon")
+        //    gameObject.SetActive(false);
+        //else
+        //    spellBar.SetSpells(spells);
     }
 }

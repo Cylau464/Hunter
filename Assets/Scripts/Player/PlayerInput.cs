@@ -26,6 +26,7 @@ public class PlayerInput : MonoBehaviour
     [HideInInspector] public bool healingPotionPressed;
     [HideInInspector] public static bool restart;
     public List<InputsEnum> lastInputs = new List<InputsEnum>(1);           //Create new list for 2 elements for writting 2 last inputs
+    public bool[] spellKeyUp = new bool[3];
     [SerializeField] float clearInputsDelay = .3f;
     float curClearDelay;
 
@@ -86,6 +87,7 @@ public class PlayerInput : MonoBehaviour
         healingPotionHeld = false;
         healingPotionPressed = false;
         hook = false;
+        spellKeyUp = new bool[3];
 
         readyToClear = false;
 
@@ -109,8 +111,11 @@ public class PlayerInput : MonoBehaviour
 
         hook = hook || Input.GetButtonDown("Hook");
 
-        //evade = evade || Input.GetButtonDown("Evade");
-        if(Input.GetButtonDown("Evade"))
+        spellKeyUp[0] = spellKeyUp[0] || Input.GetButtonUp("First Spell");
+        spellKeyUp[1] = spellKeyUp[1] || Input.GetButtonUp("Second Spell");
+        spellKeyUp[2] = spellKeyUp[2] || Input.GetButtonUp("Third Spell");
+
+        if (Input.GetButtonDown("Evade"))
         {
             if (attributes.Stamina <= 0) return;
 

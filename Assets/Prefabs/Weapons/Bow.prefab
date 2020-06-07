@@ -49,6 +49,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -71,7 +72,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -747433451
-  m_SortingLayer: 2
+  m_SortingLayer: -1
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: ed610a5955393004182523bbda5787a7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -116,36 +117,147 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   title: Weapon
-  lightAttackDamage: 1
-  strongAttackDamage: 2
-  jointAttackDamage: 3
+  lightAttackDamage: 15
+  strongAttackDamage: 25
+  jointAttackDamage: 40
+  topDownAttackDamage: 10
+  lightAttackStaminaCosts: 10
+  strongAttackStaminaCosts: 15
+  jointAttackStaminaCosts: 20
+  topDownAttackStaminaCosts: 15
   lightAttackSpeed: 0.3
   strongAttackSpeed: 0.5
   jointAttackSpeed: 0.6
+  topDownAttackSpeed: 0.8
   attackRangeX: 0
   attackRangeY: 0
   lightAttackForce: 0
   strongAttackForce: 0
   jointAttackForce: 0
-  shellSpeed: 20
-  weaponMass: 0.8
-  damageType: 2
-  weaponType: 1
+  topDownAttackForce: 10
+  mass: 1
+  shellSpeed: 30
+  shellFlyTime: 0.5
+  damageTypesOfAttacks:
+    reorderableList:
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
+      isExpanded: 1
+      label:
+        m_Text: Keys
+        m_Image: {fileID: 0}
+        m_Tooltip: 
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
+      elementDisplayType: 0
+      elementNameProperty: 
+      elementNameOverride: 
+      elementIcon: {fileID: 0}
+    reqReferences: {fileID: 0}
+    isExpanded: 1
+    _keyValues: 01000000020000000300000004000000
+    _keys: 01000000020000000300000004000000
+    _values: 02000000020000000200000002000000
+  weaponAttackType: 1
+  type: 4
+  weaponUltimate:
+    title: Evade Bonus
+    type: 3
+    attributes:
+      reorderableList:
+        canAdd: 1
+        canRemove: 1
+        draggable: 1
+        expandable: 1
+        multipleSelection: 1
+        isExpanded: 0
+        label:
+          m_Text: Keys
+          m_Image: {fileID: 0}
+          m_Tooltip: 
+        headerHeight: 18
+        footerHeight: 13
+        slideEasing: 0.15
+        verticalSpacing: 2
+        showDefaultBackground: 1
+        elementDisplayType: 0
+        elementNameProperty: 
+        elementNameOverride: 
+        elementIcon: {fileID: 0}
+      reqReferences: {fileID: 0}
+      isExpanded: 0
+      _keyValues: 0100000002000000
+      _keys: 0100000002000000
+      _values:
+      - 3
+      - 3
   shellPrefab: {fileID: 6939570054422823187, guid: 6ee9e0b70ddd69947a61fda31e364137,
     type: 3}
   elements:
-  - title: Fire
-    element: 0
-    value: 0
-  - title: Wind
-    element: 2
-    value: 0
-  - title: Earth
-    element: 3
-    value: 0
-  - title: Water
-    element: 1
-    value: 0
+    reorderableList:
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
+      isExpanded: 0
+      label:
+        m_Text: Keys
+        m_Image: {fileID: 0}
+        m_Tooltip: 
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
+      elementDisplayType: 0
+      elementNameProperty: 
+      elementNameOverride: 
+      elementIcon: {fileID: 0}
+    reqReferences: {fileID: 0}
+    isExpanded: 0
+    _keyValues: 01000000020000000300000004000000
+    _keys: 01000000020000000300000004000000
+    _values:
+    - title: Fire
+      element: 1
+      value: 0
+      color: {r: 0, g: 1, b: 1, a: 1}
+    - title: Fire
+      element: 1
+      value: 0
+      color: {r: 0, g: 1, b: 1, a: 1}
+    - title: Fire
+      element: 1
+      value: 0
+      color: {r: 0, g: 1, b: 1, a: 1}
+    - title: Wind
+      element: 3
+      value: 0
+      color: {r: 0, g: 1, b: 0, a: 1}
+  spellPrefabs:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  spells:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  spellBar: {fileID: 0}
+  icon: {fileID: 0}
+  lightSwingClips: []
+  strongSwingClips: []
+  jointSwingClips: []
+  lightAttackClips: []
+  strongAttackClips: []
+  jointAttackClips: []
+  impactClip: {fileID: 0}
 --- !u!114 &-446821498990930878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,6 +270,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e245c6c5d23de5e4781638163070d4f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultRot: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &994899412
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,0 +1,1832 @@
+fileFormatVersion: 2
+guid: dc553fb0e62c079448a213011d387f94
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1776885325945639812
+    second: Void_Fire_0
+  - first:
+      213: -1506517547340187511
+    second: Void_Fire_1
+  - first:
+      213: 9091308830327095779
+    second: Void_Fire_2
+  - first:
+      213: 4225921856288484906
+    second: Void_Fire_3
+  - first:
+      213: 1727471252600825096
+    second: Void_Fire_4
+  - first:
+      213: -8145262081554750116
+    second: Void_Fire_5
+  - first:
+      213: -5450585607610548134
+    second: Void_Fire_6
+  - first:
+      213: 3614498388948783907
+    second: Void_Fire_7
+  - first:
+      213: 3702596692959923554
+    second: Void_Fire_8
+  - first:
+      213: 3795108883282829215
+    second: Void_Fire_9
+  - first:
+      213: 4758413121912711135
+    second: Void_Fire_10
+  - first:
+      213: -3798962086384908872
+    second: Void_Fire_11
+  - first:
+      213: -69783772082136991
+    second: Void_Fire_12
+  - first:
+      213: -911910790948563149
+    second: Void_Fire_13
+  - first:
+      213: 981776731449994249
+    second: Void_Fire_14
+  - first:
+      213: 1128199826872688634
+    second: Void_Fire_15
+  - first:
+      213: 1466421595148006344
+    second: Void_Fire_16
+  - first:
+      213: -4383283456005361432
+    second: Void_Fire_17
+  - first:
+      213: 4713949766940822968
+    second: Void_Fire_18
+  - first:
+      213: -3449283863510684824
+    second: Void_Fire_19
+  - first:
+      213: 5369447046223530634
+    second: Void_Fire_20
+  - first:
+      213: 3595417623163146075
+    second: Void_Fire_21
+  - first:
+      213: -8542401506855702733
+    second: Void_Fire_22
+  - first:
+      213: -4554248984168734653
+    second: Void_Fire_23
+  - first:
+      213: 6189540180527915351
+    second: Void_Fire_24
+  - first:
+      213: -1926044506733280815
+    second: Void_Fire_25
+  - first:
+      213: 2838434630141329290
+    second: Void_Fire_26
+  - first:
+      213: -4375231458264254831
+    second: Void_Fire_27
+  - first:
+      213: 3854510135740432679
+    second: Void_Fire_28
+  - first:
+      213: -4027347814936288076
+    second: Void_Fire_29
+  - first:
+      213: -8570592424991434362
+    second: Void_Fire_30
+  - first:
+      213: -1513064240617266086
+    second: Void_Fire_31
+  - first:
+      213: -5657973196600411914
+    second: Void_Fire_32
+  - first:
+      213: -1744622596552576948
+    second: Void_Fire_33
+  - first:
+      213: -110360955037685102
+    second: Void_Fire_34
+  - first:
+      213: -5505039981624559979
+    second: Void_Fire_35
+  - first:
+      213: -3281377859874133192
+    second: Void_Fire_36
+  - first:
+      213: -8235882352076118286
+    second: Void_Fire_37
+  - first:
+      213: -382581779453870163
+    second: Void_Fire_38
+  - first:
+      213: -272881336486652624
+    second: Void_Fire_39
+  - first:
+      213: -1198547847000674994
+    second: Void_Fire_40
+  - first:
+      213: 5421082503174206890
+    second: Void_Fire_41
+  - first:
+      213: 6282847998238075565
+    second: Void_Fire_42
+  - first:
+      213: -8271228442917895970
+    second: Void_Fire_43
+  - first:
+      213: 7301153815822705309
+    second: Void_Fire_44
+  - first:
+      213: 3625411461584469897
+    second: Void_Fire_45
+  - first:
+      213: -155417474556235273
+    second: Void_Fire_46
+  - first:
+      213: 5671957168544360739
+    second: Void_Fire_47
+  - first:
+      213: -2822094228911517769
+    second: Void_Fire_48
+  - first:
+      213: -8317877767422211487
+    second: Void_Fire_49
+  - first:
+      213: 879885715967682007
+    second: Void_Fire_50
+  - first:
+      213: 7534630570235771057
+    second: Void_Fire_51
+  - first:
+      213: -3854094099533097704
+    second: Void_Fire_52
+  - first:
+      213: 917912556325198286
+    second: Void_Fire_53
+  - first:
+      213: 8952045930229663293
+    second: Void_Fire_54
+  - first:
+      213: -6609046167038464241
+    second: Void_Fire_55
+  - first:
+      213: -2658674291899175753
+    second: Void_Fire_56
+  - first:
+      213: 7718669948674047001
+    second: Void_Fire_57
+  - first:
+      213: -2518536563319948065
+    second: Void_Fire_58
+  - first:
+      213: 8272504195700534516
+    second: Void_Fire_59
+  - first:
+      213: 9159580684478659538
+    second: Void_Fire_60
+  - first:
+      213: 6832592447484594341
+    second: Void_Fire_61
+  - first:
+      213: 2021774377509116395
+    second: Void_Fire_62
+  - first:
+      213: 5170086211628008432
+    second: Void_Fire_63
+  - first:
+      213: -3818397419201007573
+    second: Void_Fire_0
+  - first:
+      213: 7762116745072790288
+    second: Void_Fire_1
+  - first:
+      213: 883680162830905386
+    second: Void_Fire_2
+  - first:
+      213: 4538404483573283478
+    second: Void_Fire_3
+  - first:
+      213: -7839742431583496571
+    second: Void_Fire_4
+  - first:
+      213: 519473026329054309
+    second: Void_Fire_5
+  - first:
+      213: -8873208541106273797
+    second: Void_Fire_6
+  - first:
+      213: -3528552333302174766
+    second: Void_Fire_7
+  - first:
+      213: 6972249828073851552
+    second: Void_Fire_8
+  - first:
+      213: 8074863634190975781
+    second: Void_Fire_9
+  - first:
+      213: -8289892088182103250
+    second: Void_Fire_10
+  - first:
+      213: 3064898015559808995
+    second: Void_Fire_11
+  - first:
+      213: 5641673170377829642
+    second: Void_Fire_12
+  - first:
+      213: 979838723238568721
+    second: Void_Fire_13
+  - first:
+      213: -1193771398594762561
+    second: Void_Fire_14
+  - first:
+      213: 6427923082985777312
+    second: Void_Fire_15
+  - first:
+      213: 2830130361109967199
+    second: Void_Fire_16
+  - first:
+      213: -87604618038885310
+    second: Void_Fire_17
+  - first:
+      213: -833714029802277723
+    second: Void_Fire_18
+  - first:
+      213: -8398242634103834869
+    second: Void_Fire_19
+  - first:
+      213: -4461217622689460389
+    second: Void_Fire_20
+  - first:
+      213: -2652887316825372348
+    second: Void_Fire_21
+  - first:
+      213: -7193904103263409655
+    second: Void_Fire_22
+  - first:
+      213: -6533020894410065357
+    second: Void_Fire_23
+  - first:
+      213: -1420028236957643581
+    second: Void_Fire_24
+  - first:
+      213: -3758613724155440334
+    second: Void_Fire_25
+  - first:
+      213: -2884950953821468950
+    second: Void_Fire_26
+  - first:
+      213: -4268044180026549814
+    second: Void_Fire_27
+  - first:
+      213: 1619478957391095498
+    second: Void_Fire_28
+  - first:
+      213: 2011920130797961729
+    second: Void_Fire_29
+  - first:
+      213: 3934510408783863809
+    second: Void_Fire_30
+  - first:
+      213: -2343482540158941440
+    second: Void_Fire_31
+  - first:
+      213: 4470359800954050755
+    second: Void_Fire_32
+  - first:
+      213: -2452165352008143435
+    second: Void_Fire_33
+  - first:
+      213: 4360551699117474430
+    second: Void_Fire_34
+  - first:
+      213: -103130275103195628
+    second: Void_Fire_35
+  - first:
+      213: -2704311079260558581
+    second: Void_Fire_36
+  - first:
+      213: -1185134795343786259
+    second: Void_Fire_37
+  - first:
+      213: -8187710608021382014
+    second: Void_Fire_38
+  - first:
+      213: 2153186433678265911
+    second: Void_Fire_39
+  - first:
+      213: -1055734583178894942
+    second: Void_Fire_40
+  - first:
+      213: 7500509687134408017
+    second: Void_Fire_41
+  - first:
+      213: 5784213298366755770
+    second: Void_Fire_42
+  - first:
+      213: 442656461302473434
+    second: Void_Fire_43
+  - first:
+      213: -5676103560114699865
+    second: Void_Fire_44
+  - first:
+      213: -813365326441466710
+    second: Void_Fire_45
+  - first:
+      213: 3818079092656905094
+    second: Void_Fire_46
+  - first:
+      213: -715048100547156755
+    second: Void_Fire_47
+  - first:
+      213: 8706138736283922399
+    second: Void_Fire_48
+  - first:
+      213: -2276259744242639261
+    second: Void_Fire_49
+  - first:
+      213: 2570964821696130485
+    second: Void_Fire_50
+  - first:
+      213: -57582500833229849
+    second: Void_Fire_51
+  - first:
+      213: -4688752472762662224
+    second: Void_Fire_52
+  - first:
+      213: -7390604871489581173
+    second: Void_Fire_53
+  - first:
+      213: 653776586167795895
+    second: Void_Fire_54
+  - first:
+      213: -8764290157734501633
+    second: Void_Fire_55
+  - first:
+      213: -5060097380523082800
+    second: Void_Fire_56
+  - first:
+      213: 2264967985863161336
+    second: Void_Fire_57
+  - first:
+      213: 1718688478930705902
+    second: Void_Fire_58
+  - first:
+      213: -1713857396697188616
+    second: Void_Fire_59
+  - first:
+      213: 9193729460558678917
+    second: Void_Fire_60
+  - first:
+      213: 661468512298208702
+    second: Void_Fire_61
+  - first:
+      213: 8289649499025782366
+    second: Void_Fire_62
+  - first:
+      213: 588763354958177896
+    second: Void_Fire_63
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 75
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Void_Fire_0
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 896
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b20714927c3520bc0800000000000000
+      internalID: -3818397419201007573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_1
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 896
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 01bcc2fdd0498bb60800000000000000
+      internalID: 7762116745072790288
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_2
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 896
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a2078981d66734c00800000000000000
+      internalID: 883680162830905386
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_3
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 896
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69afc6215d6abfe30800000000000000
+      internalID: 4538404483573283478
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_4
+      rect:
+        serializedVersion: 2
+        x: 526
+        y: 896
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58698e29bc3a33390800000000000000
+      internalID: -7839742431583496571
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_5
+      rect:
+        serializedVersion: 2
+        x: 654
+        y: 896
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56c8db417f9853700800000000000000
+      internalID: 519473026329054309
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_6
+      rect:
+        serializedVersion: 2
+        x: 782
+        y: 896
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf1066918d70cd480800000000000000
+      internalID: -8873208541106273797
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_7
+      rect:
+        serializedVersion: 2
+        x: 910
+        y: 896
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2dbe5221950180fc0800000000000000
+      internalID: -3528552333302174766
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_8
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 768
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0aace9f274862c060800000000000000
+      internalID: 6972249828073851552
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_9
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 768
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5234cad51bdaf0070800000000000000
+      internalID: 8074863634190975781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_10
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 768
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e23a599411364fc80800000000000000
+      internalID: -8289892088182103250
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_11
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 768
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3e7fd32b184b88a20800000000000000
+      internalID: 3064898015559808995
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_12
+      rect:
+        serializedVersion: 2
+        x: 526
+        y: 768
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a0de83b8bdf3b4e40800000000000000
+      internalID: 5641673170377829642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_13
+      rect:
+        serializedVersion: 2
+        x: 654
+        y: 768
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 113aecb9026199d00800000000000000
+      internalID: 979838723238568721
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_14
+      rect:
+        serializedVersion: 2
+        x: 782
+        y: 768
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fb8ecb3ec3fde6fe0800000000000000
+      internalID: -1193771398594762561
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_15
+      rect:
+        serializedVersion: 2
+        x: 910
+        y: 768
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0a8a6e4ccf1943950800000000000000
+      internalID: 6427923082985777312
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_16
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 640
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f51f10a9194a64720800000000000000
+      internalID: 2830130361109967199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_17
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 640
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 244cb156014c8cef0800000000000000
+      internalID: -87604618038885310
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_18
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 640
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a43061d18d0e64f0800000000000000
+      internalID: -833714029802277723
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_19
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 640
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b0733b0f1d2737b80800000000000000
+      internalID: -8398242634103834869
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_20
+      rect:
+        serializedVersion: 2
+        x: 526
+        y: 640
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b5fc1ed65329612c0800000000000000
+      internalID: -4461217622689460389
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_21
+      rect:
+        serializedVersion: 2
+        x: 654
+        y: 640
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4490c7b7a0d0f2bd0800000000000000
+      internalID: -2652887316825372348
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_22
+      rect:
+        serializedVersion: 2
+        x: 782
+        y: 640
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 90a62c0455e1a2c90800000000000000
+      internalID: -7193904103263409655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_23
+      rect:
+        serializedVersion: 2
+        x: 910
+        y: 640
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 33abb762c1c0655a0800000000000000
+      internalID: -6533020894410065357
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_24
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 512
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3cc8d1597db0b4ce0800000000000000
+      internalID: -1420028236957643581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_25
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 512
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2339ecb5bb8b6dbc0800000000000000
+      internalID: -3758613724155440334
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_26
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 512
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae60c03846896f7d0800000000000000
+      internalID: -2884950953821468950
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_27
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 512
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac918db6e6cd4c4c0800000000000000
+      internalID: -4268044180026549814
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_28
+      rect:
+        serializedVersion: 2
+        x: 526
+        y: 512
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac62488088b897610800000000000000
+      internalID: 1619478957391095498
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_29
+      rect:
+        serializedVersion: 2
+        x: 654
+        y: 512
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1028ba803b6cbeb10800000000000000
+      internalID: 2011920130797961729
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_30
+      rect:
+        serializedVersion: 2
+        x: 782
+        y: 512
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 100a3a0fe503a9630800000000000000
+      internalID: 3934510408783863809
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_31
+      rect:
+        serializedVersion: 2
+        x: 910
+        y: 512
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0070f78cb074a7fd0800000000000000
+      internalID: -2343482540158941440
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_32
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 384
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c85d02dd88e90e30800000000000000
+      internalID: 4470359800954050755
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_33
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 384
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5bda80fba9828fdd0800000000000000
+      internalID: -2452165352008143435
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_34
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 384
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e728f9acaaac38c30800000000000000
+      internalID: 4360551699117474430
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_35
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 384
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41eb2eaaf8b919ef0800000000000000
+      internalID: -103130275103195628
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_36
+      rect:
+        serializedVersion: 2
+        x: 526
+        y: 384
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b0b6586c66b587ad0800000000000000
+      internalID: -2704311079260558581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_37
+      rect:
+        serializedVersion: 2
+        x: 654
+        y: 384
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dee0498ce2e8d8fe0800000000000000
+      internalID: -1185134795343786259
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_38
+      rect:
+        serializedVersion: 2
+        x: 782
+        y: 384
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 28c103515986f5e80800000000000000
+      internalID: -8187710608021382014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_39
+      rect:
+        serializedVersion: 2
+        x: 910
+        y: 384
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 73e459247a7a1ed10800000000000000
+      internalID: 2153186433678265911
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_40
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 256
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a1e6887df64951f0800000000000000
+      internalID: -1055734583178894942
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_41
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 256
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15dc50032d9271860800000000000000
+      internalID: 7500509687134408017
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_42
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 256
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab3bd3a4957a54050800000000000000
+      internalID: 5784213298366755770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_43
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 256
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad2277dc4b1a42600800000000000000
+      internalID: 442656461302473434
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_44
+      rect:
+        serializedVersion: 2
+        x: 526
+        y: 256
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a18807a2ed6a31b0800000000000000
+      internalID: -5676103560114699865
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_45
+      rect:
+        serializedVersion: 2
+        x: 654
+        y: 256
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa436d48b8856b4f0800000000000000
+      internalID: -813365326441466710
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_46
+      rect:
+        serializedVersion: 2
+        x: 782
+        y: 256
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 68b192aa4ba8cf430800000000000000
+      internalID: 3818079092656905094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_47
+      rect:
+        serializedVersion: 2
+        x: 910
+        y: 256
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de4a1918a83a316f0800000000000000
+      internalID: -715048100547156755
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_48
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 128
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fdfa875bd0b62d870800000000000000
+      internalID: 8706138736283922399
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_49
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 128
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 36e55ef92d91960e0800000000000000
+      internalID: -2276259744242639261
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_50
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 128
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5bd293f32e6eda320800000000000000
+      internalID: 2570964821696130485
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_51
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 128
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7e38e84450d633ff0800000000000000
+      internalID: -57582500833229849
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_52
+      rect:
+        serializedVersion: 2
+        x: 526
+        y: 128
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0b24f35d7743eeeb0800000000000000
+      internalID: -4688752472762662224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_53
+      rect:
+        serializedVersion: 2
+        x: 654
+        y: 128
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b8f8797c60c4f6990800000000000000
+      internalID: -7390604871489581173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_54
+      rect:
+        serializedVersion: 2
+        x: 782
+        y: 128
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b0cffc575ea21900800000000000000
+      internalID: 653776586167795895
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_55
+      rect:
+        serializedVersion: 2
+        x: 910
+        y: 128
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff268c7698cfe5680800000000000000
+      internalID: -8764290157734501633
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_56
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 0
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0db7901fd3ce6c9b0800000000000000
+      internalID: -5060097380523082800
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_57
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 0
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f571010268ce6f10800000000000000
+      internalID: 2264967985863161336
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_58
+      rect:
+        serializedVersion: 2
+        x: 270
+        y: 0
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eed983ac0120ad710800000000000000
+      internalID: 1718688478930705902
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_59
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 0
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f6303237c72738e0800000000000000
+      internalID: -1713857396697188616
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_60
+      rect:
+        serializedVersion: 2
+        x: 526
+        y: 0
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58bc4a1eb30b69f70800000000000000
+      internalID: 9193729460558678917
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_61
+      rect:
+        serializedVersion: 2
+        x: 654
+        y: 0
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ebd04a97b120e2900800000000000000
+      internalID: 661468512298208702
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_62
+      rect:
+        serializedVersion: 2
+        x: 782
+        y: 0
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e563de58c40ca0370800000000000000
+      internalID: 8289649499025782366
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Void_Fire_63
+      rect:
+        serializedVersion: 2
+        x: 910
+        y: 0
+        width: 106
+        height: 128
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 866ac05e625bb2800800000000000000
+      internalID: 588763354958177896
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -307,7 +307,7 @@ public class PlayerMovement : MonoBehaviour
 
         float xVelocity;
 
-        if (input.horizontalAccess && !isAttacking || attack.weaponAttackType == WeaponAttackType.Range)
+        if (input.horizontalAccess && (!isAttacking || attack.weaponAttackType == WeaponAttackType.Range))
         {
             xVelocity = ((speed * attributes.speedDivisor + (bonusAttributes.ContainsKey(BonusAttributes.Speed) ? bonusAttributes[BonusAttributes.Speed] : 0)) * input.horizontal) / attack.weaponMass;
             rigidBody.velocity = new Vector2(xVelocity, rigidBody.velocity.y);
@@ -523,6 +523,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
+            SpellCastEnd();
             bodyCollider.sharedMaterial = null;
             canFlip = false;
 

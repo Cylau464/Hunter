@@ -149,6 +149,14 @@ public class AudioManager : MonoBehaviour
         current.playerSource.PlayOneShot(current.death);
     }
 
+    public static void PlaySwingAudio(AudioClip clip)
+    {
+        if (current == null)
+            return;
+
+        current.sfxSource.PlayOneShot(clip, .5f);
+    }
+
     public static void PlayAttackAudio(AudioClip clip)
     {
         if (current == null)
@@ -171,5 +179,41 @@ public class AudioManager : MonoBehaviour
             return;
 
         current.playerSource.PlayOneShot(current.healUp, .25f);
+    }
+
+    public static void PlayCastSpellAudio(AudioClip clip)
+    {
+        if (current == null)
+            return;
+
+        current.playerSource.clip = clip;
+        current.playerSource.Play();
+    }
+
+    public static void StopPlayerAudio()
+    {
+        if (current == null)
+            return;
+
+        current.playerSource.Stop();
+        current.playerSource.clip = null;
+    }
+
+    public static AudioSource PlayClipAtPosition(AudioClip clip, Vector3 position, float volume = 1f, float minDistance = 1f, float dopplerLevel = 1f, Transform parent = null)
+    {
+        GameObject _go = new GameObject("One Shot Audio");
+        _go.transform.position = position;
+        _go.transform.parent = parent;
+        AudioSource _as = _go.AddComponent<AudioSource>();
+        _as.clip = clip;
+        _as.volume = volume;
+        _as.spatialBlend = 1f;
+        _as.minDistance = minDistance;
+        _as.dopplerLevel = dopplerLevel;
+        _as.Play();
+        Destroy(_go, _as.clip.length);
+
+        return _as;
+
     }
 }

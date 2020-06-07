@@ -4,20 +4,24 @@ using UnityEngine;
 
 public class Aim : MonoBehaviour
 {
-    public Texture2D cursorTexture;
-    public CursorMode cursorMode = CursorMode.Auto;
-    public Vector2 centerOffset = Vector2.zero;
+    [SerializeField] Texture2D cursorTexture = null;
+    [SerializeField] CursorMode cursorMode = CursorMode.Auto;
+    [SerializeField] Vector2 centerOffset = Vector2.zero;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
+    {
+        if (gameObject.tag == "Main Weapon")
+            SetCursorTexture();
+    }
+
+    public void SetCursorTexture()
     {
         Cursor.SetCursor(cursorTexture, centerOffset, cursorMode);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetCursorDefault()
     {
-
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
     }
 
     //void OnMouseEnter()

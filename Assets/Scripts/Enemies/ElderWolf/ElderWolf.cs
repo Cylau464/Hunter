@@ -183,7 +183,7 @@ public class ElderWolf : Enemy
                         if ((lastAttack == "Two Fast Attack" && lastSpell == "Back Jump") ||
                              lastAttack == "One Attack" ||
                             (lastSpell  == "Long Jump" && Random.Range(0, 100) > 50) ||
-                             DistanceToPlayer().x <= mySpells["Ice Breath"].castRange && DistanceToPlayer().x >= bodyCollider.size.x / 2f && Random.Range(0, 100) > 30 ||
+                             DistanceToPlayer().x <= mySpells["Ice Breath"].castRange && DistanceToPlayer().x >= colliderWidth && Random.Range(0, 100) > 30 ||
                              lastSpell == "Knockback")
                         {
                             spell = "Ice Breath";

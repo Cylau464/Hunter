@@ -91,7 +91,8 @@ public class Enemy : MonoBehaviour
 
     protected Transform myTransform;
     protected Rigidbody2D rigidBody;
-    protected BoxCollider2D bodyCollider;
+    Collider2D bodyCollider;
+    protected float colliderWidth;
     protected Collider2D target;
     protected LayerMask playerLayer = 1 << 10;       //10 - player layer
     Transform hookTransform;
@@ -144,7 +145,7 @@ public class Enemy : MonoBehaviour
         health              = maxHealth;
         currentState        = State.Patrol;
         myTransform         = GetComponent<Transform>();
-        bodyCollider        = GetComponent<BoxCollider2D>();
+        bodyCollider        = GetComponent<Collider2D>();
         rigidBody           = GetComponent<Rigidbody2D>();
         sprite              = GetComponent<SpriteRenderer>();
         startPos            = myTransform.position;
@@ -160,13 +161,23 @@ public class Enemy : MonoBehaviour
             if(t.tag == "Hook Target")
                 myHookTarget = t;
         }
+
+        if (bodyCollider is PolygonCollider2D)
+        {
+            PolygonCollider2D _col = (PolygonCollider2D)bodyCollider;
+
+            foreach (Vector2 point in _col.points)
+            {
+                colliderWidth = point.x > colliderWidth ? point.x : colliderWidth;
+            }
+        }
     }
 
     protected void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         if(bodyCollider != null)
-            Gizmos.DrawWireCube(new Vector2(transform.position.x + (attackRange.x / 2f + curCombo.attackRange / 2f) * direction, transform.position.y + attackRange.y / 2f), new Vector2(attackRange.x + curCombo.attackRange, attackRange.y));
+            Gizmos.DrawWireCube(new Vector2(transform.position.x + attackRange.x * 1.5f * direction, transform.position.y + attackRange.y / 2f), new Vector2(attackRange.x + curCombo.attackRange, attackRange.y));
     }
 
     protected void Update()
@@ -336,7 +347,7 @@ public class Enemy : MonoBehaviour
                         if (_random < combo.Value.chance + _chance)
                         {
                             //If player too far
-                            if (DistanceToPlayer().x > attackRange.x + combo.Value.attackRange)
+                            if (DistanceToPlayer().x > attackRange.x + combo.Value.attackRange || DistanceToPlayer().x <= (attackRange.x + combo.Value.attackRange) / 2f)
                             {
                                 SwitchState(State.Chase);
                                 return;
@@ -475,7 +486,7 @@ public class Enemy : MonoBehaviour
         DamageBox _damageBox = _inst.GetComponent<DamageBox>();
         int targetLayer = 10;
         float _dbLifeTime = curCombo.timeBtwAttack[curAttackNumber] > 0f ? curCombo.timeBtwAttack[curAttackNumber] : .1f;
-        _damageBox.GetParameters(curCombo.damage[curAttackNumber], curCombo.element, new Vector2(transform.position.x + attackRange.x / 2f * direction, transform.position.y + attackRange.y / 2f), attackRange, _dbLifeTime, impactClip, targetLayer, curCombo.dazedTime[curAttackNumber], curCombo.repulseDistantion[curAttackNumber], this);
+        _damageBox.GetParameters(curCombo.damage[curAttackNumber], curCombo.element, new Vector2(transform.position.x + attackRange.x * 1.5f * direction, transform.position.y + attackRange.y / 2f), attackRange, _dbLifeTime, impactClip, targetLayer, curCombo.dazedTime[curAttackNumber], curCombo.repulseDistantion[curAttackNumber], this);
         PlayAttackAudio(curCombo.attackClips[curAttackNumber]);
 
         if (curCombo.attackCount <= curAttackNumber + 1)

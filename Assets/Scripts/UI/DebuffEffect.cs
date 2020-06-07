@@ -101,8 +101,8 @@ public class DebuffEffect : MonoBehaviour
         {
             case Effects.Freeze:
                 playerAttributes.speedDivisor = playerAttributes.defSpeedDivisor - effect.value * stackCount;
-                playerAttributes.attackSpeed = playerAttributes.defAttackSpeed - effect.value * stackCount;
-                playerAttributes.SetAnimationSpeed(1f - effect.value * stackCount);
+                //playerAttributes.attackSpeed = playerAttributes.defAttackSpeed - effect.value * stackCount;
+                playerAttributes.AnimSpeed = playerAttributes.defAnimSpeed - effect.value * stackCount;//SetAnimationSpeed(effect.value * stackCount);
                 break;
             case Effects.Bleeding:
             case Effects.Poison:

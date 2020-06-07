@@ -118,7 +118,7 @@ public class PlayerAnimation : MonoBehaviour
         anim.SetInteger(airLightComboParamID, attack.airLightCombo);
         anim.SetInteger(airStrongComboParamID, attack.airStrongCombo);
         anim.SetInteger(airJointComboParamID, attack.airJointCombo);
-        anim.SetInteger(spellAttackNumberParamID, spell.attackNumber);
+        //anim.SetInteger(spellAttackNumberParamID, spell.attackNumber.ContainsKey(spell.curSpellTitle) ? spell.attackNumber[spell.curSpellTitle] : 0);
 
         anim.SetFloat(fallParamID, rigidBody.velocity.y);
 
@@ -136,6 +136,7 @@ public class PlayerAnimation : MonoBehaviour
             castClip = movement.castAnim;
             
             animatorOverrideController[castDefClip] = castClip;
+            anim.Play("Player_Cast", 0, 0f);
         }
     }
 

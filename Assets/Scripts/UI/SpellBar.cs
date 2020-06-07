@@ -8,10 +8,10 @@ using Enums;
 
 public class SpellBar : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField] GameObject[] spellCells = new GameObject[3];
+    [SerializeField] GameObject[] spellCells = new GameObject[2];
     [SerializeField] GameObject spellSelector = null;
 
-    [HideInInspector] public SpellUI[] spellUI = new SpellUI[3];
+    [HideInInspector] public SpellUI[] spellUI = new SpellUI[2];
 
     void Awake()
     {

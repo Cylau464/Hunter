@@ -42,54 +42,54 @@ public class PlayerAttributes : MonoBehaviour
         } 
         get { return stamina; } 
     }
-    [SerializeField] int maxEnergy = 100;
-    int energy;
-    float energyFloat;
-    int energyPoints;
+    //[SerializeField] int maxEnergy = 100;
+    //int energy;
+    //float energyFloat;
+    //int energyPoints;
 
-    public int EnergyPoints
-    {
-        set
-        {
-            if (value < energyPoints)
-            {
-                int _subtract = energyPoints - value;
-                energyPoints = value;
-                Energy -= Mathf.Floor((_subtract == 0 ? energyPoints : _subtract) * (maxEnergy / 3f));
-            }    
-            else
-                energyPoints = value;
-        }
-        get { return energyPoints; }
-    }
-    public float Energy
-    {
-        set
-        {
-            if (value > maxEnergy)
-            {
-                energyFloat = energy = maxEnergy;
-            }
-            else if(value <= 0f)
-            {
-                energyFloat = energy = 0;
-            }
-            else if(value > energyFloat)
-            {
-                energyFloat += value - energy;
-                energy = Mathf.FloorToInt(energyFloat);
-            }
-            else
-            {
-                energyFloat = value + (energyFloat % 1);
-                energy = Mathf.FloorToInt(energyFloat);
-            }
+    //public int EnergyPoints
+    //{
+    //    set
+    //    {
+    //        if (value < energyPoints)
+    //        {
+    //            int _subtract = energyPoints - value;
+    //            energyPoints = value;
+    //            Energy -= Mathf.Floor((_subtract == 0 ? energyPoints : _subtract) * (maxEnergy / 3f));
+    //        }    
+    //        else
+    //            energyPoints = value;
+    //    }
+    //    get { return energyPoints; }
+    //}
+    //public float Energy
+    //{
+    //    set
+    //    {
+    //        if (value > maxEnergy)
+    //        {
+    //            energyFloat = energy = maxEnergy;
+    //        }
+    //        else if(value <= 0f)
+    //        {
+    //            energyFloat = energy = 0;
+    //        }
+    //        else if(value > energyFloat)
+    //        {
+    //            energyFloat += value - energy;
+    //            energy = Mathf.FloorToInt(energyFloat);
+    //        }
+    //        else
+    //        {
+    //            energyFloat = value + (energyFloat % 1);
+    //            energy = Mathf.FloorToInt(energyFloat);
+    //        }
 
-            energyPoints = Mathf.FloorToInt(energy / (maxEnergy / 3f)); // dont use property EnergyPoints here because it's bugging
-            energyBar.GetParameters(energy, maxEnergy, EnergyPoints);
-        }
-        get { return energy; }
-    }
+    //        energyPoints = Mathf.FloorToInt(energy / (maxEnergy / 3f)); // dont use property EnergyPoints here because it's bugging
+    //        energyBar.GetParameters(energy, maxEnergy, EnergyPoints);
+    //    }
+    //    get { return energy; }
+    //}
 
     [SerializeField] float restoreStaminaPause = 2f;            //Pasue after last stamina reduction
     //[SerializeField] float restoreStaminaDelay = .1f;           //Delay between stamina recovery
@@ -100,8 +100,22 @@ public class PlayerAttributes : MonoBehaviour
     [Header("Secondary Attributes")]
     public float defSpeedDivisor = 1f;
     public float speedDivisor;                             //Used to decrease horizontal speed
-    public float defAttackSpeed = 1f;
-    public float attackSpeed;
+    public float defAnimSpeed = 1f;
+    float animSpeed;
+    public float AnimSpeed
+    {
+        set
+        {
+            animSpeed = value;
+
+            if(!movement.isAttacking)
+                SetAnimationSpeed(value);
+        }
+
+        get { return animSpeed; }
+    }
+    //public float defAttackSpeed = 1f;
+    //public float attackSpeed;
     [SerializeField] float healingDelay = .5f;
     [HideInInspector] public float curHealingDelay;
     public bool isInvulnerable;
@@ -109,7 +123,7 @@ public class PlayerAttributes : MonoBehaviour
     [Header("References")]
     [SerializeField] Transform statusBarTransform = null;
     StatusBar statusBar;
-    [SerializeField] EnergyBar energyBar = null;
+    //[SerializeField] EnergyBar energyBar = null;
     [SerializeField] UsableItemUI healingPotion = null;
     PlayerMovement movement;
     Animator anim;
@@ -123,16 +137,17 @@ public class PlayerAttributes : MonoBehaviour
 
     void Start()
     {
-        speedDivisor = defSpeedDivisor;
-        attackSpeed = defAttackSpeed;
-        health = maxHealth;
-        curHealingPotionCount = healingPotionCount;
-        staminaFloat = stamina = maxStamina;
         anim = GetComponent<Animator>();
         movement = GetComponent<PlayerMovement>();
         rigidBody = GetComponent<Rigidbody2D>();
         effectsController = GetComponent<PlayerEffectsController>();
         statusBar = statusBarTransform.GetComponent<StatusBar>();
+        speedDivisor = defSpeedDivisor;
+        //attackSpeed = defAttackSpeed;
+        AnimSpeed = defAnimSpeed;
+        health = maxHealth;
+        curHealingPotionCount = healingPotionCount;
+        staminaFloat = stamina = maxStamina;
         statusBar.maxHealth = maxHealth;
         statusBar.HealthChange(health);
         statusBar.maxStamina = maxStamina;
@@ -152,9 +167,9 @@ public class PlayerAttributes : MonoBehaviour
     /// <summary>
     /// Just damage
     /// </summary>
-    public void TakeDamage(int damage, HurtType hurtType, Element element)
+    public int TakeDamage(int damage, HurtType hurtType, Element element)
     {
-        if (isInvulnerable) return;
+        if (isInvulnerable) return 0;
 
         if (damage > 0 || element.value > 0)
         {
@@ -162,8 +177,8 @@ public class PlayerAttributes : MonoBehaviour
             timeOfLastTakenDamage = Time.time;
             statusBar.HealthChange(health);
             //Decrease energy
-            float _percentageConversionToEnergy = .05f;
-            Energy -= damage * _percentageConversionToEnergy;
+            //float _percentageConversionToEnergy = .05f;
+            //Energy -= damage * _percentageConversionToEnergy;
 
             DamageText(damage, element);
         }
@@ -174,7 +189,8 @@ public class PlayerAttributes : MonoBehaviour
             isInvulnerable = true;
             movement.bodyCollider.sharedMaterial = null;        //Delete collider material for turn on friction
             AudioManager.PlayDeathAudio();
-            return;
+
+            return damage + element.value;
         }
         else
             AudioManager.PlayHurtAudio();
@@ -183,22 +199,24 @@ public class PlayerAttributes : MonoBehaviour
         float _maxAmplitude = 8f;
         float _shakeAmplitude = (damage + element.value) / (float)maxHealth * _maxAmplitude;
         cameraShake.Shake(_shakeAmplitude, 1f, .25f);
+
+        return damage + element.value;
     }
 
     /// <summary>
     /// Effect damage
     /// </summary>
-    public void TakeDamage(int damage, HurtType hurtType, Effect effect)
+    public int TakeDamage(int damage, HurtType hurtType, Effect effect)
     {
-        if (movement.isDead) return;
+        if (movement.isDead) return 0;
 
         if (damage > 0)
         {
             health -= damage;
             statusBar.HealthChange(health);
             //Decrease energy
-            float _percentageConversionToEnergy = .05f;
-            Energy -= damage * _percentageConversionToEnergy;
+            //float _percentageConversionToEnergy = .05f;
+            //Energy -= damage * _percentageConversionToEnergy;
 
             DamageText(damage, effect);
         }
@@ -209,7 +227,8 @@ public class PlayerAttributes : MonoBehaviour
             isInvulnerable = true;
             movement.bodyCollider.sharedMaterial = null;        //Delete collider material for turn on friction
             AudioManager.PlayDeathAudio();
-            return;
+
+            return damage;
         }
         else
             AudioManager.PlayHurtAudio();
@@ -218,14 +237,16 @@ public class PlayerAttributes : MonoBehaviour
         float _maxAmplitude = 8f;
         float _shakeAmplitude = damage / (float)maxHealth * _maxAmplitude;
         cameraShake.Shake(_shakeAmplitude, 1f, .25f);
+
+        return damage;
     }
 
     /// <summary>
     /// Damage with catching
     /// </summary>
-    public void TakeDamage(int damage, HurtType hurtType, Transform anchorPoint, Rigidbody2D rigidBody, Element element)
+    public int TakeDamage(int damage, HurtType hurtType, Transform anchorPoint, Rigidbody2D rigidBody, Element element)
     {
-        if (isInvulnerable) return;
+        if (isInvulnerable) return 0;
 
         if (damage > 0 || element.value > 0)
         {
@@ -233,8 +254,8 @@ public class PlayerAttributes : MonoBehaviour
             timeOfLastTakenDamage = Time.time;
             statusBar.HealthChange(health);
             //Decrease energy
-            float _percentageConversionToEnergy = .05f;
-            Energy -= (damage + element.value) * _percentageConversionToEnergy;
+            //float _percentageConversionToEnergy = .05f;
+            //Energy -= (damage + element.value) * _percentageConversionToEnergy;
 
             DamageText(damage, element);
         }
@@ -245,7 +266,8 @@ public class PlayerAttributes : MonoBehaviour
             isInvulnerable = true;
             movement.bodyCollider.sharedMaterial = null;
             AudioManager.PlayDeathAudio();
-            return;
+
+            return damage + element.value;
         }
         else
         {
@@ -258,14 +280,16 @@ public class PlayerAttributes : MonoBehaviour
         float _maxAmplitude = 8f;
         float _shakeAmplitude = (damage + element.value) / (float)maxHealth * _maxAmplitude;
         cameraShake.Shake(_shakeAmplitude, 1f, .25f);
+
+        return damage + element.value;
     }
 
     /// <summary>
     /// Damage with repulse
     /// </summary>
-    public void TakeDamage(int damage, HurtType hurtType, Vector2 repulseDistantion, float dazedTime, Element element)
+    public int TakeDamage(int damage, HurtType hurtType, Vector2 repulseDistantion, float dazedTime, Element element)
     {
-        if (isInvulnerable) return;
+        if (isInvulnerable) return 0;
 
         if (damage > 0 || element.value > 0)
         {
@@ -275,8 +299,8 @@ public class PlayerAttributes : MonoBehaviour
             repulseDistantion.y = movement.isOnGround && repulseDistantion.y < 0f ? 0f : repulseDistantion.y;
             movement.Repulse(repulseDistantion, dazedTime);
             //Decrease energy
-            float _percentageConversionToEnergy = .05f;
-            Energy -= (damage + element.value) * _percentageConversionToEnergy;
+            //float _percentageConversionToEnergy = .05f;
+            //Energy -= (damage + element.value) * _percentageConversionToEnergy;
 
             DamageText(damage, element);
         }
@@ -287,7 +311,8 @@ public class PlayerAttributes : MonoBehaviour
             isInvulnerable = true;
             movement.bodyCollider.sharedMaterial = null;
             AudioManager.PlayDeathAudio();
-            return;
+
+            return damage + element.value;
         }
         else
             AudioManager.PlayHurtAudio();
@@ -296,14 +321,16 @@ public class PlayerAttributes : MonoBehaviour
         float _maxAmplitude = 8f;
         float _shakeAmplitude = (damage + element.value) / (float)maxHealth * _maxAmplitude;
         cameraShake.Shake(_shakeAmplitude, 1f, .25f);
+
+        return damage + element.value;
     }
 
     /// <summary>
     /// Damage with stun
     /// </summary>
-    public void TakeDamage(int damage, HurtType hurtType, float dazedTime, Element element)
+    public int TakeDamage(int damage, HurtType hurtType, float dazedTime, Element element)
     {
-        if (isInvulnerable) return;
+        if (isInvulnerable) return 0;
 
         if (damage > 0 || element.value > 0)
         {
@@ -312,8 +339,8 @@ public class PlayerAttributes : MonoBehaviour
             statusBar.HealthChange(health);
             DamageText(damage, element);
             //Decrease energy
-            float _percentageConversionToEnergy = .05f;
-            Energy -= (damage + element.value) * _percentageConversionToEnergy;
+            //float _percentageConversionToEnergy = .05f;
+            //Energy -= (damage + element.value) * _percentageConversionToEnergy;
         }
 
         if (health <= 0)
@@ -322,7 +349,8 @@ public class PlayerAttributes : MonoBehaviour
             isInvulnerable = true;
             movement.bodyCollider.sharedMaterial = null;
             AudioManager.PlayDeathAudio();
-            return;
+
+            return damage + element.value;
         }
         else
             AudioManager.PlayHurtAudio();
@@ -334,11 +362,13 @@ public class PlayerAttributes : MonoBehaviour
         float _maxAmplitude = 8f;
         float _shakeAmplitude = (damage + element.value) / (float)maxHealth * _maxAmplitude;
         cameraShake.Shake(_shakeAmplitude, 1f, .25f);
+
+        return damage + element.value;
     }
 
     public void TakeEffect(Effect effect)
     {
-        if (movement.isEvading) return;
+        if (isInvulnerable) return;
 
         effectsController.GetEffect(effect);
     }

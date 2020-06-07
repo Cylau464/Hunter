@@ -17,13 +17,17 @@ namespace Structures
         public float[] timeBtwAttack;
         public DamageTypes[] damageType;
         public SpellTypes type;
-        [Range(1, 3)] public int energyCost;
+        public SpellUseTypes useType;
+        public float timeToUse;
+        //[Range(1, 3)] public int energyCost;
         public float castTime;
         public float cooldown;
         public Vector2[] damageRange;
         public Element element;
         public Sprite icon;
-        //public AnimationClip spellAnimation;
+        public Sprite waitingIcon;
+        public GameObject particle;
+        public GameObject spellPrefab;  // Some GO like a shell or mark
         public AnimationClip castAnimation;
         public AnimationClip[] attackAnimations;
         public AudioClip audioCast;
@@ -35,28 +39,37 @@ namespace Structures
 
         [Header("Range Properties")]
         public float[] castDistance;
+        public float[] shellLifeTime;
+        public AudioClip[] shellClip;
 
-        public PlayerSpell(int attackCount, int[] damage, float[] timeBtwAttack, DamageTypes[] damageType, SpellTypes type, int energyCost, float castTime, float cooldown, Vector2[] damageRange, Element element, Vector2[] forceDirection, float[] castDistance)
+        public PlayerSpell(int attackCount, int[] damage, float[] timeBtwAttack, DamageTypes[] damageType, SpellTypes type, SpellUseTypes useType, float timeToUse/*, int energyCost*/, float castTime, float cooldown, Vector2[] damageRange, Element element, Vector2[] forceDirection, float[] castDistance, float[] shellLifeTime)
         {
             this.attackCount = attackCount;
             this.damage = damage;
             this.timeBtwAttack = timeBtwAttack;
             this.damageType = damageType;
             this.type = type;
-            this.energyCost = energyCost;
+            //this.energyCost = energyCost;
             this.castTime = castTime;
             this.cooldown = cooldown;
             this.damageRange = damageRange;
             this.element = element;
             this.forceDirection = forceDirection;
             this.castDistance = castDistance;
+            this.timeToUse = timeToUse;
+            this.useType = useType;
+            this.shellLifeTime = shellLifeTime;
 
             icon = null;
+            waitingIcon = null;
             castAnimation = null;
             attackAnimations = null;
             audioCast = null;
             audioImpact = null;
             audioAttacks = null;
+            particle = null;
+            spellPrefab = null;
+            shellClip = null;
         }
     }
 

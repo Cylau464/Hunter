@@ -15,13 +15,27 @@ public class SpellSelector : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     void Start()
     {
         RectTransform rectTransform = GetComponent<RectTransform>();
-        Vector3 cellPos = new Vector2(-65f, 72f);
+        Vector3 _cellPos = new Vector2(-65f, 72f);
+        int _count = 0;
         
         foreach (KeyValuePair<SpellTitles, GameObject> kvp in spellsList.spells)
         {
             Spell _spell = kvp.Value.GetComponent<Spell>();
-            SelectableSpell _selectableSpell = Instantiate(spellCellPrefab, rectTransform.position + cellPos, transform.rotation, transform).GetComponent<SelectableSpell>();
-            cellPos.x += 65;
+            SelectableSpell _selectableSpell = Instantiate(spellCellPrefab, Vector3.zero, transform.rotation, transform).GetComponent<SelectableSpell>();
+            _selectableSpell.transform.localPosition = _cellPos;
+            
+            if (_count >= 2)
+            {
+                _cellPos.x -= 130f;
+                _cellPos.y -= 72f;
+                _count = 0;
+            }
+            else
+            {
+                _cellPos.x += 65f;
+                _count++;
+            }
+
             _selectableSpell.GetSpell(_spell.title, _spell.spell, this);
         }
     }
