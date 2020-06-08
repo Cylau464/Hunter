@@ -55,6 +55,7 @@ public class PlayerAttack : MonoBehaviour
     [HideInInspector] public float weaponMass;
 
     int damage;
+    int staminaDamage;
     int staminaCosts;
 
     public WeaponAttackType weaponAttackType;
@@ -212,7 +213,7 @@ public class PlayerAttack : MonoBehaviour
         {
             shellObj                    = Instantiate(shellPrefab, transform.position, Quaternion.Euler(0f, 0f, rotZ));
             shell                       = shellObj.GetComponent<Shell>();
-            shell.SetParameters(damage, weaponDamageType, weaponElement, shellSpeed, shellFlyTime, weaponImpactClip);
+            shell.SetParameters(damage, staminaDamage, weaponDamageType, weaponElement, shellSpeed, shellFlyTime, weaponImpactClip);
         }
         else
         {
@@ -224,7 +225,7 @@ public class PlayerAttack : MonoBehaviour
             GameObject _inst            = Instantiate(damageBox, transform);
             DamageBox _damageBox        = _inst.GetComponent<DamageBox>();
             int targetLayer             = 12;
-            _damageBox.GetParameters(damage, weaponDamageType, weaponElement, weapon.position, new Vector2(attackRangeX, attackRangeY), attackDuration - Time.time, weaponImpactClip, targetLayer, attributes);
+            _damageBox.GetParameters(damage, staminaDamage, weaponDamageType, weaponElement, weapon.position, new Vector2(attackRangeX, attackRangeY), attackDuration - Time.time, weaponImpactClip, targetLayer, attributes);
         }
 
         AudioManager.PlayAttackAudio(weaponAudioClip);
@@ -365,6 +366,7 @@ public class PlayerAttack : MonoBehaviour
 
     void GetWeaponAttributes(AttackTypes type)
     {
+        staminaDamage = weaponAttributes.staminaDamage;
         weaponAttackType = weaponAttributes.weaponAttackType;
         weaponImpactClip = weaponAttributes.impactClip;
         shellPrefab = weaponAttributes.shellPrefab;
@@ -415,7 +417,6 @@ public class PlayerAttack : MonoBehaviour
                 break;
             case AttackTypes.TopDown:
                 damage                      = weaponAttributes.topDownAttackDamage;//attributes.Stamina >= staminaCosts ? weaponAttributes.topDownAttackDamage : weaponAttributes.topDownAttackDamage / 10;
-                staminaCosts                = weaponAttributes.topDownAttackStaminaCosts;
                 weaponElement               = weaponAttributes.elements[type];
                 weaponDamageType            = weaponAttributes.damageTypesOfAttacks[type]; //fix it
                 attackForceDistance         = weaponAttributes.topDownAttackForce;
