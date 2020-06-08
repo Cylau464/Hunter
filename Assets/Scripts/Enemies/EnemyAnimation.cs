@@ -18,6 +18,7 @@ public class EnemyAnimation : MonoBehaviour
     int fallParamID;
     int castParamID;
     int spellParamID;
+    int stunParamID;
     //int spellPrepareParamID;
     int spellCastParamID;
     int spellEndParamID;
@@ -35,6 +36,7 @@ public class EnemyAnimation : MonoBehaviour
         hurtParamID                 = Animator.StringToHash("isHurt");
         deadParamID                 = Animator.StringToHash("isDead");
         castParamID                 = Animator.StringToHash("isCast");
+        stunParamID                 = Animator.StringToHash("isStun");
         speedParamID                = Animator.StringToHash("speed");
         fallParamID                 = Animator.StringToHash("verticalVelocity");
         spellParamID                = Animator.StringToHash("spellNumber");
@@ -68,6 +70,7 @@ public class EnemyAnimation : MonoBehaviour
         anim.SetBool(attackingParamID, enemy.isAttack);
         anim.SetBool(deadParamID, enemy.isDead);
         anim.SetBool(castParamID, enemy.isCast);
+        anim.SetBool(stunParamID, enemy.isStun);
 
         anim.SetInteger(spellParamID, enemy.spellNumber);
         anim.SetInteger(comboNumberParamID, enemy.comboNumber);

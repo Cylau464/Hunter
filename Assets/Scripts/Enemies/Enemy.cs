@@ -20,6 +20,8 @@ public class Enemy : MonoBehaviour
     { 
         set
         {
+            value = Mathf.Clamp(value, 0, maxStamina);
+
             if (value < stamina)
             {
                 if (value <= 0)
@@ -247,7 +249,8 @@ public class Enemy : MonoBehaviour
     {
         if(currentState == State.Dead) return;
 
-        SwitchSpell();
+        if(currentState != State.Stun)
+            SwitchSpell();
 
         switch (currentState)
         {
@@ -468,7 +471,7 @@ public class Enemy : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public int TakeDamage(int damage, DamageTypes damageType, Element element, int staminaDamage /*, bool crit*/)
+    public int TakeDamage(int damage, DamageTypes damageType, Element element, int staminaDamage = 0 /*, bool crit*/)
     {
         if (currentState == State.Dead) return default;
 
@@ -665,12 +668,15 @@ public class Enemy : MonoBehaviour
     {
         PlayStunAudio();
         SwitchState(State.Stun);
+        Debug.Log("STUN");
     }
 
     void Stunned()
     {
+        Debug.Log("STUNNNED");
         if (curRestoreStaminaDelay <= Time.time)
         {
+            Debug.Log("STUNNNED END");
             SwitchState(State.Chase);
             Stamina = maxStamina;
         }

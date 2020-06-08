@@ -3652,6 +3652,18 @@ PrefabInstance:
       propertyPath: attackRange.x
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 752039248, guid: 1b00b37d08923724481287bb221d8aa3, type: 3}
+      propertyPath: isHurt
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 752039248, guid: 1b00b37d08923724481287bb221d8aa3, type: 3}
+      propertyPath: mySpells.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 752039248, guid: 1b00b37d08923724481287bb221d8aa3, type: 3}
+      propertyPath: mySpells.reorderableList.isExpanded
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3205944958286040067, guid: 1b00b37d08923724481287bb221d8aa3,
         type: 3}
       propertyPath: m_Name
@@ -13657,6 +13669,11 @@ PrefabInstance:
         type: 3}
       propertyPath: strongAttackSpeed
       value: 0.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 6152385741686769640, guid: df7c630f577f62a498fa23acee900284,
+        type: 3}
+      propertyPath: staminaDamage
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 6152385742185305279, guid: df7c630f577f62a498fa23acee900284,
         type: 3}
