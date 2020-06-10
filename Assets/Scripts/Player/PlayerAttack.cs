@@ -169,7 +169,7 @@ public class PlayerAttack : MonoBehaviour
         if (movement.isCrouching)
             movement.StandUp();
 
-        movement.isAttacking = true;
+        //movement.isAttacking = true;
         input.lightAttack = false;
         input.strongAttack = false;
         input.jointAttack = false;
