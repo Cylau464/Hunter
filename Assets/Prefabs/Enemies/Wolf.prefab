@@ -307,7 +307,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -2126381367
-  m_SortingLayer: -3
+  m_SortingLayer: 2
   m_SortingOrder: 2
   m_Sprite: {fileID: -3037453330189687227, guid: 07a8e9dc30ce61547b2e9ca272e80da0,
     type: 3}
@@ -412,9 +412,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
-  maxStamina: 5
-  restoreStaminaDelay: 2
-  restoreStaminaValue: 5
   viewDistance: 100
   dragType: 1
   damageBox: {fileID: 5330670728575379889, guid: b3fb16808712326438cbc8ead25ed8ac,
@@ -559,7 +556,6 @@ MonoBehaviour:
   isAttack: 0
   isCast: 0
   isHurt: 0
-  isStun: 0
   isDead: 0
   spriteBlinkingDuration: 0.6
   spriteBlinkingPeriod: 0.1
@@ -573,7 +569,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: bc6b01bd88b988b4899ec7602599ab74, type: 3}
   - {fileID: 8300000, guid: 10fae34b47c1b144dbaa48ac4c0883df, type: 3}
   impactClip: {fileID: 8300000, guid: 225bedce6818b3d45813d73b9512cbb8, type: 3}
-  stunClip: {fileID: 0}
   statusBarTransform: {fileID: 2012428806396077791}
 --- !u!82 &-7086019865315815960
 AudioSource:

@@ -14,7 +14,6 @@ namespace Structures
     {
         public int attackCount;
         public int[] damage;
-        public int[] staminaDamage;
         public float[] timeBtwAttack;
         public DamageTypes[] damageType;
         public SpellTypes type;
@@ -43,11 +42,10 @@ namespace Structures
         public float[] shellLifeTime;
         public AudioClip[] shellClip;
 
-        public PlayerSpell(int attackCount, int[] damage, int[] staminaDamage, float[] timeBtwAttack, DamageTypes[] damageType, SpellTypes type, SpellUseTypes useType, float timeToUse/*, int energyCost*/, float castTime, float cooldown, Vector2[] damageRange, Element element, Vector2[] forceDirection, float[] castDistance, float[] shellLifeTime)
+        public PlayerSpell(int attackCount, int[] damage, float[] timeBtwAttack, DamageTypes[] damageType, SpellTypes type, SpellUseTypes useType, float timeToUse/*, int energyCost*/, float castTime, float cooldown, Vector2[] damageRange, Element element, Vector2[] forceDirection, float[] castDistance, float[] shellLifeTime)
         {
             this.attackCount = attackCount;
             this.damage = damage;
-            this.staminaDamage = staminaDamage;
             this.timeBtwAttack = timeBtwAttack;
             this.damageType = damageType;
             this.type = type;

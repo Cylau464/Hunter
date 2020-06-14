@@ -216,7 +216,7 @@ public class PlayerSpells : MonoBehaviour
                 _boxPosition = attack.weapon.position;
                 _inst = Instantiate(attack.damageBox, transform);
                 DamageBox _damageBox = _inst.GetComponent<DamageBox>();
-                _damageBox.GetParameters(_spell.damage[attackNumber], _spell.staminaDamage[attackNumber], _spell.damageType[attackNumber], _spell.element, _boxPosition, _spell.damageRange[attackNumber], _spell.timeBtwAttack[attackNumber], _spell.audioImpact, _targetLayer, attributes, true);
+                _damageBox.GetParameters(_spell.damage[attackNumber], _spell.damageType[attackNumber], _spell.element, _boxPosition, _spell.damageRange[attackNumber], _spell.timeBtwAttack[attackNumber], _spell.audioImpact, _targetLayer, attributes, true);
                 break;
             case SpellTypes.MeleeAOE:
                 _boxPosition = myTransform.position;

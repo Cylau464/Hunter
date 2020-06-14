@@ -34,7 +34,7 @@ public class VoidSlash : Spell
         _shellColliderSize *= shellsSizeMultiplier[_attackNumber];
 
         AudioManager.PlayClipAtPosition(spell.audioAttacks[_attackNumber], pSpells.myTransform.position, 1f, 5f);
-        spellPrefab.GetComponent<DamageBox>().GetParameters(_damage, spell.staminaDamage[_attackNumber], spell.damageType[_attackNumber], _element, attackPosition, _shellColliderSize, spell.shellLifeTime[_attackNumber], spell.audioImpact, _targetLayer, pSpells.attributes, true, spell.shellClip[_attackNumber]);
+        spellPrefab.GetComponent<DamageBox>().GetParameters(_damage, spell.damageType[_attackNumber], _element, attackPosition, _shellColliderSize, spell.shellLifeTime[_attackNumber], spell.audioImpact, _targetLayer, pSpells.attributes, true, spell.shellClip[_attackNumber]);
         spellPrefab.GetComponent<Rigidbody2D>().AddForce(new Vector2(spell.forceDirection[_attackNumber].x * pSpells.movement.direction, spell.forceDirection[_attackNumber].y), ForceMode2D.Impulse);
     }
 

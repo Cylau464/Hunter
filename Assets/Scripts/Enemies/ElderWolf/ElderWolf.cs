@@ -45,18 +45,18 @@ public class ElderWolf : Enemy
 
     private void OnGUI()
     {
-        //float[] cd = new float[10];
-        //string[] name = new string[10];
-        //int a = 0;
-        //foreach(KeyValuePair<string, float> spell in spellsCurCooldown)
-        //{
-        //    name[a] = spell.Key + ": ";
-        //    cd[a] = spell.Value > 0f ? spell.Value - Time.time : 0f;
-        //    a++;
-        //}
-        //GUI.TextField(new Rect(10, 10, 150, 200), name[0] + cd[0].ToString() + "\n" + name[1] + cd[1].ToString() + "\n" + name[2] + cd[2].ToString() + "\n"
-        //    + name[3] + cd[3].ToString() + "\n" + name[4] + cd[4].ToString() + "\n" + name[5] + cd[5].ToString() + "\n" + name[6] + cd[6].ToString() + "\n"
-        //     + name[7] + cd[7].ToString() + "\n" + name[8] + cd[8].ToString() + "\n");
+        float[] cd = new float[10];
+        string[] name = new string[10];
+        int a = 0;
+        foreach(KeyValuePair<string, float> spell in spellsCurCooldown)
+        {
+            name[a] = spell.Key + ": ";
+            cd[a] = spell.Value > 0f ? spell.Value - Time.time : 0f;
+            a++;
+        }
+        GUI.TextField(new Rect(10, 10, 150, 200), name[0] + cd[0].ToString() + "\n" + name[1] + cd[1].ToString() + "\n" + name[2] + cd[2].ToString() + "\n"
+            + name[3] + cd[3].ToString() + "\n" + name[4] + cd[4].ToString() + "\n" + name[5] + cd[5].ToString() + "\n" + name[6] + cd[6].ToString() + "\n"
+             + name[7] + cd[7].ToString() + "\n" + name[8] + cd[8].ToString() + "\n");
     }
 
     new void Awake()
