@@ -17,7 +17,6 @@ public class PlayerInput : MonoBehaviour
     [HideInInspector] public bool strongAttack;
     [HideInInspector] public bool jointAttack;
     [HideInInspector] public bool topDownAttack;
-    [HideInInspector] public bool attackPressed;
     [HideInInspector] public bool evade;
     [HideInInspector] public bool hook;
     [HideInInspector] public bool horizontalAccess = true;
@@ -70,11 +69,6 @@ public class PlayerInput : MonoBehaviour
             horizontal = 0f;
         else
             horizontal = Mathf.Clamp(horizontal, -1f, 1f);
-
-        if (lastInputs[0] == InputsEnum.LightAttack || lastInputs[0] == InputsEnum.StrongAttack || lastInputs[0] == InputsEnum.JointAttack || lastInputs[0] == InputsEnum.TopDownAttack)
-            attackPressed = true;
-        else
-            attackPressed = false;
     }
 
     void ClearInput()
@@ -98,9 +92,7 @@ public class PlayerInput : MonoBehaviour
         readyToClear = false;
 
         if (curClearDelay <= Time.time || !attack.canAttack || (attributes.Stamina <= 0 && lastInputs.Count > 0 && lastInputs[0] != InputsEnum.FirstSpell && lastInputs[0] != InputsEnum.SecondSpell && lastInputs[0] != InputsEnum.ThirdSpell))
-        {
             lastInputs.Clear();
-        }
     }
 
     void ProcessInputs()
@@ -222,7 +214,6 @@ public class PlayerInput : MonoBehaviour
 
             curClearDelay = Time.time + clearInputsDelay;
         }
-
         if (Input.GetButtonDown("StrongAttack") && !GameManager.UIOverlapsMouse)
         {
             if (attributes.Stamina <= 0) return;
