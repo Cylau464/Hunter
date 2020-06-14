@@ -7,7 +7,6 @@ using Structures;
 public class Shell : MonoBehaviour
 {
     int damage;
-    int staminaDamage;
     DamageTypes damageType;
     Element element;
     float forceSpeed;
@@ -86,7 +85,7 @@ public class Shell : MonoBehaviour
             {
                 rigidBody.bodyType = RigidbodyType2D.Kinematic;
                 transform.parent = _enemy.transform;
-                int _damageDone = _enemy.TakeDamage(damage, damageType, element, staminaDamage);
+                int _damageDone = _enemy.TakeDamage(damage, damageType, element);
 
                 if (_damageDone > 0)
                     AudioManager.PlayClipAtPosition(impactClip, transform.position, .25f, 10f);
@@ -98,10 +97,9 @@ public class Shell : MonoBehaviour
         }
     }
 
-    public void SetParameters(int damage, int staminaDamage, DamageTypes damageType, Element element, float forceSpeed, float flyTime, AudioClip impactClip)
+    public void SetParameters(int damage, DamageTypes damageType, Element element, float forceSpeed, float flyTime, AudioClip impactClip)
     {
         this.damage = damage;
-        this.staminaDamage = staminaDamage;
         this.damageType = damageType;
         this.element = element;
         this.forceSpeed = forceSpeed;

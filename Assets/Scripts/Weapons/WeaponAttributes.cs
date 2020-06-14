@@ -28,8 +28,7 @@ public class WeaponAttributes : MonoBehaviour
     public float strongAttackForce          = 2f;
     public float jointAttackForce           = 2.5f;
     public float topDownAttackForce         = 10f;
-    public float mass                       = 1f;                    //It multiplier character move speed and jump height. 1 = 100% speed and height
-    public int staminaDamage                = 2;
+    public float mass = 1f;                    //It multiplier character move speed and jump height. 1 = 100% speed and height
 
     [Header("Shell Properties")]
     public float shellSpeed                 = 0f;

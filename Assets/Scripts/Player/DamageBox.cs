@@ -7,7 +7,6 @@ using Enums;
 public class DamageBox : MonoBehaviour
 {
     int damage;
-    int staminaDamage;
     DamageTypes damageType;
     Element element;
     Vector2 position;
@@ -66,7 +65,7 @@ public class DamageBox : MonoBehaviour
                 if (_enemy)
                 {
                     takenColliders.Add(collision.gameObject.GetInstanceID());
-                    int _damageDone = _enemy.TakeDamage(damage, damageType, element, staminaDamage);
+                    int _damageDone = _enemy.TakeDamage(damage, damageType, element);
 
                     if (_damageDone > 0)
                         AudioManager.PlayClipAtPosition(impactClip, transform.position, .25f, 10f);
@@ -116,10 +115,9 @@ public class DamageBox : MonoBehaviour
     /// <summary>
     /// Player's damage box
     /// </summary>
-    public void GetParameters(int damage, int staminaDamage, DamageTypes damageType, Element element, Vector2 position, Vector2 colliderSize, float lifeTime, AudioClip impactClip, int targetLayer, PlayerAttributes playerAttributes, bool isSpell = false, AudioClip spellClip = null)
+    public void GetParameters(int damage, DamageTypes damageType, Element element, Vector2 position, Vector2 colliderSize, float lifeTime, AudioClip impactClip, int targetLayer, PlayerAttributes playerAttributes, bool isSpell = false, AudioClip spellClip = null)
     {
         this.damage = damage;
-        this.staminaDamage = staminaDamage;
         this.damageType = damageType;
         this.element = element;
         this.position = position;

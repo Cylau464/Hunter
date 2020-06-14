@@ -11,6 +11,7 @@ public class Enemy : MonoBehaviour
     [Header("Attributes Properties")]
     [SerializeField] protected int maxHealth = 100;
     int health;
+<<<<<<< HEAD
     [SerializeField] protected int maxStamina = 100;
     int stamina;
     [SerializeField] float restoreStaminaDelay = 2f;
@@ -42,6 +43,8 @@ public class Enemy : MonoBehaviour
         get { return stamina; }
     }
 
+=======
+>>>>>>> parent of 62ea2ad... 3
     [SerializeField] float viewDistance = 20f;
     public DragType dragType = DragType.Draggable;
 
@@ -108,7 +111,6 @@ public class Enemy : MonoBehaviour
     public bool isAttack;
     public bool isCast;
     public bool isHurt;
-    public bool isStun;
     public bool isDead;
 
     [SerializeField] float spriteBlinkingDuration = 0.6f;
@@ -118,7 +120,7 @@ public class Enemy : MonoBehaviour
 
     bool spriteBlinkingEnabled;
 
-    protected enum State { Null, Patrol, Chase, Attack, CastSpell, Hurt, Stun, Dead };
+    protected enum State { Null, Patrol, Chase, Attack, CastSpell, Hurt, Dead };
     protected State currentState;
 
     protected Transform myTransform;
@@ -167,7 +169,6 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected AudioSource audioSource = null;
     [SerializeField] AudioClip[] stepClips = null;
     [SerializeField] AudioClip impactClip = null;
-    [SerializeField] AudioClip stunClip = null;
 
     //UI
     [SerializeField] Transform statusBarTransform = null;
@@ -176,7 +177,6 @@ public class Enemy : MonoBehaviour
     protected void Awake()
     {
         health              = maxHealth;
-        Stamina             = maxStamina;
         currentState        = State.Patrol;
         myTransform         = GetComponent<Transform>();
         bodyCollider        = GetComponent<Collider2D>();
@@ -236,13 +236,6 @@ public class Enemy : MonoBehaviour
         //Blinking after take damage
         if(spriteBlinkingEnabled)
             SpriteBlinkingEffect();
-
-        //Stamina restore
-        if(curRestoreStaminaDelay <= Time.time && stamina < maxStamina)
-        {
-            Stamina += restoreStaminaValue;
-            curRestoreStaminaDelay = Time.time + 1f;
-        }
     }
 
     protected void FixedUpdate()
@@ -274,10 +267,6 @@ public class Enemy : MonoBehaviour
                 isHurt = true;
                 Hurt();
                 break;
-            case State.Stun:
-                isStun = true;
-                Stunned();
-                break;
             case State.Dead:
                 //isDead = true;
                 //Invoke("Dead", 3f);
@@ -286,7 +275,6 @@ public class Enemy : MonoBehaviour
         }
 
         CheckPlayer();
-        CheckOtherEnemies(); // Check other enemies to push them away so that they dont stack
     }
 
     protected void SwitchState(State newState)
@@ -299,7 +287,6 @@ public class Enemy : MonoBehaviour
         isAttack    = false;
         isCast      = false;
         isHurt      = false;
-        isStun      = false;
         isDead      = false;
 
         spellNumber = 0;
@@ -358,7 +345,7 @@ public class Enemy : MonoBehaviour
     protected void Chase()
     {
         //Chase while the player in view area
-        if (target)
+        if (target)//(DistanceToPlayer().x <= viewDistance)
         {
             //Flip enemy towards the player
             if (Mathf.Sign(target.transform.position.x - transform.position.x) != direction)
@@ -471,7 +458,11 @@ public class Enemy : MonoBehaviour
         Destroy(gameObject);
     }
 
+<<<<<<< HEAD
     public int TakeDamage(int damage, DamageTypes damageType, Element element, int staminaDamage = 0 /*, bool crit*/)
+=======
+    public int TakeDamage(int damage, DamageTypes damageType, Element element /*, bool crit*/)
+>>>>>>> parent of 62ea2ad... 3
     {
         if (currentState == State.Dead) return default;
 
@@ -481,7 +472,6 @@ public class Enemy : MonoBehaviour
         health -= damage + element.value;
         damageTaken.Add(new Dictionary<float, int>());
         damageTaken.Last().Add(Time.time, damage + element.value);
-        Stamina -= staminaDamage;
 
         //Calculate duration between first taken damage and last, then devide all taken damage on it
         if (damageTaken.Count > 1)
@@ -596,29 +586,6 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void CheckOtherEnemies()
-    {
-        Collider2D _collider;
-        Rigidbody2D _rigidBody;
-        float _checkDistance = .5f;
-
-        if(_collider = Physics2D.OverlapCircle(transform.position, _checkDistance, 1 << 12))
-        {
-            _rigidBody = _collider.attachedRigidbody;
-            Vector2 _distanceToEnemy = DistanceToOtherEnemy(_collider.transform.position);
-
-            if (_distanceToEnemy.x < _checkDistance)
-            {
-                _rigidBody.AddForce(Vector2.right * _distanceToEnemy * Mathf.Sign(_distanceToEnemy.x), ForceMode2D.Impulse);
-            }
-        }
-    }
-
-    Vector2 DistanceToOtherEnemy(Vector2 otherPosition)
-    {
-        return otherPosition - (Vector2) myTransform.position;
-    }
-
     protected bool IsPlayerBehind()
     {
         if(Mathf.Sign(myTransform.position.x - target.transform.position.x) * direction < 0)
@@ -630,9 +597,9 @@ public class Enemy : MonoBehaviour
     protected Vector2 DistanceToPlayer()
     {
         //return Mathf.Abs(target.transform.position.x - transform.position.x - attackRange.x * direction);
-        float x = Mathf.Abs(target.transform.position.x - transform.position.x);
-        float y = target.transform.position.y - transform.position.y;
-        return new Vector2(x, y);
+        float _x = Mathf.Abs(target.transform.position.x - transform.position.x);
+        float _y = target.transform.position.y - transform.position.y;
+        return new Vector2(_x, _y);
     }
 
     void PlayStepsAudio()
@@ -654,6 +621,7 @@ public class Enemy : MonoBehaviour
         audioSource.pitch = Random.Range(.5f, .8f);
         audioSource.PlayOneShot(clip);
     }
+<<<<<<< HEAD
 
     void PlayStunAudio()
     {
@@ -681,4 +649,6 @@ public class Enemy : MonoBehaviour
             Stamina = maxStamina;
         }
     }
+=======
+>>>>>>> parent of 62ea2ad... 3
 }
