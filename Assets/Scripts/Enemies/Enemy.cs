@@ -457,10 +457,14 @@ public class Enemy : MonoBehaviour
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     public int TakeDamage(int damage, DamageTypes damageType, Element element, int staminaDamage = 0 /*, bool crit*/)
 =======
     public int TakeDamage(int damage, DamageTypes damageType, Element element /*, bool crit*/)
 >>>>>>> parent of 62ea2ad... 3
+=======
+    public int TakeDamage(int damage, DamageTypes damageType, Element element, int staminaDamage /*, bool crit*/)
+>>>>>>> parent of dc742f9... 45
 =======
     public int TakeDamage(int damage, DamageTypes damageType, Element element, int staminaDamage /*, bool crit*/)
 >>>>>>> parent of dc742f9... 45
