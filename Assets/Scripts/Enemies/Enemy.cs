@@ -468,7 +468,7 @@ public class Enemy : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public int TakeDamage(int damage, DamageTypes damageType, Element element, int staminaDamage /*, bool crit*/)
+    public int TakeDamage(int damage, DamageTypes damageType, Element element, int staminaDamage = 0 /*, bool crit*/)
     {
         if (currentState == State.Dead) return default;
 
